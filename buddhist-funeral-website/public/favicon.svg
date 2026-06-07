@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Singapore Buddhist Funeral Services">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#46382b"/>
+      <stop offset="1" stop-color="#2f261d"/>
+    </linearGradient>
+    <linearGradient id="goldA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e4c98a"/>
+      <stop offset="1" stop-color="#c39a52"/>
+    </linearGradient>
+    <linearGradient id="goldB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cda863"/>
+      <stop offset="1" stop-color="#a87f3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <circle cx="32" cy="33" r="24" fill="none" stroke="#d6b878" stroke-opacity="0.22" stroke-width="1.4"/>
+  <g transform="translate(0,2)">
+    <path d="M32 12c4.2 7.4 5.2 13.6 0 21-5.2-7.4-4.2-13.6 0-21Z" fill="url(#goldA)"/>
+    <path d="M19 20c7.4 2.1 11.6 6.3 12.7 14.8-8.5-1.1-12.7-6.3-12.7-14.8Z" fill="url(#goldB)"/>
+    <path d="M45 20c-7.4 2.1-11.6 6.3-12.7 14.8 8.5-1.1 12.7-6.3 12.7-14.8Z" fill="url(#goldB)"/>
+    <path d="M10 33c7.4-1.1 13.6 1 19 7.4-7.4 3.2-14.8 0-19-7.4Z" fill="url(#goldA)"/>
+    <path d="M54 33c-7.4-1.1-13.6 1-19 7.4 7.4 3.2 14.8 0 19-7.4Z" fill="url(#goldA)"/>
+    <path d="M16 46c9.5-4.2 20.1-4.2 31.7 0-9.5 5.3-20.1 5.3-31.7 0Z" fill="url(#goldB)"/>
+  </g>
+</svg>

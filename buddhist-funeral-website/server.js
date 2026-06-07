@@ -79,6 +79,54 @@ app.get('/', (req, res) => {
   res.render('index', { c: loadContent() });
 });
 
+// ---- SEO: robots.txt & sitemap.xml -----------------------------------------
+// Both domains serve the same app, so we build these from the request host
+// (whitelisted to prevent Host-header spoofing) so each domain self-references.
+const SITE_HOSTS = [
+  'singaporebuddhistfuneral.com.sg',
+  'singaporebuddhistfuneral.sg',
+  'www.singaporebuddhistfuneral.com.sg',
+  'www.singaporebuddhistfuneral.sg',
+];
+function siteOrigin(req) {
+  let host = String(req.headers.host || '').toLowerCase();
+  if (!SITE_HOSTS.includes(host)) host = 'singaporebuddhistfuneral.com.sg';
+  const proto = String(req.headers['x-forwarded-proto'] || 'https').split(',')[0].trim();
+  return proto + '://' + host;
+}
+
+app.get('/robots.txt', (req, res) => {
+  const origin = siteOrigin(req);
+  res.type('text/plain').send(
+    'User-agent: *\n' +
+    'Allow: /\n' +
+    'Disallow: /admin\n' +
+    '\n' +
+    'Sitemap: ' + origin + '/sitemap.xml\n'
+  );
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  const origin = siteOrigin(req);
+  let lastmod;
+  try {
+    lastmod = fs.statSync(DATA_FILE).mtime.toISOString().slice(0, 10);
+  } catch (e) {
+    lastmod = new Date().toISOString().slice(0, 10);
+  }
+  const xml =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    '  <url>\n' +
+    '    <loc>' + origin + '/</loc>\n' +
+    '    <lastmod>' + lastmod + '</lastmod>\n' +
+    '    <changefreq>weekly</changefreq>\n' +
+    '    <priority>1.0</priority>\n' +
+    '  </url>\n' +
+    '</urlset>\n';
+  res.type('application/xml').send(xml);
+});
+
 // ============================================================================
 // ADMIN
 // ============================================================================
@@ -206,6 +254,44 @@ app.post('/admin/hero-image/remove', requireAuth, (req, res) => {
   content.hero.backgroundImage = '';
   saveContent(content);
   res.redirect('/admin?saved=1#hero');
+});
+
+// ---- Header logo -----------------------------------------------------------
+app.post('/admin/logo', requireAuth, upload.single('image'), (req, res) => {
+  const content = loadContent();
+  if (req.file) {
+    deleteUpload(content.site.logo);
+    content.site.logo = '/uploads/' + req.file.filename;
+    saveContent(content);
+  }
+  res.redirect('/admin?saved=1#sec-logo');
+});
+
+app.post('/admin/logo/remove', requireAuth, (req, res) => {
+  const content = loadContent();
+  deleteUpload(content.site.logo);
+  content.site.logo = '';
+  saveContent(content);
+  res.redirect('/admin?saved=1#sec-logo');
+});
+
+// ---- Favicon ---------------------------------------------------------------
+app.post('/admin/favicon', requireAuth, upload.single('image'), (req, res) => {
+  const content = loadContent();
+  if (req.file) {
+    deleteUpload(content.site.favicon);
+    content.site.favicon = '/uploads/' + req.file.filename;
+    saveContent(content);
+  }
+  res.redirect('/admin?saved=1#sec-logo');
+});
+
+app.post('/admin/favicon/remove', requireAuth, (req, res) => {
+  const content = loadContent();
+  deleteUpload(content.site.favicon);
+  content.site.favicon = '';
+  saveContent(content);
+  res.redirect('/admin?saved=1#sec-logo');
 });
 
 // ---- Gallery images --------------------------------------------------------

@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= c.site.metaTitle %></title>
 <meta name="description" content="<%= c.site.metaDescription %>">
+<link rel="canonical" href="https://singaporebuddhistfuneral.com.sg/">
+<% if (c.site.favicon) { %>
+<link rel="icon" href="<%= c.site.favicon %>">
+<link rel="apple-touch-icon" href="<%= c.site.favicon %>">
+<% } else { %>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<% } %>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
@@ -24,6 +32,13 @@ html{scroll-behavior:smooth}
 body{font-family:'Jost',sans-serif;color:var(--brown-soft);background:var(--ivory);line-height:1.75;font-weight:300}
 h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;color:var(--brown);line-height:1.25}
 .zh{font-family:'Noto Serif SC',serif}
+/* Mandarin mode — switch to a CJK-capable serif throughout */
+body.lang-zh,body.lang-zh h1,body.lang-zh h2,body.lang-zh h3,body.lang-zh h4{font-family:'Noto Serif SC',serif}
+body.lang-zh{font-weight:400;letter-spacing:.02em}
+body.lang-zh .eyebrow,body.lang-zh .btn,body.lang-zh .nav-links a{letter-spacing:.12em}
+body.lang-zh .hero h1 em,body.lang-zh .section-title em{font-style:normal}
+/* avoid showing the small Chinese term twice when the whole UI is already Chinese */
+body.lang-zh .rite h3 .zh,body.lang-zh .contact-card h3 .zh{display:none}
 img,svg{max-width:100%;display:block}
 a{text-decoration:none;color:inherit}
 .container{max-width:1100px;margin:0 auto;padding:0 24px}
@@ -44,14 +59,37 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(59,47,36,.95
 .nav-inner{max-width:1100px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
 .brand{display:flex;align-items:center;gap:12px;color:var(--gold-light)}
 .brand svg{width:34px;height:34px}
+.brand-logo{height:40px;width:auto;max-width:200px;object-fit:contain;border-radius:6px}
+@media(max-width:560px){.brand-logo{height:34px;max-width:150px}}
 .brand b{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;letter-spacing:.06em}
 .brand span{font-size:.95rem;opacity:.85}
 .nav-links{display:flex;gap:28px;list-style:none;align-items:center}
 .nav-links a{color:#e9ddc6;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;transition:color .25s}
 .nav-links a:hover{color:var(--gold-light)}
+.nav-right{display:flex;align-items:center;gap:14px}
 .nav-hotline{background:var(--maroon);color:#fff;padding:9px 20px;border-radius:30px;font-size:.83rem;letter-spacing:.08em;white-space:nowrap}
 .nav-hotline:hover{background:#8f4536}
-@media(max-width:900px){.nav-links{display:none}}
+/* LANGUAGE TOGGLE */
+.lang-toggle{display:inline-flex;align-items:center;border:1px solid rgba(214,184,120,.55);border-radius:30px;overflow:hidden}
+.lang-toggle button{background:transparent;color:#e9ddc6;border:none;padding:7px 13px;cursor:pointer;font-family:'Jost',sans-serif;font-size:.78rem;letter-spacing:.1em;line-height:1;transition:background .25s,color .25s}
+.lang-toggle button.zh-label{font-family:'Noto Serif SC',serif}
+.lang-toggle button.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff}
+.nav-toggle{display:none;background:transparent;border:none;color:#e9ddc6;cursor:pointer;padding:6px;line-height:0}
+.nav-toggle svg{width:26px;height:26px}
+@media(max-width:900px){
+  .nav-toggle{display:block}
+  .nav-links{position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:rgba(45,33,24,.99);max-height:0;overflow:hidden;transition:max-height .35s ease;border-top:1px solid rgba(214,184,120,.18)}
+  nav.open .nav-links{max-height:60vh;border-bottom:1px solid rgba(214,184,120,.3)}
+  .nav-links li{width:100%}
+  .nav-links a{display:block;padding:16px 24px;border-top:1px solid rgba(214,184,120,.1)}
+  .nav-links li:first-child a{border-top:none}
+}
+@media(max-width:560px){
+  .nav-hotline{display:none}
+  .brand b{font-size:1.05rem}
+  .brand span{font-size:.82rem}
+}
+@media(max-width:380px){.brand span{display:none}}
 
 /* HERO */
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;background:
@@ -150,6 +188,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(59,47,36,.95
 .faq{background:linear-gradient(180deg,var(--ivory),var(--ivory-deep))}
 .faq details{background:var(--white);border-radius:14px;margin-top:16px;border:1px solid var(--ivory-deep);overflow:hidden}
 .faq summary{cursor:pointer;padding:20px 26px;font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--brown);list-style:none;position:relative}
+body.lang-zh .faq summary{font-family:'Noto Serif SC',serif}
 .faq summary::after{content:'+';position:absolute;right:24px;color:var(--gold);font-size:1.4rem;transition:transform .25s}
 .faq details[open] summary::after{transform:rotate(45deg)}
 .faq details p{padding:0 26px 22px;font-size:.95rem}
@@ -172,25 +211,68 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(59,47,36,.95
 footer{background:#2a2118;padding:34px 0;text-align:center}
 footer p{color:#9b8a72;font-size:.82rem;letter-spacing:.05em}
 footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4em}
+
+/* MOBILE REFINEMENTS */
+@media(max-width:600px){
+  section{padding:60px 0}
+  .container{padding:0 18px}
+  .hero{min-height:auto;padding:118px 0 68px}
+  .hero p{font-size:1rem}
+  .hero .zh-line{letter-spacing:.32em;font-size:1.05rem}
+  .hero-ctas{gap:12px}
+  .hero-ctas .btn{width:100%;max-width:320px}
+  .strip .container{flex-direction:column;text-align:center}
+  .svc,.pkg,.contact-card,.contact-note,.rite{padding-left:24px;padding-right:24px}
+  .section-title{font-size:1.8rem}
+}
+@media(max-width:380px){
+  .lang-toggle button{padding:6px 10px;font-size:.72rem}
+}
 </style>
 </head>
 <body>
+<%
+  // Bilingual helper: renders a text node carrying both languages.
+  // The toggle swaps textContent between data-en / data-zh at runtime.
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function t(en, zh){
+    en = en == null ? '' : String(en);
+    zh = (zh == null || zh === '') ? en : String(zh);
+    return '<span class="i18n" data-en="' + esc(en) + '" data-zh="' + esc(zh) + '">' + esc(en) + '</span>';
+  }
+%>
 
 <nav>
   <div class="nav-inner">
     <a href="#top" class="brand">
+      <% if (c.site.logo) { %>
+      <img class="brand-logo" src="<%= c.site.logo %>" alt="<%= c.site.brandTop %> <%= c.site.brandBottom %>">
+      <% } else { %>
       <svg viewBox="0 0 64 64" fill="none"><path d="M32 14c4 7 5 13 0 20-5-7-4-13 0-20Z" fill="#d6b878"/><path d="M20 22c7 2 11 6 12 14-8-1-12-6-12-14Z" fill="#b08d4a"/><path d="M44 22c-7 2-11 6-12 14 8-1 12-6 12-14Z" fill="#b08d4a"/><path d="M12 34c7-1 13 1 18 7-7 3-14 0-18-7Z" fill="#d6b878"/><path d="M52 34c-7-1-13 1-18 7 7 3 14 0 18-7Z" fill="#d6b878"/><path d="M18 46c9-4 19-4 28 0-9 5-19 5-28 0Z" fill="#b08d4a"/></svg>
-      <div><b><%= c.site.brandTop %></b> <span><%= c.site.brandBottom %></span></div>
+      <% } %>
+      <div><b><%- t(c.site.brandTop, c.site.brandTopZh) %></b> <span><%- t(c.site.brandBottom, c.site.brandBottomZh) %></span></div>
     </a>
     <ul class="nav-links">
-      <li><a href="#guidance">First Steps</a></li>
-      <li><a href="#services">Services</a></li>
-      <% if (c.gallery.items.length) { %><li><a href="#gallery">Gallery</a></li><% } %>
-      <li><a href="#rites">Buddhist Rites</a></li>
-      <li><a href="#packages">Packages</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#guidance"><%- t('First Steps', '初步指引') %></a></li>
+      <li><a href="#services"><%- t('Services', '服务') %></a></li>
+      <% if (c.gallery.items.length) { %><li><a href="#gallery"><%- t('Gallery', '影集') %></a></li><% } %>
+      <li><a href="#rites"><%- t('Buddhist Rites', '佛教仪轨') %></a></li>
+      <li><a href="#packages"><%- t('Packages', '配套') %></a></li>
+      <li><a href="#contact"><%- t('Contact', '联系') %></a></li>
     </ul>
-    <a class="nav-hotline" href="tel:<%= c.site.hotlineTel %>">24-Hr Hotline · <%= c.site.hotline %></a>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active">EN</button>
+        <button type="button" data-lang="zh" class="zh-label">中文</button>
+      </div>
+      <a class="nav-hotline" href="tel:<%= c.site.hotlineTel %>"><%- t('24-Hr Hotline', '24小时热线') %> · <%= c.site.hotline %></a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -211,32 +293,32 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
       <path d="M30 64c18-8 42-8 60 0-18 10-42 10-60 0Z" fill="#b08d4a"/>
     </svg>
     <% } %>
-    <h1><%= c.hero.title %> <em><%= c.hero.titleEm %></em></h1>
+    <h1><%- t(c.hero.title, c.hero.titleZh) %> <em><%- t(c.hero.titleEm, c.hero.titleEmZh) %></em></h1>
     <div class="zh-line"><%= c.hero.zhLine %></div>
-    <p><%= c.hero.paragraph %></p>
+    <p><%- t(c.hero.paragraph, c.hero.paragraphZh) %></p>
     <div class="hero-ctas">
-      <a href="tel:<%= c.site.hotlineTel %>" class="btn btn-gold"><%= c.hero.ctaPrimary %></a>
-      <a href="#packages" class="btn btn-outline"><%= c.hero.ctaSecondary %></a>
+      <a href="tel:<%= c.site.hotlineTel %>" class="btn btn-gold"><%- t(c.hero.ctaPrimary, c.hero.ctaPrimaryZh) %></a>
+      <a href="#packages" class="btn btn-outline"><%- t(c.hero.ctaSecondary, c.hero.ctaSecondaryZh) %></a>
     </div>
   </div>
 </header>
 
 <div class="strip">
   <div class="container">
-    <p><%= c.strip.text %><br><b><%= c.site.hotline %></b></p>
-    <a class="btn" href="https://wa.me/<%= c.site.whatsapp %>"><%= c.strip.button %></a>
+    <p><%- t(c.strip.text, c.strip.textZh) %><br><b><%= c.site.hotline %></b></p>
+    <a class="btn" href="https://wa.me/<%= c.site.whatsapp %>"><%- t(c.strip.button, c.strip.buttonZh) %></a>
   </div>
 </div>
 
 <section class="steps" id="guidance">
   <div class="container">
-    <span class="eyebrow"><%= c.steps.eyebrow %></span>
-    <h2 class="section-title"><%= c.steps.title %> <em><%= c.steps.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.steps.eyebrow, c.steps.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.steps.title, c.steps.titleZh) %> <em><%- t(c.steps.titleEm, c.steps.titleEmZh) %></em></h2>
     <div class="rule"></div>
-    <p class="lead"><%= c.steps.lead %></p>
+    <p class="lead"><%- t(c.steps.lead, c.steps.leadZh) %></p>
     <div class="steps-grid">
       <% c.steps.items.forEach(function(item, i){ %>
-      <div class="step"><i><%= i+1 %></i><h3><%= item.title %></h3><p><%= item.text %></p></div>
+      <div class="step"><i><%= i+1 %></i><h3><%- t(item.title, item.titleZh) %></h3><p><%- t(item.text, item.textZh) %></p></div>
       <% }); %>
     </div>
   </div>
@@ -244,10 +326,10 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <section class="services" id="services">
   <div class="container">
-    <span class="eyebrow"><%= c.services.eyebrow %></span>
-    <h2 class="section-title"><%= c.services.title %> <em><%= c.services.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.services.eyebrow, c.services.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.services.title, c.services.titleZh) %> <em><%- t(c.services.titleEm, c.services.titleEmZh) %></em></h2>
     <div class="rule"></div>
-    <p class="lead"><%= c.services.lead %></p>
+    <p class="lead"><%- t(c.services.lead, c.services.leadZh) %></p>
     <%
       var svcIcons = [
         '<svg viewBox="0 0 48 48" fill="none"><rect x="8" y="20" width="32" height="18" rx="3" stroke="#b08d4a" stroke-width="2"/><path d="M12 20l12-9 12 9" stroke="#b08d4a" stroke-width="2" stroke-linecap="round"/><path d="M24 28v6" stroke="#d6b878" stroke-width="2" stroke-linecap="round"/></svg>',
@@ -262,8 +344,8 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
       <% c.services.items.forEach(function(item, i){ %>
       <div class="svc">
         <%- svcIcons[i % svcIcons.length] %>
-        <h3><%= item.title %></h3>
-        <p><%= item.text %></p>
+        <h3><%- t(item.title, item.titleZh) %></h3>
+        <p><%- t(item.text, item.textZh) %></p>
       </div>
       <% }); %>
     </div>
@@ -273,10 +355,10 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 <% if (c.gallery.items.length) { %>
 <section class="gallery" id="gallery">
   <div class="container">
-    <span class="eyebrow"><%= c.gallery.eyebrow %></span>
-    <h2 class="section-title"><%= c.gallery.title %> <em><%= c.gallery.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.gallery.eyebrow, c.gallery.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.gallery.title, c.gallery.titleZh) %> <em><%- t(c.gallery.titleEm, c.gallery.titleEmZh) %></em></h2>
     <div class="rule"></div>
-    <p class="lead"><%= c.gallery.lead %></p>
+    <p class="lead"><%- t(c.gallery.lead, c.gallery.leadZh) %></p>
     <div class="gallery-grid">
       <% c.gallery.items.forEach(function(item){ %>
       <div class="gallery-item">
@@ -291,13 +373,13 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <section class="rites" id="rites">
   <div class="container">
-    <span class="eyebrow"><%= c.rites.eyebrow %></span>
-    <h2 class="section-title"><%= c.rites.title %> <em><%= c.rites.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.rites.eyebrow, c.rites.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.rites.title, c.rites.titleZh) %> <em><%- t(c.rites.titleEm, c.rites.titleEmZh) %></em></h2>
     <div class="rule"></div>
-    <p class="lead"><%= c.rites.lead %></p>
+    <p class="lead"><%- t(c.rites.lead, c.rites.leadZh) %></p>
     <div class="rites-grid">
       <% c.rites.items.forEach(function(item){ %>
-      <div class="rite"><h3><%= item.title %> <span class="zh"><%= item.zh %></span></h3><p><%= item.text %></p></div>
+      <div class="rite"><h3><%- t(item.title, item.titleZh) %> <span class="zh"><%= item.zh %></span></h3><p><%- t(item.text, item.textZh) %></p></div>
       <% }); %>
     </div>
   </div>
@@ -305,20 +387,20 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <section class="packages" id="packages">
   <div class="container">
-    <span class="eyebrow"><%= c.packages.eyebrow %></span>
-    <h2 class="section-title"><%= c.packages.title %> <em><%= c.packages.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.packages.eyebrow, c.packages.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.packages.title, c.packages.titleZh) %> <em><%- t(c.packages.titleEm, c.packages.titleEmZh) %></em></h2>
     <div class="rule"></div>
-    <p class="lead"><%= c.packages.lead %></p>
+    <p class="lead"><%- t(c.packages.lead, c.packages.leadZh) %></p>
     <div class="pkg-grid">
       <% c.packages.items.forEach(function(pkg){ %>
       <div class="pkg <%= pkg.featured ? 'featured' : '' %>">
-        <% if (pkg.featured && pkg.tag) { %><span class="tag"><%= pkg.tag %></span><% } %>
-        <h3><%= pkg.name %></h3>
-        <div class="days"><%= pkg.days %></div>
+        <% if (pkg.featured && pkg.tag) { %><span class="tag"><%- t(pkg.tag, pkg.tagZh) %></span><% } %>
+        <h3><%- t(pkg.name, pkg.nameZh) %></h3>
+        <div class="days"><%- t(pkg.days, pkg.daysZh) %></div>
         <ul>
-          <% pkg.features.forEach(function(f){ %><li><%= f %></li><% }); %>
+          <% pkg.features.forEach(function(f, fi){ %><li><%- t(f, (pkg.featuresZh && pkg.featuresZh[fi]) ? pkg.featuresZh[fi] : f) %></li><% }); %>
         </ul>
-        <a href="#contact" class="btn <%= pkg.featured ? 'btn-gold' : 'btn-outline' %>">Enquire</a>
+        <a href="#contact" class="btn <%= pkg.featured ? 'btn-gold' : 'btn-outline' %>"><%- t('Enquire', '洽询') %></a>
       </div>
       <% }); %>
     </div>
@@ -327,13 +409,13 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <section class="faq">
   <div class="container">
-    <span class="eyebrow"><%= c.faq.eyebrow %></span>
-    <h2 class="section-title"><%= c.faq.title %> <em><%= c.faq.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.faq.eyebrow, c.faq.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.faq.title, c.faq.titleZh) %> <em><%- t(c.faq.titleEm, c.faq.titleEmZh) %></em></h2>
     <div class="rule"></div>
     <% c.faq.items.forEach(function(item){ %>
     <details>
-      <summary><%= item.q %></summary>
-      <p><%= item.a %></p>
+      <summary><%- t(item.q, item.qZh) %></summary>
+      <p><%- t(item.a, item.aZh) %></p>
     </details>
     <% }); %>
   </div>
@@ -341,22 +423,22 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <section class="contact" id="contact">
   <div class="container">
-    <span class="eyebrow"><%= c.contact.eyebrow %></span>
-    <h2 class="section-title"><%= c.contact.title %> <em><%= c.contact.titleEm %></em></h2>
+    <span class="eyebrow"><%- t(c.contact.eyebrow, c.contact.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.contact.title, c.contact.titleZh) %> <em><%- t(c.contact.titleEm, c.contact.titleEmZh) %></em></h2>
     <div class="rule"></div>
     <div class="contact-grid">
       <div class="contact-card">
-        <h3><%= c.contact.cardTitle %> <span class="zh"><%= c.contact.cardZh %></span></h3>
-        <p style="font-size:.85rem;opacity:.8;margin-bottom:18px"><%= c.contact.cardSubtitle %></p>
-        <div class="cl"><b>Hotline</b><span><%= c.site.hotline %> — 24 hours</span></div>
-        <div class="cl"><b>WhatsApp</b><span><%= c.site.whatsapp %></span></div>
-        <div class="cl"><b>Email</b><span><%= c.site.email %></span></div>
-        <div class="cl"><b>Address</b><span><%= c.site.address %></span></div>
+        <h3><%- t(c.contact.cardTitle, c.contact.cardTitleZh) %> <span class="zh"><%= c.contact.cardZh %></span></h3>
+        <p style="font-size:.85rem;opacity:.8;margin-bottom:18px"><%- t(c.contact.cardSubtitle, c.contact.cardSubtitleZh) %></p>
+        <div class="cl"><b><%- t('Hotline', '热线') %></b><span><%= c.site.hotline %> — <%- t('24 hours', '24小时') %></span></div>
+        <div class="cl"><b><%- t('WhatsApp', 'WhatsApp') %></b><span><%= c.site.whatsapp %></span></div>
+        <div class="cl"><b><%- t('Email', '电邮') %></b><span><%= c.site.email %></span></div>
+        <div class="cl"><b><%- t('Address', '地址') %></b><span><%- t(c.site.address, c.site.addressZh) %></span></div>
       </div>
       <div class="contact-note">
-        <h3><%= c.contact.noteTitle %></h3>
-        <p><%= c.contact.noteText %></p>
-        <div><a class="btn btn-gold" href="tel:<%= c.site.hotlineTel %>"><%= c.contact.noteButton %></a></div>
+        <h3><%- t(c.contact.noteTitle, c.contact.noteTitleZh) %></h3>
+        <p><%- t(c.contact.noteText, c.contact.noteTextZh) %></p>
+        <div><a class="btn btn-gold" href="tel:<%= c.site.hotlineTel %>"><%- t(c.contact.noteButton, c.contact.noteButtonZh) %></a></div>
       </div>
     </div>
   </div>
@@ -364,8 +446,55 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <footer>
   <p class="zh"><%= c.site.footerZh %></p>
-  <p>© <%= c.site.companyName %> · <%= c.site.brandTop %> <%= c.site.brandBottom %> · Available 24 Hours</p>
+  <p>© <%= c.site.companyName %> · <%- t(c.site.brandTop, c.site.brandTopZh) %> <%- t(c.site.brandBottom, c.site.brandBottomZh) %> · <%- t('Available 24 Hours', '24小时为您服务') %></p>
 </footer>
+
+<script>
+(function(){
+  var KEY = 'sbf_lang';
+  function setLang(lang){
+    lang = (lang === 'zh') ? 'zh' : 'en';
+    document.body.classList.toggle('lang-zh', lang === 'zh');
+    document.documentElement.lang = (lang === 'zh') ? 'zh-Hans' : 'en';
+    var nodes = document.querySelectorAll('.i18n');
+    for (var i = 0; i < nodes.length; i++){
+      var v = nodes[i].getAttribute(lang === 'zh' ? 'data-zh' : 'data-en');
+      if (v !== null) nodes[i].textContent = v;
+    }
+    var btns = document.querySelectorAll('.lang-toggle button');
+    for (var j = 0; j < btns.length; j++){
+      btns[j].classList.toggle('active', btns[j].getAttribute('data-lang') === lang);
+    }
+    try { localStorage.setItem(KEY, lang); } catch(e){}
+  }
+  var saved = 'en';
+  try { saved = localStorage.getItem(KEY) || 'en'; } catch(e){}
+  document.addEventListener('DOMContentLoaded', function(){
+    var btns = document.querySelectorAll('.lang-toggle button');
+    for (var i = 0; i < btns.length; i++){
+      (function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); })(btns[i]);
+    }
+    if (saved === 'zh') setLang('zh');
+
+    // Mobile menu
+    var nav = document.querySelector('nav');
+    var toggle = document.querySelector('.nav-toggle');
+    if (toggle && nav){
+      toggle.addEventListener('click', function(){
+        var open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      var links = nav.querySelectorAll('.nav-links a');
+      for (var k = 0; k < links.length; k++){
+        links[k].addEventListener('click', function(){
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      }
+    }
+  });
+})();
+</script>
 
 </body>
 </html>

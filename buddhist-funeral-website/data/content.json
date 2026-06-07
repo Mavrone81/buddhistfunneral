@@ -1,7 +1,9 @@
 {
   "site": {
     "brandTop": "Singapore Buddhist",
+    "brandTopZh": "新加坡佛教",
     "brandBottom": "Funeral Services",
+    "brandBottomZh": "殡葬服务",
     "metaTitle": "Singapore Buddhist Funeral Services 新加坡佛教殡葬服务 | 24-Hour Hotline",
     "metaDescription": "Singapore Buddhist Funeral Services — dignified wake arrangements, monk chanting rites, encoffinment, cremation and 49-day prayers. Compassionate care, 24 hours a day.",
     "hotline": "+65 0000 0000",
@@ -9,192 +11,299 @@
     "whatsapp": "6500000000",
     "email": "hello@sgbuddhistfuneral.sg",
     "address": "Singapore",
+    "addressZh": "新加坡",
     "companyName": "Singapore Bereavement Group Pte Ltd",
-    "footerZh": "慈悲 · 庄严 · 安详"
+    "footerZh": "慈悲 · 庄严 · 安详",
+    "logo": "",
+    "favicon": ""
   },
   "hero": {
     "title": "A peaceful journey,",
+    "titleZh": "安详的旅程，",
     "titleEm": "guided with compassion",
+    "titleEmZh": "以慈悲相伴",
     "zhLine": "慈悲 · 庄严 · 安详",
     "paragraph": "Singapore Buddhist Funeral Services provides dignified Buddhist funerals — honouring your loved one with proper rites, mindful care and a serene farewell, available around the clock.",
+    "paragraphZh": "新加坡佛教殡葬服务为您提供庄严的佛教殡葬礼仪——以如法的仪轨、细心的照料与宁静的告别，恭送您的至亲，全天候为您服务。",
     "ctaPrimary": "Call Our 24-Hr Hotline",
+    "ctaPrimaryZh": "拨打24小时热线",
     "ctaSecondary": "View Packages",
+    "ctaSecondaryZh": "查看配套",
     "backgroundImage": ""
   },
   "strip": {
     "text": "Immediate assistance, day or night — our advisors will guide you through every step.",
-    "button": "WhatsApp Us Now"
+    "textZh": "无论昼夜，即时协助——我们的顾问将引导您完成每一个步骤。",
+    "button": "WhatsApp Us Now",
+    "buttonZh": "立即 WhatsApp 联系我们"
   },
   "steps": {
     "eyebrow": "Guidance In Difficult Moments",
+    "eyebrowZh": "艰难时刻的指引",
     "title": "When a loved one",
+    "titleZh": "当至亲",
     "titleEm": "passes away",
+    "titleEmZh": "离世时",
     "lead": "In the first hours, you do not need to face the arrangements alone. Call us first — we will handle everything that follows.",
+    "leadZh": "在最初的时刻，您无需独自面对各项安排。请先致电我们——后续的一切都交由我们处理。",
     "items": [
       {
         "title": "Call Us First",
-        "text": "Contact our 24-hour hotline. Our advisor will guide you calmly through what needs to be done, wherever the passing occurred."
+        "titleZh": "先致电我们",
+        "text": "Contact our 24-hour hotline. Our advisor will guide you calmly through what needs to be done, wherever the passing occurred.",
+        "textZh": "请拨打我们的24小时热线。无论在何处离世，我们的顾问都会平和地引导您处理需要办理的事宜。"
       },
       {
         "title": "Certification of Death",
-        "text": "We assist with the doctor's Certificate of Cause of Death (CCOD) and the official death documentation required in Singapore."
+        "titleZh": "死亡证明",
+        "text": "We assist with the doctor's Certificate of Cause of Death (CCOD) and the official death documentation required in Singapore.",
+        "textZh": "我们协助办理医生开具的死亡原因证明书（CCOD）及新加坡所需的官方死亡文件。"
       },
       {
         "title": "Bringing Them Home",
-        "text": "Our team transfers your loved one with care to the wake venue — void deck, funeral parlour or your home — and prepares the setup."
+        "titleZh": "接送回家",
+        "text": "Our team transfers your loved one with care to the wake venue — void deck, funeral parlour or your home — and prepares the setup.",
+        "textZh": "我们的团队将妥善地把您的至亲送往灵堂——组屋底层、殡仪馆或您的住所——并完成布置。"
       },
       {
         "title": "The Wake & Rites Begin",
-        "text": "We arrange the altar, casket and monk chanting rites, so your family can focus on being present with one another."
+        "titleZh": "灵堂与法事开始",
+        "text": "We arrange the altar, casket and monk chanting rites, so your family can focus on being present with one another.",
+        "textZh": "我们安排佛坛、棺木及僧人诵经法事，让您的家人能够安心地彼此相伴。"
       }
     ]
   },
   "services": {
     "eyebrow": "Complete & Compassionate",
+    "eyebrowZh": "圆满 · 慈悲",
     "title": "Our",
+    "titleZh": "我们的",
     "titleEm": "services",
+    "titleEmZh": "服务",
     "lead": "A full Buddhist funeral service, arranged end to end — every detail handled with reverence.",
+    "leadZh": "完整的佛教殡葬服务，从头到尾悉心安排——每个细节皆以虔敬之心处理。",
     "items": [
       {
         "title": "Wake Arrangements",
-        "text": "Full setup at HDB void deck, funeral parlour or private residence — tentage, altar, Buddha image, floral arrangements, photo enlargement and nightly support."
+        "titleZh": "灵堂布置",
+        "text": "Full setup at HDB void deck, funeral parlour or private residence — tentage, altar, Buddha image, floral arrangements, photo enlargement and nightly support.",
+        "textZh": "在组屋底层、殡仪馆或私人住所完成全套布置——帐篷、佛坛、佛像、花艺布置、遗照放大及每晚的协助。"
       },
       {
         "title": "Monk Chanting Rites",
-        "text": "Venerable monks conduct chanting and transference-of-merit rites — at the encoffinment, nightly prayers, funeral day and cremation, per Mahayana or Theravada tradition."
+        "titleZh": "僧人诵经法事",
+        "text": "Venerable monks conduct chanting and transference-of-merit rites — at the encoffinment, nightly prayers, funeral day and cremation, per Mahayana or Theravada tradition.",
+        "textZh": "礼请法师进行诵经及超度回向法事——于入殓、每晚诵经、出殡日及火化时，依大乘或南传传统进行。"
       },
       {
         "title": "Encoffinment & Embalming",
-        "text": "Professional embalming, dressing and encoffinment performed with dignity, with a quality casket appropriate to Buddhist customs."
+        "titleZh": "入殓与防腐",
+        "text": "Professional embalming, dressing and encoffinment performed with dignity, with a quality casket appropriate to Buddhist customs.",
+        "textZh": "以庄重之心进行专业防腐、净身更衣与入殓，并备有契合佛教礼俗的优质棺木。"
       },
       {
         "title": "Cremation & Ash Collection",
-        "text": "Booking of the cremation slot at Mandai Crematorium, hearse and family transport, and respectful ash collection the following day."
+        "titleZh": "火化与捡灰",
+        "text": "Booking of the cremation slot at Mandai Crematorium, hearse and family transport, and respectful ash collection the following day.",
+        "textZh": "预订万礼火化场时段、灵车及家属接送，并于翌日恭敬捡灰。"
       },
       {
         "title": "Post-Funeral Prayers",
-        "text": "Arrangement of 7th-day (头七), 49-day (七七) and 100-day memorial prayers, guiding your loved one's journey and bringing comfort to the family."
+        "titleZh": "葬后法事",
+        "text": "Arrangement of 7th-day (头七), 49-day (七七) and 100-day memorial prayers, guiding your loved one's journey and bringing comfort to the family.",
+        "textZh": "安排头七、七七（四十九天）及百日追思法事，引导至亲的旅程，并抚慰家属。"
       },
       {
         "title": "Columbarium & Sea Burial",
-        "text": "Guidance on niche selection at government or temple columbaria, or arrangement of sea scattering with the appropriate Buddhist ritual."
+        "titleZh": "灵位与海葬",
+        "text": "Guidance on niche selection at government or temple columbaria, or arrangement of sea scattering with the appropriate Buddhist ritual.",
+        "textZh": "提供政府或寺院骨灰位选择的指引，或安排如法的佛教海葬仪式。"
       }
     ]
   },
   "gallery": {
     "eyebrow": "In Loving Memory",
+    "eyebrowZh": "深切缅怀",
     "title": "A serene",
+    "titleZh": "宁静的",
     "titleEm": "farewell",
+    "titleEmZh": "告别",
     "lead": "Glimpses of the dignified arrangements and tranquil settings we prepare for every family.",
+    "leadZh": "撷取我们为每个家庭精心准备的庄严安排与宁静场景。",
     "items": []
   },
   "rites": {
     "eyebrow": "Honouring The Dharma",
+    "eyebrowZh": "恭敬佛法",
     "title": "Buddhist funeral",
+    "titleZh": "佛教殡葬",
     "titleEm": "rites & traditions",
+    "titleEmZh": "礼仪与传统",
     "lead": "Each rite carries deep meaning — generating merit for the departed and guiding them peacefully toward their next journey.",
+    "leadZh": "每项仪轨皆蕴含深意——为亡者积累功德，引导他们安详地迈向下一段旅程。",
     "items": [
       {
         "title": "Encoffinment Rite",
+        "titleZh": "入殓仪式",
         "zh": "入殓",
-        "text": "Monks chant as your loved one is laid into the casket, blessing the departed and sanctifying the beginning of the wake."
+        "text": "Monks chant as your loved one is laid into the casket, blessing the departed and sanctifying the beginning of the wake.",
+        "textZh": "僧人于您的至亲入棺时诵经，为亡者祝祷，并为灵堂的开始加以圣化。"
       },
       {
         "title": "Nightly Chanting",
+        "titleZh": "每晚诵经",
         "zh": "诵经",
-        "text": "Evening sutra recitations — commonly the Amitabha Sutra — transfer merit to the departed while bringing calm to the bereaved."
+        "text": "Evening sutra recitations — commonly the Amitabha Sutra — transfer merit to the departed while bringing calm to the bereaved.",
+        "textZh": "夜间诵经——常诵《阿弥陀经》——为亡者回向功德，同时为家属带来安宁。"
       },
       {
         "title": "Funeral Day Service",
+        "titleZh": "出殡仪式",
         "zh": "出殡",
-        "text": "The final-day rite includes prayers, last respects and the procession, conducted with solemnity before the cortege departs for cremation."
+        "text": "The final-day rite includes prayers, last respects and the procession, conducted with solemnity before the cortege departs for cremation.",
+        "textZh": "末日仪式包括诵经、瞻仰遗容及送殡行列，在灵柩启程火化前庄严举行。"
       },
       {
         "title": "49 Days of Prayers",
+        "titleZh": "四十九天法事",
         "zh": "七七四十九天",
-        "text": "In Buddhist belief, the consciousness journeys for up to 49 days. Weekly prayers, especially the 7th and 49th day, support a favourable rebirth."
+        "text": "In Buddhist belief, the consciousness journeys for up to 49 days. Weekly prayers, especially the 7th and 49th day, support a favourable rebirth.",
+        "textZh": "佛教相信，神识在四十九天内仍在旅程之中。每周诵经，尤其是头七与第四十九天，有助于亡者获得善的往生。"
       }
     ]
   },
   "packages": {
     "eyebrow": "Transparent & Complete",
+    "eyebrowZh": "透明 · 圆满",
     "title": "Funeral",
+    "titleZh": "殡葬",
     "titleEm": "packages",
+    "titleEmZh": "配套",
     "lead": "Every package is complete — no hidden costs. Speak with our advisors for current pricing and customisation.",
+    "leadZh": "每个配套皆为完整服务——绝无隐藏费用。欢迎与我们的顾问洽询最新价格与定制方案。",
     "items": [
       {
         "name": "3-Day Wake",
+        "nameZh": "三日丧礼",
         "days": "An intimate farewell",
+        "daysZh": "温馨的告别",
         "featured": false,
         "tag": "",
+        "tagZh": "",
         "features": [
           "Casket, embalming & encoffinment",
           "Wake setup with Buddhist altar",
           "Monk chanting — encoffin & funeral day",
           "Mandai cremation booking & hearse",
           "Ash collection assistance"
+        ],
+        "featuresZh": [
+          "棺木、防腐与入殓",
+          "设有佛坛的灵堂布置",
+          "僧人诵经——入殓与出殡日",
+          "万礼火化预订及灵车",
+          "协助捡灰"
         ]
       },
       {
         "name": "5-Day Wake",
+        "nameZh": "五日丧礼",
         "days": "Time for family & friends",
+        "daysZh": "予亲友相聚的时光",
         "featured": true,
         "tag": "Most Chosen",
+        "tagZh": "最多选择",
         "features": [
           "Everything in the 3-day package",
           "Nightly monk chanting sessions",
           "Floral & fruit altar offerings refreshed daily",
           "Photo montage & memorial book",
           "Funeral director present throughout"
+        ],
+        "featuresZh": [
+          "包含三日配套的所有项目",
+          "每晚僧人诵经",
+          "每日更新的鲜花与供果",
+          "追思影集与纪念册",
+          "殡葬礼仪师全程在场"
         ]
       },
       {
         "name": "7-Day Wake",
+        "nameZh": "七日丧礼",
         "days": "A full traditional farewell",
+        "daysZh": "圆满的传统告别",
         "featured": false,
         "tag": "",
+        "tagZh": "",
         "features": [
           "Everything in the 5-day package",
           "Extended tentage & nightly refreshments",
           "Additional prayer sessions per tradition",
           "49-day & 100-day prayer arrangement",
           "Columbarium or sea burial guidance"
+        ],
+        "featuresZh": [
+          "包含五日配套的所有项目",
+          "加大帐篷及每晚茶点",
+          "依传统增设诵经法事",
+          "四十九天与百日法事安排",
+          "灵位或海葬指引"
         ]
       }
     ]
   },
   "faq": {
     "eyebrow": "Common Questions",
+    "eyebrowZh": "常见问题",
     "title": "Frequently",
+    "titleZh": "常见",
     "titleEm": "asked",
+    "titleEmZh": "问答",
     "items": [
       {
         "q": "What should I do immediately when a loved one passes at home?",
-        "a": "Call a doctor to certify the death (we can arrange one), then call our 24-hour hotline. Our team will take care of the transfer, documentation and all funeral arrangements from there."
+        "qZh": "至亲在家中离世时，我该立即怎么做？",
+        "a": "Call a doctor to certify the death (we can arrange one), then call our 24-hour hotline. Our team will take care of the transfer, documentation and all funeral arrangements from there.",
+        "aZh": "请致电医生开具死亡证明（我们可代为安排），然后拨打我们的24小时热线。我们的团队将从接送、文件办理到所有殡葬安排，全程为您处理。"
       },
       {
         "q": "Can the wake be held at an HDB void deck?",
-        "a": "Yes. We obtain the necessary town council permit and handle the complete setup — tentage, lighting, altar, seating and nightly security — at the void deck, a funeral parlour, or your home."
+        "qZh": "丧礼可以在组屋底层举行吗？",
+        "a": "Yes. We obtain the necessary town council permit and handle the complete setup — tentage, lighting, altar, seating and nightly security — at the void deck, a funeral parlour, or your home.",
+        "aZh": "可以。我们会向市镇理事会申请所需准证，并完成全套布置——帐篷、照明、佛坛、座位及每晚的保安——无论是在组屋底层、殡仪馆或您的住所。"
       },
       {
         "q": "Do you serve both Mahayana and Theravada traditions?",
-        "a": "Yes. We work with venerable monks of both traditions and will arrange rites according to your family's practice and dialect group customs."
+        "qZh": "你们同时提供大乘与南传（上座部）传统的服务吗？",
+        "a": "Yes. We work with venerable monks of both traditions and will arrange rites according to your family's practice and dialect group customs.",
+        "aZh": "是的。我们礼请两种传统的法师，并会依据您家庭的修持与籍贯习俗安排相应的仪轨。"
       },
       {
         "q": "What happens after the cremation?",
-        "a": "We accompany you for ash collection, then assist with your chosen resting place — a columbarium niche, sea scattering with Buddhist ritual, or other arrangements — plus the 7th-day, 49-day and 100-day prayers."
+        "qZh": "火化之后会如何安排？",
+        "a": "We accompany you for ash collection, then assist with your chosen resting place — a columbarium niche, sea scattering with Buddhist ritual, or other arrangements — plus the 7th-day, 49-day and 100-day prayers.",
+        "aZh": "我们将陪同您捡灰，随后协助安排您选择的安息之所——骨灰位、如法的佛教海葬，或其他安排——并办理头七、四十九天及百日法事。"
       }
     ]
   },
   "contact": {
     "eyebrow": "Here For You, Always",
+    "eyebrowZh": "始终在您身边",
     "title": "Contact",
+    "titleZh": "联系",
     "titleEm": "us",
+    "titleEmZh": "我们",
     "cardTitle": "Singapore Buddhist Funeral Services",
+    "cardTitleZh": "新加坡佛教殡葬服务",
     "cardZh": "新加坡佛教殡葬服务",
     "cardSubtitle": "A service of Singapore Bereavement Group Pte Ltd",
+    "cardSubtitleZh": "由 Singapore Bereavement Group Pte Ltd 提供的服务",
     "noteTitle": "In your most difficult hour, call us first.",
+    "noteTitleZh": "在您最艰难的时刻，请先致电我们。",
     "noteText": "Our advisors respond at any hour, every day. Let us shoulder the arrangements while you stay close to your family.",
-    "noteButton": "Call Now"
+    "noteTextZh": "我们的顾问全天候、每日为您解答。让我们承担各项安排，您只需安心陪伴家人。",
+    "noteButton": "Call Now",
+    "noteButtonZh": "立即致电"
   }
 }

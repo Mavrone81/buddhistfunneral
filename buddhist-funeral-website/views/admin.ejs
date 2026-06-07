@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Website · Admin</title>
+<link rel="icon" href="<%= c.site.favicon || '/favicon.svg' %>">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--gold:#b08d4a;--gold-light:#d6b878;--brown:#3b2f24;--ivory:#f7f1e6}
@@ -73,6 +74,7 @@ input[type=file]{font-size:.85rem}
 
   <div class="toc">
     <a href="#sec-site">Contact & Brand</a>
+    <a href="#sec-logo">Logo & Favicon</a>
     <a href="#sec-hero">Hero / Top Banner</a>
     <a href="#sec-steps">First Steps</a>
     <a href="#sec-services">Services</a>
@@ -103,6 +105,54 @@ input[type=file]{font-size:.85rem}
     </div>
     <div class="field"><label>Browser tab title (SEO)</label><input form="contentForm" type="text" name="site[metaTitle]" value="<%= c.site.metaTitle %>"></div>
     <div class="field"><label>Search description (SEO)</label><textarea form="contentForm" name="site[metaDescription]"><%= c.site.metaDescription %></textarea></div>
+  </div>
+
+  <!-- ============ LOGO & FAVICON ============ -->
+  <div class="card" id="sec-logo">
+    <h2>Logo &amp; Favicon</h2>
+    <p class="hint">Two separate images: the <b>header logo</b> shown in the top navigation bar, and the <b>favicon</b> shown in the browser tab and phone bookmarks. Leave either as default to use the lotus mark.</p>
+
+    <!-- Header logo -->
+    <label>Header logo (top navigation bar)</label>
+    <p class="hint" style="margin-top:0">Best as a wide or square image (PNG, JPG or SVG). Shown about 40px tall.</p>
+    <div class="hero-preview">
+      <% if (c.site.logo) { %>
+        <img src="<%= c.site.logo %>" alt="current header logo" style="height:56px;width:auto;max-width:220px;object-fit:contain;border-radius:8px;background:#3b2f24;padding:8px 12px">
+      <% } else { %>
+        <img src="/favicon.svg" alt="default logo" style="width:56px;height:56px;object-fit:contain;border-radius:10px;background:#3b2f24;padding:6px">
+      <% } %>
+      <div>
+        <p class="hint" style="margin:0 0 8px">
+          <% if (c.site.logo) { %>Current: your uploaded header logo.<% } else { %>Current: the default lotus mark + brand text.<% } %>
+        </p>
+        <% if (c.site.logo) { %>
+        <form method="post" action="/admin/logo/remove"><button class="btn btn-danger btn-sm" type="submit">Reset to default</button></form>
+        <% } %>
+      </div>
+    </div>
+    <form method="post" action="/admin/logo" enctype="multipart/form-data" class="upload-row" style="margin-top:14px;margin-bottom:26px">
+      <div class="field"><label>Upload a new header logo</label><input type="file" name="image" accept="image/*" required></div>
+      <button class="btn btn-gold btn-sm" type="submit">Upload Logo</button>
+    </form>
+
+    <!-- Favicon -->
+    <label>Favicon (browser tab icon)</label>
+    <p class="hint" style="margin-top:0">Use a <b>square</b> image (PNG, JPG or SVG). A simple, bold mark works best at small sizes.</p>
+    <div class="hero-preview">
+      <img src="<%= c.site.favicon || '/favicon.svg' %>" alt="current favicon" style="width:56px;height:56px;object-fit:contain;border-radius:10px;background:#3b2f24;padding:6px">
+      <div>
+        <p class="hint" style="margin:0 0 8px">
+          <% if (c.site.favicon) { %>Current: your uploaded favicon.<% } else { %>Current: the default lotus mark.<% } %>
+        </p>
+        <% if (c.site.favicon) { %>
+        <form method="post" action="/admin/favicon/remove"><button class="btn btn-danger btn-sm" type="submit">Reset to default</button></form>
+        <% } %>
+      </div>
+    </div>
+    <form method="post" action="/admin/favicon" enctype="multipart/form-data" class="upload-row" style="margin-top:14px">
+      <div class="field"><label>Upload a new favicon</label><input type="file" name="image" accept="image/*" required></div>
+      <button class="btn btn-gold btn-sm" type="submit">Upload Favicon</button>
+    </form>
   </div>
 
   <!-- ============ HERO ============ -->
