@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Website · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#b08d4a;--gold-light:#d6b878;--brown:#3b2f24;--ivory:#f7f1e6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:#f3ede1;color:#4a3d30;line-height:1.6}
+a{color:var(--gold);text-decoration:none}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:var(--brown);color:#e9ddc6;display:flex;align-items:center;justify-content:space-between;padding:14px 26px;gap:16px;flex-wrap:wrap}
+.topbar .title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#f7f1e6;font-weight:600}
+.topbar .actions{display:flex;gap:12px;align-items:center}
+.btn{display:inline-block;padding:10px 22px;border-radius:30px;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;font-family:inherit;transition:.25s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff}
+.btn-gold:hover{box-shadow:0 6px 20px rgba(176,141,74,.4)}
+.btn-ghost{background:transparent;border:1px solid rgba(214,184,120,.5);color:#e9ddc6}
+.btn-ghost:hover{background:rgba(214,184,120,.15)}
+.btn-sm{padding:7px 16px;font-size:.72rem}
+.btn-danger{background:#8a4233;color:#fff}
+.layout{max-width:1000px;margin:0 auto;padding:30px 22px 80px}
+.banner{background:#dff0d8;border:1px solid #b6d7a8;color:#3c763d;padding:13px 18px;border-radius:10px;margin-bottom:24px;font-size:.92rem}
+.banner.warn{background:#fcf3e3;border-color:#e6cfa3;color:#8a6d3b}
+.card{background:#fff;border:1px solid #e5dcca;border-radius:14px;padding:26px 28px;margin-bottom:24px;box-shadow:0 4px 16px rgba(59,47,36,.05)}
+.card h2{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--brown);margin-bottom:4px;font-weight:600}
+.card .hint{font-size:.85rem;color:#9a8c78;margin-bottom:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+.field{margin-bottom:16px}
+label{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:6px}
+input[type=text],textarea,input:not([type]){width:100%;padding:11px 13px;border:1px solid #ddd2bd;border-radius:9px;font-family:inherit;font-size:.95rem;color:#4a3d30;background:#fdfaf3}
+input:focus,textarea:focus{outline:none;border-color:var(--gold-light);background:#fff}
+textarea{resize:vertical;min-height:74px}
+.subcard{border:1px dashed #ddd2bd;border-radius:10px;padding:18px;margin-bottom:14px;background:#fdfaf3}
+.subcard .num{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--gold);font-size:1.1rem;margin-bottom:10px}
+.checkrow{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.checkrow input{width:18px;height:18px;accent-color:var(--gold)}
+.checkrow label{margin:0;text-transform:none;letter-spacing:0;font-size:.92rem;color:#4a3d30}
+/* gallery */
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:22px}
+.gal-item{border:1px solid #e5dcca;border-radius:10px;overflow:hidden;background:#fdfaf3}
+.gal-item img{width:100%;height:130px;object-fit:cover;display:block}
+.gal-item .cap{padding:10px}
+.gal-item .cap input{font-size:.85rem;padding:8px 10px;margin-bottom:8px}
+.upload-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;background:#fdfaf3;border:1px dashed #ddd2bd;border-radius:10px;padding:16px}
+.upload-row .field{margin:0;flex:1;min-width:160px}
+input[type=file]{font-size:.85rem}
+.hero-preview{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.hero-preview img{width:200px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #e5dcca}
+.toc{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.toc a{background:#fff;border:1px solid #e5dcca;border-radius:30px;padding:7px 16px;font-size:.8rem;color:#6b5b47}
+.toc a:hover{border-color:var(--gold-light);color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="title">✦ Edit Your Website</span>
+  <div class="actions">
+    <a class="btn btn-ghost btn-sm" href="/" target="_blank">View Site ↗</a>
+    <a class="btn btn-ghost btn-sm" href="/admin/logout">Log Out</a>
+    <button class="btn btn-gold" type="submit" form="contentForm">Save All Changes</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <% if (saved) { %><div class="banner">✓ Your changes have been saved and are now live on the website.</div><% } %>
+  <% if (message) { %><div class="banner warn"><%= message %></div><% } %>
+
+  <div class="toc">
+    <a href="#sec-site">Contact & Brand</a>
+    <a href="#sec-hero">Hero / Top Banner</a>
+    <a href="#sec-steps">First Steps</a>
+    <a href="#sec-services">Services</a>
+    <a href="#sec-gallery">Photo Gallery</a>
+    <a href="#sec-rites">Buddhist Rites</a>
+    <a href="#sec-packages">Packages</a>
+    <a href="#sec-faq">FAQ</a>
+    <a href="#sec-contact">Contact Section</a>
+  </div>
+
+  <!-- This empty form collects every text field on the page via the form="contentForm" attribute. -->
+  <form id="contentForm" method="post" action="/admin/save"></form>
+
+  <!-- ============ CONTACT & BRAND ============ -->
+  <div class="card" id="sec-site">
+    <h2>Contact Details & Brand</h2>
+    <p class="hint">Phone numbers, email and business name shown across the whole site.</p>
+    <div class="grid2">
+      <div class="field"><label>Brand name (line 1)</label><input form="contentForm" type="text" name="site[brandTop]" value="<%= c.site.brandTop %>"></div>
+      <div class="field"><label>Brand name (line 2)</label><input form="contentForm" type="text" name="site[brandBottom]" value="<%= c.site.brandBottom %>"></div>
+      <div class="field"><label>Hotline (shown)</label><input form="contentForm" type="text" name="site[hotline]" value="<%= c.site.hotline %>"></div>
+      <div class="field"><label>Hotline (dial number, e.g. +6591234567)</label><input form="contentForm" type="text" name="site[hotlineTel]" value="<%= c.site.hotlineTel %>"></div>
+      <div class="field"><label>WhatsApp number (e.g. 6591234567)</label><input form="contentForm" type="text" name="site[whatsapp]" value="<%= c.site.whatsapp %>"></div>
+      <div class="field"><label>Email</label><input form="contentForm" type="text" name="site[email]" value="<%= c.site.email %>"></div>
+      <div class="field"><label>Address</label><input form="contentForm" type="text" name="site[address]" value="<%= c.site.address %>"></div>
+      <div class="field"><label>Company name (footer)</label><input form="contentForm" type="text" name="site[companyName]" value="<%= c.site.companyName %>"></div>
+      <div class="field"><label>Footer Chinese line</label><input form="contentForm" type="text" name="site[footerZh]" value="<%= c.site.footerZh %>"></div>
+    </div>
+    <div class="field"><label>Browser tab title (SEO)</label><input form="contentForm" type="text" name="site[metaTitle]" value="<%= c.site.metaTitle %>"></div>
+    <div class="field"><label>Search description (SEO)</label><textarea form="contentForm" name="site[metaDescription]"><%= c.site.metaDescription %></textarea></div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <div class="card" id="sec-hero">
+    <h2>Hero / Top Banner</h2>
+    <p class="hint">The first thing visitors see.</p>
+    <div class="grid2">
+      <div class="field"><label>Heading (normal text)</label><input form="contentForm" type="text" name="hero[title]" value="<%= c.hero.title %>"></div>
+      <div class="field"><label>Heading (gold/italic text)</label><input form="contentForm" type="text" name="hero[titleEm]" value="<%= c.hero.titleEm %>"></div>
+    </div>
+    <div class="field"><label>Chinese line</label><input form="contentForm" type="text" name="hero[zhLine]" value="<%= c.hero.zhLine %>"></div>
+    <div class="field"><label>Paragraph</label><textarea form="contentForm" name="hero[paragraph]"><%= c.hero.paragraph %></textarea></div>
+    <div class="grid2">
+      <div class="field"><label>Primary button text</label><input form="contentForm" type="text" name="hero[ctaPrimary]" value="<%= c.hero.ctaPrimary %>"></div>
+      <div class="field"><label>Secondary button text</label><input form="contentForm" type="text" name="hero[ctaSecondary]" value="<%= c.hero.ctaSecondary %>"></div>
+    </div>
+
+    <label>Background image (optional)</label>
+    <div class="hero-preview">
+      <% if (c.hero.backgroundImage) { %>
+        <img src="<%= c.hero.backgroundImage %>" alt="hero background">
+        <form method="post" action="/admin/hero-image/remove"><button class="btn btn-danger btn-sm" type="submit">Remove image</button></form>
+      <% } else { %>
+        <p class="hint" style="margin:0">No image set — an elegant lotus illustration is shown instead.</p>
+      <% } %>
+    </div>
+    <form method="post" action="/admin/hero-image" enctype="multipart/form-data" class="upload-row" style="margin-top:14px">
+      <div class="field"><label>Upload a new background image</label><input type="file" name="image" accept="image/*" required></div>
+      <button class="btn btn-gold btn-sm" type="submit">Upload</button>
+    </form>
+  </div>
+
+  <!-- ============ FIRST STEPS ============ -->
+  <div class="card" id="sec-steps">
+    <h2>First Steps Section</h2>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow (small label)</label><input form="contentForm" type="text" name="steps[eyebrow]" value="<%= c.steps.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="steps[title]" value="<%= c.steps.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="steps[titleEm]" value="<%= c.steps.titleEm %>"></div>
+      <div class="field"><label>Lead paragraph</label><input form="contentForm" type="text" name="steps[lead]" value="<%= c.steps.lead %>"></div>
+    </div>
+    <% c.steps.items.forEach(function(item, i){ %>
+    <div class="subcard">
+      <div class="num">Step <%= i+1 %></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="steps[items][<%= i %>][title]" value="<%= item.title %>"></div>
+      <div class="field"><label>Text</label><textarea form="contentForm" name="steps[items][<%= i %>][text]"><%= item.text %></textarea></div>
+    </div>
+    <% }); %>
+  </div>
+
+  <!-- ============ SERVICES ============ -->
+  <div class="card" id="sec-services">
+    <h2>Services Section</h2>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow</label><input form="contentForm" type="text" name="services[eyebrow]" value="<%= c.services.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="services[title]" value="<%= c.services.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="services[titleEm]" value="<%= c.services.titleEm %>"></div>
+      <div class="field"><label>Lead paragraph</label><input form="contentForm" type="text" name="services[lead]" value="<%= c.services.lead %>"></div>
+    </div>
+    <% c.services.items.forEach(function(item, i){ %>
+    <div class="subcard">
+      <div class="num">Service <%= i+1 %></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="services[items][<%= i %>][title]" value="<%= item.title %>"></div>
+      <div class="field"><label>Text</label><textarea form="contentForm" name="services[items][<%= i %>][text]"><%= item.text %></textarea></div>
+    </div>
+    <% }); %>
+  </div>
+
+  <!-- ============ GALLERY ============ -->
+  <div class="card" id="sec-gallery">
+    <h2>Photo Gallery</h2>
+    <p class="hint">Upload photos here. The gallery section only appears on the website once it has at least one photo.</p>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow</label><input form="contentForm" type="text" name="gallery[eyebrow]" value="<%= c.gallery.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="gallery[title]" value="<%= c.gallery.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="gallery[titleEm]" value="<%= c.gallery.titleEm %>"></div>
+      <div class="field"><label>Lead paragraph</label><input form="contentForm" type="text" name="gallery[lead]" value="<%= c.gallery.lead %>"></div>
+    </div>
+
+    <% if (c.gallery.items.length) { %>
+    <label>Current photos</label>
+    <div class="gal-grid">
+      <% c.gallery.items.forEach(function(item, i){ %>
+      <div class="gal-item">
+        <img src="<%= item.image %>" alt="">
+        <div class="cap">
+          <input form="contentForm" type="text" name="gallery[items][<%= i %>][caption]" value="<%= item.caption %>" placeholder="Caption (optional)">
+          <form method="post" action="/admin/gallery/delete" onsubmit="return confirm('Delete this photo?')">
+            <input type="hidden" name="index" value="<%= i %>">
+            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <p class="hint">Tip: edit captions above, then click “Save All Changes” at the top.</p>
+    <% } %>
+
+    <form method="post" action="/admin/gallery/add" enctype="multipart/form-data" class="upload-row">
+      <div class="field"><label>Add a photo</label><input type="file" name="image" accept="image/*" required></div>
+      <div class="field"><label>Caption (optional)</label><input type="text" name="caption"></div>
+      <button class="btn btn-gold btn-sm" type="submit">Upload Photo</button>
+    </form>
+  </div>
+
+  <!-- ============ RITES ============ -->
+  <div class="card" id="sec-rites">
+    <h2>Buddhist Rites Section</h2>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow</label><input form="contentForm" type="text" name="rites[eyebrow]" value="<%= c.rites.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="rites[title]" value="<%= c.rites.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="rites[titleEm]" value="<%= c.rites.titleEm %>"></div>
+      <div class="field"><label>Lead paragraph</label><input form="contentForm" type="text" name="rites[lead]" value="<%= c.rites.lead %>"></div>
+    </div>
+    <% c.rites.items.forEach(function(item, i){ %>
+    <div class="subcard">
+      <div class="num">Rite <%= i+1 %></div>
+      <div class="grid2">
+        <div class="field"><label>Title</label><input form="contentForm" type="text" name="rites[items][<%= i %>][title]" value="<%= item.title %>"></div>
+        <div class="field"><label>Chinese term</label><input form="contentForm" type="text" name="rites[items][<%= i %>][zh]" value="<%= item.zh %>"></div>
+      </div>
+      <div class="field"><label>Text</label><textarea form="contentForm" name="rites[items][<%= i %>][text]"><%= item.text %></textarea></div>
+    </div>
+    <% }); %>
+  </div>
+
+  <!-- ============ PACKAGES ============ -->
+  <div class="card" id="sec-packages">
+    <h2>Funeral Packages</h2>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow</label><input form="contentForm" type="text" name="packages[eyebrow]" value="<%= c.packages.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="packages[title]" value="<%= c.packages.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="packages[titleEm]" value="<%= c.packages.titleEm %>"></div>
+      <div class="field"><label>Lead paragraph</label><input form="contentForm" type="text" name="packages[lead]" value="<%= c.packages.lead %>"></div>
+    </div>
+    <% c.packages.items.forEach(function(pkg, i){ %>
+    <div class="subcard">
+      <div class="num">Package <%= i+1 %></div>
+      <div class="grid2">
+        <div class="field"><label>Name</label><input form="contentForm" type="text" name="packages[items][<%= i %>][name]" value="<%= pkg.name %>"></div>
+        <div class="field"><label>Subtitle</label><input form="contentForm" type="text" name="packages[items][<%= i %>][days]" value="<%= pkg.days %>"></div>
+      </div>
+      <div class="checkrow">
+        <input form="contentForm" type="checkbox" id="feat<%= i %>" name="packages[items][<%= i %>][featured]" <%= pkg.featured ? 'checked' : '' %>>
+        <label for="feat<%= i %>">Highlight this package (gold border + badge)</label>
+      </div>
+      <div class="field"><label>Badge text (only shows when highlighted)</label><input form="contentForm" type="text" name="packages[items][<%= i %>][tag]" value="<%= pkg.tag %>"></div>
+      <div class="field"><label>Features (one per line)</label><textarea form="contentForm" name="packages[items][<%= i %>][features]" style="min-height:120px"><%= pkg.features.join('\n') %></textarea></div>
+    </div>
+    <% }); %>
+  </div>
+
+  <!-- ============ FAQ ============ -->
+  <div class="card" id="sec-faq">
+    <h2>FAQ Section</h2>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow</label><input form="contentForm" type="text" name="faq[eyebrow]" value="<%= c.faq.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="faq[title]" value="<%= c.faq.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="faq[titleEm]" value="<%= c.faq.titleEm %>"></div>
+    </div>
+    <% c.faq.items.forEach(function(item, i){ %>
+    <div class="subcard">
+      <div class="num">Question <%= i+1 %></div>
+      <div class="field"><label>Question</label><input form="contentForm" type="text" name="faq[items][<%= i %>][q]" value="<%= item.q %>"></div>
+      <div class="field"><label>Answer</label><textarea form="contentForm" name="faq[items][<%= i %>][a]"><%= item.a %></textarea></div>
+    </div>
+    <% }); %>
+  </div>
+
+  <!-- ============ CONTACT SECTION ============ -->
+  <div class="card" id="sec-contact">
+    <h2>Contact Section (bottom of page)</h2>
+    <div class="grid2">
+      <div class="field"><label>Eyebrow</label><input form="contentForm" type="text" name="contact[eyebrow]" value="<%= c.contact.eyebrow %>"></div>
+      <div class="field"><label>Title</label><input form="contentForm" type="text" name="contact[title]" value="<%= c.contact.title %>"></div>
+      <div class="field"><label>Title (gold word)</label><input form="contentForm" type="text" name="contact[titleEm]" value="<%= c.contact.titleEm %>"></div>
+      <div class="field"><label>Card title</label><input form="contentForm" type="text" name="contact[cardTitle]" value="<%= c.contact.cardTitle %>"></div>
+      <div class="field"><label>Card Chinese</label><input form="contentForm" type="text" name="contact[cardZh]" value="<%= c.contact.cardZh %>"></div>
+      <div class="field"><label>Card subtitle</label><input form="contentForm" type="text" name="contact[cardSubtitle]" value="<%= c.contact.cardSubtitle %>"></div>
+    </div>
+    <div class="field"><label>Note title</label><input form="contentForm" type="text" name="contact[noteTitle]" value="<%= c.contact.noteTitle %>"></div>
+    <div class="field"><label>Note text</label><textarea form="contentForm" name="contact[noteText]"><%= c.contact.noteText %></textarea></div>
+    <div class="field"><label>Note button text</label><input form="contentForm" type="text" name="contact[noteButton]" value="<%= c.contact.noteButton %>"></div>
+  </div>
+
+  <div style="text-align:center"><button class="btn btn-gold" type="submit" form="contentForm" style="padding:14px 40px">Save All Changes</button></div>
+
+</div>
+</body>
+</html>

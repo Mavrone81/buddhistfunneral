@@ -1,0 +1,200 @@
+{
+  "site": {
+    "brandTop": "Singapore Buddhist",
+    "brandBottom": "Funeral Services",
+    "metaTitle": "Singapore Buddhist Funeral Services 新加坡佛教殡葬服务 | 24-Hour Hotline",
+    "metaDescription": "Singapore Buddhist Funeral Services — dignified wake arrangements, monk chanting rites, encoffinment, cremation and 49-day prayers. Compassionate care, 24 hours a day.",
+    "hotline": "+65 0000 0000",
+    "hotlineTel": "+6500000000",
+    "whatsapp": "6500000000",
+    "email": "hello@sgbuddhistfuneral.sg",
+    "address": "Singapore",
+    "companyName": "Singapore Bereavement Group Pte Ltd",
+    "footerZh": "慈悲 · 庄严 · 安详"
+  },
+  "hero": {
+    "title": "A peaceful journey,",
+    "titleEm": "guided with compassion",
+    "zhLine": "慈悲 · 庄严 · 安详",
+    "paragraph": "Singapore Buddhist Funeral Services provides dignified Buddhist funerals — honouring your loved one with proper rites, mindful care and a serene farewell, available around the clock.",
+    "ctaPrimary": "Call Our 24-Hr Hotline",
+    "ctaSecondary": "View Packages",
+    "backgroundImage": ""
+  },
+  "strip": {
+    "text": "Immediate assistance, day or night — our advisors will guide you through every step.",
+    "button": "WhatsApp Us Now"
+  },
+  "steps": {
+    "eyebrow": "Guidance In Difficult Moments",
+    "title": "When a loved one",
+    "titleEm": "passes away",
+    "lead": "In the first hours, you do not need to face the arrangements alone. Call us first — we will handle everything that follows.",
+    "items": [
+      {
+        "title": "Call Us First",
+        "text": "Contact our 24-hour hotline. Our advisor will guide you calmly through what needs to be done, wherever the passing occurred."
+      },
+      {
+        "title": "Certification of Death",
+        "text": "We assist with the doctor's Certificate of Cause of Death (CCOD) and the official death documentation required in Singapore."
+      },
+      {
+        "title": "Bringing Them Home",
+        "text": "Our team transfers your loved one with care to the wake venue — void deck, funeral parlour or your home — and prepares the setup."
+      },
+      {
+        "title": "The Wake & Rites Begin",
+        "text": "We arrange the altar, casket and monk chanting rites, so your family can focus on being present with one another."
+      }
+    ]
+  },
+  "services": {
+    "eyebrow": "Complete & Compassionate",
+    "title": "Our",
+    "titleEm": "services",
+    "lead": "A full Buddhist funeral service, arranged end to end — every detail handled with reverence.",
+    "items": [
+      {
+        "title": "Wake Arrangements",
+        "text": "Full setup at HDB void deck, funeral parlour or private residence — tentage, altar, Buddha image, floral arrangements, photo enlargement and nightly support."
+      },
+      {
+        "title": "Monk Chanting Rites",
+        "text": "Venerable monks conduct chanting and transference-of-merit rites — at the encoffinment, nightly prayers, funeral day and cremation, per Mahayana or Theravada tradition."
+      },
+      {
+        "title": "Encoffinment & Embalming",
+        "text": "Professional embalming, dressing and encoffinment performed with dignity, with a quality casket appropriate to Buddhist customs."
+      },
+      {
+        "title": "Cremation & Ash Collection",
+        "text": "Booking of the cremation slot at Mandai Crematorium, hearse and family transport, and respectful ash collection the following day."
+      },
+      {
+        "title": "Post-Funeral Prayers",
+        "text": "Arrangement of 7th-day (头七), 49-day (七七) and 100-day memorial prayers, guiding your loved one's journey and bringing comfort to the family."
+      },
+      {
+        "title": "Columbarium & Sea Burial",
+        "text": "Guidance on niche selection at government or temple columbaria, or arrangement of sea scattering with the appropriate Buddhist ritual."
+      }
+    ]
+  },
+  "gallery": {
+    "eyebrow": "In Loving Memory",
+    "title": "A serene",
+    "titleEm": "farewell",
+    "lead": "Glimpses of the dignified arrangements and tranquil settings we prepare for every family.",
+    "items": []
+  },
+  "rites": {
+    "eyebrow": "Honouring The Dharma",
+    "title": "Buddhist funeral",
+    "titleEm": "rites & traditions",
+    "lead": "Each rite carries deep meaning — generating merit for the departed and guiding them peacefully toward their next journey.",
+    "items": [
+      {
+        "title": "Encoffinment Rite",
+        "zh": "入殓",
+        "text": "Monks chant as your loved one is laid into the casket, blessing the departed and sanctifying the beginning of the wake."
+      },
+      {
+        "title": "Nightly Chanting",
+        "zh": "诵经",
+        "text": "Evening sutra recitations — commonly the Amitabha Sutra — transfer merit to the departed while bringing calm to the bereaved."
+      },
+      {
+        "title": "Funeral Day Service",
+        "zh": "出殡",
+        "text": "The final-day rite includes prayers, last respects and the procession, conducted with solemnity before the cortege departs for cremation."
+      },
+      {
+        "title": "49 Days of Prayers",
+        "zh": "七七四十九天",
+        "text": "In Buddhist belief, the consciousness journeys for up to 49 days. Weekly prayers, especially the 7th and 49th day, support a favourable rebirth."
+      }
+    ]
+  },
+  "packages": {
+    "eyebrow": "Transparent & Complete",
+    "title": "Funeral",
+    "titleEm": "packages",
+    "lead": "Every package is complete — no hidden costs. Speak with our advisors for current pricing and customisation.",
+    "items": [
+      {
+        "name": "3-Day Wake",
+        "days": "An intimate farewell",
+        "featured": false,
+        "tag": "",
+        "features": [
+          "Casket, embalming & encoffinment",
+          "Wake setup with Buddhist altar",
+          "Monk chanting — encoffin & funeral day",
+          "Mandai cremation booking & hearse",
+          "Ash collection assistance"
+        ]
+      },
+      {
+        "name": "5-Day Wake",
+        "days": "Time for family & friends",
+        "featured": true,
+        "tag": "Most Chosen",
+        "features": [
+          "Everything in the 3-day package",
+          "Nightly monk chanting sessions",
+          "Floral & fruit altar offerings refreshed daily",
+          "Photo montage & memorial book",
+          "Funeral director present throughout"
+        ]
+      },
+      {
+        "name": "7-Day Wake",
+        "days": "A full traditional farewell",
+        "featured": false,
+        "tag": "",
+        "features": [
+          "Everything in the 5-day package",
+          "Extended tentage & nightly refreshments",
+          "Additional prayer sessions per tradition",
+          "49-day & 100-day prayer arrangement",
+          "Columbarium or sea burial guidance"
+        ]
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "Common Questions",
+    "title": "Frequently",
+    "titleEm": "asked",
+    "items": [
+      {
+        "q": "What should I do immediately when a loved one passes at home?",
+        "a": "Call a doctor to certify the death (we can arrange one), then call our 24-hour hotline. Our team will take care of the transfer, documentation and all funeral arrangements from there."
+      },
+      {
+        "q": "Can the wake be held at an HDB void deck?",
+        "a": "Yes. We obtain the necessary town council permit and handle the complete setup — tentage, lighting, altar, seating and nightly security — at the void deck, a funeral parlour, or your home."
+      },
+      {
+        "q": "Do you serve both Mahayana and Theravada traditions?",
+        "a": "Yes. We work with venerable monks of both traditions and will arrange rites according to your family's practice and dialect group customs."
+      },
+      {
+        "q": "What happens after the cremation?",
+        "a": "We accompany you for ash collection, then assist with your chosen resting place — a columbarium niche, sea scattering with Buddhist ritual, or other arrangements — plus the 7th-day, 49-day and 100-day prayers."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Here For You, Always",
+    "title": "Contact",
+    "titleEm": "us",
+    "cardTitle": "Singapore Buddhist Funeral Services",
+    "cardZh": "新加坡佛教殡葬服务",
+    "cardSubtitle": "A service of Singapore Bereavement Group Pte Ltd",
+    "noteTitle": "In your most difficult hour, call us first.",
+    "noteText": "Our advisors respond at any hour, every day. Let us shoulder the arrangements while you stay close to your family.",
+    "noteButton": "Call Now"
+  }
+}

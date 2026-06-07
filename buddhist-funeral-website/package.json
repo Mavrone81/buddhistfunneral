@@ -1,0 +1,16 @@
+{
+  "name": "buddhist-funeral-website",
+  "version": "1.0.0",
+  "description": "Singapore Buddhist Funeral Services — public website with an admin backend for editing copy and uploading images.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "multer": "^2.1.1"
+  }
+}
