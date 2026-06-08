@@ -232,6 +232,7 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 .float-contact{position:fixed;right:18px;bottom:18px;z-index:200;display:flex;flex-direction:column;gap:12px}
 .float-contact a{display:flex;align-items:center;gap:9px;padding:12px 20px;border-radius:40px;color:#fff;font-size:.82rem;font-weight:500;letter-spacing:.04em;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .25s,box-shadow .25s}
 .float-contact a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.float-contact .fc-enquire{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
 .float-contact .fc-call{background:linear-gradient(135deg,var(--maroon),#8f4536)}
 .float-contact .fc-wa{background:linear-gradient(135deg,#1faf54,#25d366)}
 .float-contact svg{width:19px;height:19px;flex:none}
@@ -559,6 +560,10 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 <!-- Floating quick-contact buttons (24-hour) -->
 <div class="float-contact">
+  <a class="fc-enquire" href="#contact" aria-label="Send an enquiry">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v11A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-11Z" stroke="#fff" stroke-width="1.6"/><path d="m4 7 8 6 8-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span><%- t('Enquire', '咨询') %></span>
+  </a>
   <a class="fc-call" href="tel:<%= c.site.hotlineTel %>" aria-label="Call our 24-hour hotline">
     <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 3h2.7l1.4 4.6-1.9 1.4a12 12 0 0 0 4.8 4.8l1.4-1.9 4.6 1.4v2.7a2 2 0 0 1-2.1 2A16.8 16.8 0 0 1 4.6 5.1 2 2 0 0 1 6.6 3Z" fill="#fff"/></svg>
     <span><%- t('Call 24h', '24小时热线') %></span>
