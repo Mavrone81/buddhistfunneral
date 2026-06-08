@@ -49,6 +49,38 @@ if (!fs.existsSync(DATA_FILE) && fs.existsSync(DATA_DEFAULT_FILE)) {
   console.log('Seeded data/content.json from content.default.json');
 }
 
+// Fill in any NEW fields/sections added to the seed since the live content was
+// created — without overwriting existing (admin-edited) values. Lets new sections
+// (e.g. About Us) appear on deploy while preserving the client's edits.
+function fillMissing(target, defaults) {
+  let changed = false;
+  for (const key of Object.keys(defaults)) {
+    if (!(key in target)) {
+      target[key] = defaults[key];
+      changed = true;
+    } else if (
+      defaults[key] && typeof defaults[key] === 'object' && !Array.isArray(defaults[key]) &&
+      target[key] && typeof target[key] === 'object' && !Array.isArray(target[key])
+    ) {
+      changed = fillMissing(target[key], defaults[key]) || changed;
+    }
+    // Arrays and primitives that already exist are left as-is (client's data wins).
+  }
+  return changed;
+}
+if (fs.existsSync(DATA_FILE) && fs.existsSync(DATA_DEFAULT_FILE)) {
+  try {
+    const live = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    const defaults = JSON.parse(fs.readFileSync(DATA_DEFAULT_FILE, 'utf8'));
+    if (fillMissing(live, defaults)) {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(live, null, 2));
+      console.log('Merged new default fields into data/content.json');
+    }
+  } catch (e) {
+    console.error('Could not merge defaults into content.json:', e.message);
+  }
+}
+
 // Build the mail transporter only when credentials are present.
 const transporter = MAIL_ENABLED
   ? nodemailer.createTransport({

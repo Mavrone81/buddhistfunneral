@@ -18,10 +18,10 @@
     "favicon": ""
   },
   "hero": {
-    "title": "A peaceful journey,",
-    "titleZh": "安详的旅程，",
-    "titleEm": "guided with compassion",
-    "titleEmZh": "以慈悲相伴",
+    "title": "Farewell with Grace,",
+    "titleZh": "以欣慰送别，",
+    "titleEm": "Care with Devotion",
+    "titleEmZh": "以奉敬传爱",
     "zhLine": "慈悲 · 庄严 · 安详",
     "paragraph": "Singapore Buddhist Funeral Services provides dignified Buddhist funerals — honouring your loved one with proper rites, mindful care and a serene farewell, available around the clock.",
     "paragraphZh": "新加坡佛教殡葬服务为您提供庄严的佛教殡葬礼仪——以如法的仪轨、细心的照料与宁静的告别，恭送您的至亲，全天候为您服务。",
@@ -36,6 +36,37 @@
     "textZh": "无论昼夜，即时协助——我们的顾问将引导您完成每一个步骤。",
     "button": "WhatsApp Us Now",
     "buttonZh": "立即 WhatsApp 联系我们"
+  },
+  "values": {
+    "items": [
+      { "label": "24-Hour Care", "labelZh": "全天候关怀" },
+      { "label": "All Faiths Honoured", "labelZh": "尊重各种信仰" },
+      { "label": "Transparent Pricing", "labelZh": "价格透明" },
+      { "label": "Compassion First", "labelZh": "慈悲为本" }
+    ]
+  },
+  "about": {
+    "eyebrow": "Who We Are",
+    "eyebrowZh": "关于我们",
+    "title": "Caring for families",
+    "titleZh": "用心陪伴每一个家庭",
+    "titleEm": "with quiet dignity",
+    "titleEmZh": "以庄严与安宁",
+    "lead": "We exist for one reason — so that no family should have to face the loss of a loved one alone.",
+    "leadZh": "我们的存在只有一个理由——让每一个家庭在痛失至亲时，都不必独自承担。",
+    "storyTitle": "Our purpose",
+    "storyTitleZh": "我们的使命",
+    "storyText": "From the very first call to the final prayers, we shoulder the arrangements, the paperwork and the rites — quietly and respectfully — so that you can spend these precious days close to the people who matter most. Every detail is handled with the same care we would give our own family.",
+    "storyTextZh": "从您致电的那一刻，直到最后的诵经送别，我们承担起所有安排、文件与仪轨——安静而恭敬——让您能将这段珍贵的时光，留给最重要的家人。每一个细节，我们都以对待至亲的心意悉心处理。",
+    "philosophyTitle": "What sets us apart",
+    "philosophyTitleZh": "我们的不同之处",
+    "philosophyText": "A farewell should reflect the life it honours. We hold fast to time-honoured customs and religious rites, while embracing thoughtful, modern touches — so that every service feels personal and sincere, never templated.",
+    "philosophyTextZh": "告别，应当映照出逝者走过的一生。我们坚守传统习俗与宗教仪轨，同时融入用心的现代细节——让每一场仪式都真挚而独特，绝非千篇一律。",
+    "commitments": [
+      { "title": "Every Faith, Every Tradition", "titleZh": "尊重每一种信仰与传统", "text": "Buddhist, Taoist, Christian or free-thinker — we arrange the rites faithfully according to your family's beliefs and dialect customs.", "textZh": "佛教、道教、基督教或自由思想者——我们都依照您家庭的信仰与籍贯习俗，如实安排各项仪式。" },
+      { "title": "Clear, Honest Pricing", "titleZh": "清晰而诚实的价格", "text": "Complete packages with no hidden charges. We explain every cost before you decide, so there are no surprises during a difficult time.", "textZh": "配套完整，绝无隐藏费用。在您决定之前，我们会清楚说明每一项收费，让您在艰难时刻不必担心意外开销。" },
+      { "title": "Present at Every Step", "titleZh": "全程陪伴", "text": "A dedicated funeral director stays with your family throughout and is reachable day or night — help is only ever a phone call away.", "textZh": "专属的殡葬顾问将全程陪伴您的家庭，昼夜皆可联系——只需一通电话，我们便在您身边。" }
+    ]
   },
   "steps": {
     "eyebrow": "Guidance In Difficult Moments",

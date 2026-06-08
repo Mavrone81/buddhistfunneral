@@ -289,6 +289,23 @@ nav{background:rgba(7,15,58,.96);border-bottom:1px solid rgba(215,179,90,.35)}
 footer{background:#070f38}
 /* keep the floating Call button red for contrast on navy */
 .float-contact .fc-call{background:linear-gradient(135deg,#a23b2e,#c0492f)}
+
+/* values strip */
+.values{background:var(--ivory-deep);padding:26px 0;border-top:1px solid rgba(215,179,90,.18);border-bottom:1px solid rgba(215,179,90,.18)}
+.values .container{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:16px 42px}
+.values .v{display:flex;align-items:center;gap:10px;color:#e7ecf8;font-size:.95rem;letter-spacing:.05em}
+.values .v::before{content:'';width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));flex:none}
+/* about */
+.about{background:var(--ivory)}
+.about-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:46px}
+.about-cols h3{color:var(--gold-light);font-size:1.45rem;margin-bottom:12px}
+.about-cols p{color:#c3cbe6;font-size:1rem}
+.about-commit{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
+.commit{background:#101e5c;border:1px solid rgba(215,179,90,.2);border-radius:16px;padding:28px 26px}
+.commit h4{color:#fff;font-size:1.2rem;font-family:'Cormorant Garamond',serif;font-weight:600;margin-bottom:10px}
+.commit h4::before{content:'';display:block;width:34px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin-bottom:14px}
+.commit p{color:#c3cbe6;font-size:.93rem}
+@media(max-width:860px){.about-cols{grid-template-columns:1fr;gap:26px}.about-commit{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -312,6 +329,7 @@ footer{background:#070f38}
       <img class="brand-logo" src="<%= c.site.logo || '/enshrine-logo.png' %>" alt="Enshrine">
     </a>
     <ul class="nav-links">
+      <li><a href="#about"><%- t('About', '关于') %></a></li>
       <li><a href="#guidance"><%- t('First Steps', '初步指引') %></a></li>
       <li><a href="#services"><%- t('Services', '服务') %></a></li>
       <% if (c.gallery.items.length) { %><li><a href="#gallery"><%- t('Gallery', '影集') %></a></li><% } %>
@@ -365,6 +383,45 @@ footer{background:#070f38}
     <a class="btn" href="https://wa.me/<%= c.site.whatsapp %>"><%- t(c.strip.button, c.strip.buttonZh) %></a>
   </div>
 </div>
+
+<% if (c.values && c.values.items && c.values.items.length) { %>
+<div class="values">
+  <div class="container">
+    <% c.values.items.forEach(function(v){ %>
+    <span class="v"><%- t(v.label, v.labelZh) %></span>
+    <% }); %>
+  </div>
+</div>
+<% } %>
+
+<% if (c.about) { %>
+<section class="about" id="about">
+  <div class="container">
+    <span class="eyebrow"><%- t(c.about.eyebrow, c.about.eyebrowZh) %></span>
+    <h2 class="section-title"><%- t(c.about.title, c.about.titleZh) %> <em><%- t(c.about.titleEm, c.about.titleEmZh) %></em></h2>
+    <div class="rule"></div>
+    <p class="lead"><%- t(c.about.lead, c.about.leadZh) %></p>
+    <div class="about-cols">
+      <div>
+        <h3><%- t(c.about.storyTitle, c.about.storyTitleZh) %></h3>
+        <p><%- t(c.about.storyText, c.about.storyTextZh) %></p>
+      </div>
+      <div>
+        <h3><%- t(c.about.philosophyTitle, c.about.philosophyTitleZh) %></h3>
+        <p><%- t(c.about.philosophyText, c.about.philosophyTextZh) %></p>
+      </div>
+    </div>
+    <div class="about-commit">
+      <% c.about.commitments.forEach(function(item){ %>
+      <div class="commit">
+        <h4><%- t(item.title, item.titleZh) %></h4>
+        <p><%- t(item.text, item.textZh) %></p>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+<% } %>
 
 <section class="steps" id="guidance">
   <div class="container">
