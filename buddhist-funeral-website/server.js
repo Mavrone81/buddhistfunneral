@@ -35,10 +35,19 @@ const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
 const MAIL_ENABLED = Boolean(SMTP_USER && SMTP_PASS);
 
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
+// Seed/template content shipped in the repo. The live, admin-edited content lives
+// in content.json, which is NOT tracked by git so deploys never overwrite it.
+const DATA_DEFAULT_FILE = path.join(__dirname, 'data', 'content.default.json');
 const ENQUIRIES_FILE = path.join(__dirname, 'data', 'enquiries.json');
 const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads');
 
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+// On first run (e.g. a fresh deploy), create the live content from the seed.
+if (!fs.existsSync(DATA_FILE) && fs.existsSync(DATA_DEFAULT_FILE)) {
+  fs.copyFileSync(DATA_DEFAULT_FILE, DATA_FILE);
+  console.log('Seeded data/content.json from content.default.json');
+}
 
 // Build the mail transporter only when credentials are present.
 const transporter = MAIL_ENABLED

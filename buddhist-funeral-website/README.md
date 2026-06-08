@@ -104,3 +104,33 @@ To back up your site’s content, just keep a copy of these two locations.
 This is a standard Node.js app. It runs on any host that supports Node — e.g. Render, Railway, Fly.io, a DigitalOcean droplet, or any VPS. Set the `ADMIN_PASSWORD` and `SESSION_SECRET` environment variables there, and run `npm start`.
 
 > Note: uploaded images are stored on disk. On hosts with a temporary filesystem (some free tiers), attach a persistent disk/volume to the `public/uploads` folder so photos survive restarts.
+
+---
+
+## CI/CD — auto-deploy to DigitalOcean
+
+Pushing to `main` on GitHub automatically redeploys the live droplet via
+GitHub Actions (`.github/workflows/deploy.yml`).
+
+**Flow:** push to `main` → GitHub Action SSHes into the droplet → `git reset --hard origin/main`
+→ `npm ci` → `pm2 reload`.
+
+### Content vs code (important)
+- **Code** is managed in git and deploys automatically.
+- **Live content** (`data/content.json`) and **uploaded photos** (`public/uploads/`)
+  are **git-ignored** and live only on the server, so deploys never overwrite what the
+  client edits in the admin panel. The repo ships `data/content.default.json` as the
+  seed used only on a fresh install (when `content.json` doesn't yet exist).
+- To change site copy in production, use the **admin panel** — not git.
+
+### Required GitHub repo secrets
+Settings → Secrets and variables → Actions:
+
+| Secret | Value |
+|---|---|
+| `DO_HOST` | droplet IP (e.g. `157.230.240.163`) |
+| `DO_USER` | SSH user (e.g. `root`) |
+| `DO_SSH_KEY` | private deploy key (generated on the server) |
+
+The droplet must have the repo at `/root/buddhistfunneral`, PM2 running the app from
+`ecosystem.config.js`, and the deploy key's public half in `~/.ssh/authorized_keys`.

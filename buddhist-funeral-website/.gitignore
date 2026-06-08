@@ -2,5 +2,6 @@ node_modules/
 public/uploads/*
 !public/uploads/.gitkeep
 data/enquiries.json
+data/content.json
 .DS_Store
 ecosystem.config.js
