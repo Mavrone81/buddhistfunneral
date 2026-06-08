@@ -109,11 +109,18 @@ This is a standard Node.js app. It runs on any host that supports Node — e.g. 
 
 ## CI/CD — auto-deploy to DigitalOcean
 
-Pushing to `main` on GitHub automatically redeploys the live droplet via
-GitHub Actions (`.github/workflows/deploy.yml`).
+Pushing to `main` on GitHub automatically redeploys the live droplet. Deployment
+runs **on the server** via a small auto-deploy script (`/root/auto-deploy-bf.sh`)
+that a cron job runs every minute: it checks GitHub for new commits on `main` and,
+when it finds them, pulls and reloads.
 
-**Flow:** push to `main` → GitHub Action SSHes into the droplet → `git reset --hard origin/main`
-→ `npm ci` → `pm2 reload`.
+**Flow:** `git push` → (within ~1 min) the droplet detects the new commit →
+`git reset --hard origin/main` → `npm ci` → `pm2 startOrReload`.
+
+This server-pull approach needs **no GitHub secrets and no GitHub login** — the
+droplet already has read access to the repo. (A GitHub Actions workflow for
+instant, push-triggered deploys is also possible, but requires adding repo
+secrets `DO_HOST` / `DO_USER` / `DO_SSH_KEY` under Settings → Secrets → Actions.)
 
 ### Content vs code (important)
 - **Code** is managed in git and deploys automatically.
@@ -123,14 +130,8 @@ GitHub Actions (`.github/workflows/deploy.yml`).
   seed used only on a fresh install (when `content.json` doesn't yet exist).
 - To change site copy in production, use the **admin panel** — not git.
 
-### Required GitHub repo secrets
-Settings → Secrets and variables → Actions:
-
-| Secret | Value |
-|---|---|
-| `DO_HOST` | droplet IP (e.g. `157.230.240.163`) |
-| `DO_USER` | SSH user (e.g. `root`) |
-| `DO_SSH_KEY` | private deploy key (generated on the server) |
-
-The droplet must have the repo at `/root/buddhistfunneral`, PM2 running the app from
-`ecosystem.config.js`, and the deploy key's public half in `~/.ssh/authorized_keys`.
+### Server setup (already done on the live droplet)
+- Repo at `/root/buddhistfunneral`, app at `buddhist-funeral-website/`, PM2 app
+  `buddhist-funeral` from `ecosystem.config.js` (PORT 20201).
+- `/root/auto-deploy-bf.sh` installed and run every minute by cron.
+- Deploy log: `/var/log/bf-deploy.log`.
