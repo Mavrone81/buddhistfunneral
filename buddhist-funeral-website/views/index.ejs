@@ -228,6 +228,16 @@ footer{background:#2a2118;padding:34px 0;text-align:center}
 footer p{color:#9b8a72;font-size:.82rem;letter-spacing:.05em}
 footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4em}
 
+/* FLOATING CONTACT */
+.float-contact{position:fixed;right:18px;bottom:18px;z-index:200;display:flex;flex-direction:column;gap:12px}
+.float-contact a{display:flex;align-items:center;gap:9px;padding:12px 20px;border-radius:40px;color:#fff;font-size:.82rem;font-weight:500;letter-spacing:.04em;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .25s,box-shadow .25s}
+.float-contact a:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.float-contact .fc-call{background:linear-gradient(135deg,var(--maroon),#8f4536)}
+.float-contact .fc-wa{background:linear-gradient(135deg,#1faf54,#25d366)}
+.float-contact svg{width:19px;height:19px;flex:none}
+.float-contact span{white-space:nowrap}
+@media(max-width:560px){.float-contact{right:14px;bottom:14px;gap:10px}.float-contact a span{display:none}.float-contact a{padding:14px;border-radius:50%}}
+
 /* MOBILE REFINEMENTS */
 @media(max-width:600px){
   section{padding:60px 0}
@@ -546,6 +556,18 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
   });
 })();
 </script>
+
+<!-- Floating quick-contact buttons (24-hour) -->
+<div class="float-contact">
+  <a class="fc-call" href="tel:<%= c.site.hotlineTel %>" aria-label="Call our 24-hour hotline">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 3h2.7l1.4 4.6-1.9 1.4a12 12 0 0 0 4.8 4.8l1.4-1.9 4.6 1.4v2.7a2 2 0 0 1-2.1 2A16.8 16.8 0 0 1 4.6 5.1 2 2 0 0 1 6.6 3Z" fill="#fff"/></svg>
+    <span><%- t('Call 24h', '24小时热线') %></span>
+  </a>
+  <a class="fc-wa" href="https://wa.me/<%= c.site.whatsapp %>" target="_blank" rel="noopener" aria-label="WhatsApp us">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.3.1.6-.1 1.3Z"/></svg>
+    <span><%- t('WhatsApp', 'WhatsApp') %></span>
+  </a>
+</div>
 
 </body>
 </html>
