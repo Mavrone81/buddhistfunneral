@@ -51,6 +51,45 @@ You can also set `PORT` and `SESSION_SECRET` the same way. For a real deployment
 
 ---
 
+## Contact form (emailing you)
+
+The website has a **contact form** in the Contact section. Every submission is:
+
+1. Saved to `data/enquiries.json` and viewable in the admin under **Enquiries** (top-right button).
+2. Emailed to you — **once you set up email** (see below).
+
+Enquiries are recorded even before email is set up, so nothing is ever lost.
+
+### Enable email with Gmail (recommended)
+
+Gmail needs an **App Password** (not your normal password):
+
+1. Turn on 2-Step Verification at https://myaccount.google.com/security
+2. Create an App Password at https://myaccount.google.com/apppasswords (choose “Mail”). You’ll get a 16-character code.
+3. Start the site with these environment variables:
+
+   ```
+   CONTACT_TO="fudunchuan.rsn@gmail.com" \
+   SMTP_USER="your-gmail@gmail.com" \
+   SMTP_PASS="the-16-char-app-password" \
+   npm start
+   ```
+
+That’s it — enquiries will arrive in your inbox (with the sender’s email as reply-to). The startup message confirms whether email is active.
+
+| Variable | Meaning | Default |
+|---|---|---|
+| `CONTACT_TO` | Inbox that receives enquiries | `fudunchuan.rsn@gmail.com` |
+| `SMTP_USER` | Email account used to send | _(none — email off until set)_ |
+| `SMTP_PASS` | App password for that account | _(none)_ |
+| `SMTP_HOST` | Mail server | `smtp.gmail.com` |
+| `SMTP_PORT` | Mail port | `465` |
+| `SMTP_FROM` | “From” address | same as `SMTP_USER` |
+
+You can use any provider (Outlook, your web host’s SMTP, SendGrid, etc.) by setting `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS` accordingly.
+
+---
+
 ## Where your content lives
 
 - **Text:** `data/content.json` — automatically updated when you save in the admin.

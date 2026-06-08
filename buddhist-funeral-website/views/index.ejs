@@ -206,6 +206,22 @@ body.lang-zh .faq summary{font-family:'Noto Serif SC',serif}
 .contact-note h3{color:#fff;font-size:1.6rem;margin-bottom:10px}
 .contact-note p{margin-bottom:22px}
 @media(max-width:860px){.contact-grid{grid-template-columns:1fr}}
+/* contact form */
+.contact-form{margin-top:46px;background:rgba(255,253,248,.06);border:1px solid rgba(214,184,120,.3);border-radius:18px;padding:36px}
+.contact-form h3{color:var(--gold-light);font-size:1.5rem;margin-bottom:8px}
+.contact-form .cf-note{color:#cdbfa8;font-size:.95rem;margin-bottom:24px;max-width:640px}
+.cf-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:680px){.cf-row{grid-template-columns:1fr}}
+.cf-field{margin-bottom:18px}
+.cf-field label{display:block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);margin-bottom:7px;font-weight:500}
+.cf-field input,.cf-field textarea{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(214,184,120,.35);background:rgba(0,0,0,.18);color:#fffdf8;font-family:inherit;font-size:1rem}
+.cf-field input:focus,.cf-field textarea:focus{outline:none;border-color:var(--gold-light);background:rgba(0,0,0,.28)}
+.cf-field textarea{resize:vertical}
+.contact-form .btn{border:none;cursor:pointer;margin-top:4px}
+.cf-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.cf-alert{padding:13px 18px;border-radius:10px;margin-bottom:22px;font-size:.95rem}
+.cf-alert.ok{background:rgba(96,140,80,.3);border:1px solid rgba(150,200,130,.5);color:#e3f3d8}
+.cf-alert.err{background:rgba(122,59,46,.4);border:1px solid rgba(214,184,120,.35);color:#f3d8cf}
 
 /* FOOTER */
 footer{background:#2a2118;padding:34px 0;text-align:center}
@@ -440,6 +456,41 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
         <p><%- t(c.contact.noteText, c.contact.noteTextZh) %></p>
         <div><a class="btn btn-gold" href="tel:<%= c.site.hotlineTel %>"><%- t(c.contact.noteButton, c.contact.noteButtonZh) %></a></div>
       </div>
+    </div>
+
+    <div class="contact-form">
+      <h3><%- t(c.contact.formTitle, c.contact.formTitleZh) %></h3>
+      <p class="cf-note"><%- t(c.contact.formNote, c.contact.formNoteZh) %></p>
+
+      <% if (formStatus === 'ok') { %>
+        <div class="cf-alert ok"><%- t('Thank you — your message has been received. We will be in touch shortly.', '感谢您 — 我们已收到您的信息，并将尽快与您联系。') %></div>
+      <% } else if (formStatus === 'err') { %>
+        <div class="cf-alert err"><%- t('Please enter your name, a message, and a phone or email so we can reach you.', '请填写您的姓名、信息，以及电话或电邮，以便我们与您联系。') %></div>
+      <% } %>
+
+      <form method="post" action="/contact">
+        <div class="cf-row">
+          <div class="cf-field">
+            <label for="cf-name"><%- t('Your name *', '您的姓名 *') %></label>
+            <input type="text" id="cf-name" name="name" required>
+          </div>
+          <div class="cf-field">
+            <label for="cf-phone"><%- t('Phone', '电话') %></label>
+            <input type="text" id="cf-phone" name="phone">
+          </div>
+          <div class="cf-field">
+            <label for="cf-email"><%- t('Email', '电邮') %></label>
+            <input type="email" id="cf-email" name="email">
+          </div>
+        </div>
+        <div class="cf-field">
+          <label for="cf-message"><%- t('How can we help? *', '我们能为您做些什么？*') %></label>
+          <textarea id="cf-message" name="message" rows="4" required></textarea>
+        </div>
+        <!-- anti-spam honeypot: hidden from people, often filled by bots -->
+        <div class="cf-hp"><label>Leave this empty</label><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" class="btn btn-gold"><%- t(c.contact.formButton, c.contact.formButtonZh) %></button>
+      </form>
     </div>
   </div>
 </section>

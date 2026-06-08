@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enquiries · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#b08d4a;--gold-light:#d6b878;--brown:#3b2f24}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:#f3ede1;color:#4a3d30;line-height:1.6}
+a{color:var(--gold);text-decoration:none}
+.topbar{position:sticky;top:0;z-index:50;background:var(--brown);color:#e9ddc6;display:flex;align-items:center;justify-content:space-between;padding:14px 26px;gap:16px;flex-wrap:wrap}
+.topbar .title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#f7f1e6;font-weight:600}
+.topbar .actions{display:flex;gap:12px;align-items:center}
+.btn{display:inline-block;padding:10px 22px;border-radius:30px;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;font-family:inherit;transition:.25s}
+.btn-ghost{background:transparent;border:1px solid rgba(214,184,120,.5);color:#e9ddc6}
+.btn-ghost:hover{background:rgba(214,184,120,.15)}
+.btn-sm{padding:7px 16px;font-size:.72rem}
+.layout{max-width:880px;margin:0 auto;padding:30px 22px 80px}
+.note{padding:13px 18px;border-radius:10px;margin-bottom:22px;font-size:.9rem}
+.note.ok{background:#dff0d8;border:1px solid #b6d7a8;color:#3c763d}
+.note.warn{background:#fcf3e3;border:1px solid #e6cfa3;color:#8a6d3b}
+.card{background:#fff;border:1px solid #e5dcca;border-radius:12px;padding:20px 22px;margin-bottom:16px;box-shadow:0 4px 14px rgba(59,47,36,.05)}
+.card .head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.card .name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--brown)}
+.card .date{font-size:.78rem;color:#9a8c78}
+.card .meta{font-size:.9rem;margin-bottom:10px}
+.card .meta a{font-weight:500}
+.card .msg{white-space:pre-wrap;background:#fdfaf3;border:1px solid #efe6d4;border-radius:8px;padding:12px 14px;font-size:.95rem}
+.empty{text-align:center;color:#9a8c78;padding:60px 20px;font-size:1rem}
+h1.page{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--brown);margin-bottom:6px}
+.sub{color:#9a8c78;font-size:.9rem;margin-bottom:24px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="title">✦ Enquiries</span>
+  <div class="actions">
+    <a class="btn btn-ghost btn-sm" href="/admin">← Edit Website</a>
+    <a class="btn btn-ghost btn-sm" href="/" target="_blank">View Site ↗</a>
+    <a class="btn btn-ghost btn-sm" href="/admin/logout">Log Out</a>
+  </div>
+</div>
+<div class="layout">
+  <h1 class="page">Contact Form Enquiries</h1>
+  <p class="sub"><%= enquiries.length %> message<%= enquiries.length === 1 ? '' : 's' %> received · newest first</p>
+
+  <% if (mailEnabled) { %>
+    <div class="note ok">✓ Email sending is active — new enquiries are emailed to <strong><%= contactTo %></strong> and also listed here.</div>
+  <% } else { %>
+    <div class="note warn">⚠ Email sending is not configured yet, so messages are <strong>not being emailed</strong> — but every enquiry is still saved and shown below. See the README to enable email to <strong><%= contactTo %></strong>.</div>
+  <% } %>
+
+  <% if (!enquiries.length) { %>
+    <div class="empty">No enquiries yet. When someone submits the contact form on your website, it will appear here.</div>
+  <% } %>
+
+  <% enquiries.forEach(function(e){ %>
+    <div class="card">
+      <div class="head">
+        <span class="name"><%= e.name %></span>
+        <span class="date"><%= new Date(e.date).toLocaleString('en-SG', { dateStyle: 'medium', timeStyle: 'short' }) %></span>
+      </div>
+      <div class="meta">
+        <% if (e.phone) { %>📞 <a href="tel:<%= e.phone %>"><%= e.phone %></a>&nbsp;&nbsp;<% } %>
+        <% if (e.email) { %>✉ <a href="mailto:<%= e.email %>"><%= e.email %></a><% } %>
+      </div>
+      <div class="msg"><%= e.message %></div>
+    </div>
+  <% }); %>
+</div>
+</body>
+</html>

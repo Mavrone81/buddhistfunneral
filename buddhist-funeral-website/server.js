@@ -11,6 +11,7 @@ const fs = require('fs');
 const express = require('express');
 const session = require('express-session');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 
 const app = express();
 
@@ -21,10 +22,33 @@ const PORT = process.env.PORT || 20201;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change-this-secret-in-production';
 
+// ---- Contact form / email config ------------------------------------------
+// Where enquiries are sent. Override with CONTACT_TO.
+const CONTACT_TO = process.env.CONTACT_TO || 'fudunchuan.rsn@gmail.com';
+// SMTP server used to send mail. Defaults to Gmail. To actually send email you
+// must set SMTP_USER and SMTP_PASS (for Gmail, use an "App Password" — see README).
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
+const SMTP_USER = process.env.SMTP_USER || '';
+const SMTP_PASS = process.env.SMTP_PASS || '';
+const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
+const MAIL_ENABLED = Boolean(SMTP_USER && SMTP_PASS);
+
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
+const ENQUIRIES_FILE = path.join(__dirname, 'data', 'enquiries.json');
 const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads');
 
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+// Build the mail transporter only when credentials are present.
+const transporter = MAIL_ENABLED
+  ? nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+    })
+  : null;
 
 // ---- Content store ---------------------------------------------------------
 function loadContent() {
@@ -32,6 +56,48 @@ function loadContent() {
 }
 function saveContent(content) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(content, null, 2));
+}
+
+// ---- Enquiry store (backup so nothing is lost even if email fails) ---------
+function loadEnquiries() {
+  try {
+    return JSON.parse(fs.readFileSync(ENQUIRIES_FILE, 'utf8'));
+  } catch {
+    return [];
+  }
+}
+function saveEnquiry(entry) {
+  const list = loadEnquiries();
+  list.unshift(entry); // newest first
+  fs.writeFileSync(ENQUIRIES_FILE, JSON.stringify(list, null, 2));
+}
+
+// ---- Send an enquiry by email (best effort) --------------------------------
+async function emailEnquiry(entry) {
+  if (!transporter) return false;
+  const html = `
+    <h2>New enquiry from the website</h2>
+    <p><strong>Name:</strong> ${escapeHtml(entry.name)}</p>
+    <p><strong>Phone:</strong> ${escapeHtml(entry.phone || '—')}</p>
+    <p><strong>Email:</strong> ${escapeHtml(entry.email || '—')}</p>
+    <p><strong>Message:</strong></p>
+    <p style="white-space:pre-wrap">${escapeHtml(entry.message)}</p>
+    <hr><p style="color:#888;font-size:12px">Received ${entry.date}</p>`;
+  await transporter.sendMail({
+    from: SMTP_FROM,
+    to: CONTACT_TO,
+    replyTo: entry.email || undefined,
+    subject: `Website enquiry from ${entry.name}`,
+    text: `Name: ${entry.name}\nPhone: ${entry.phone || '-'}\nEmail: ${entry.email || '-'}\n\n${entry.message}\n\nReceived ${entry.date}`,
+    html,
+  });
+  return true;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+  ));
 }
 
 // ---- App setup -------------------------------------------------------------
@@ -76,7 +142,38 @@ function requireAuth(req, res, next) {
 // PUBLIC SITE
 // ============================================================================
 app.get('/', (req, res) => {
-  res.render('index', { c: loadContent() });
+  res.render('index', {
+    c: loadContent(),
+    formStatus: req.query.sent === '1' ? 'ok' : req.query.err === '1' ? 'err' : null,
+  });
+});
+
+// ---- Contact form submission -----------------------------------------------
+app.post('/contact', async (req, res) => {
+  const name = (req.body.name || '').trim();
+  const phone = (req.body.phone || '').trim();
+  const email = (req.body.email || '').trim();
+  const message = (req.body.message || '').trim();
+  const honeypot = (req.body.website || '').trim(); // bots fill hidden fields
+
+  // Spam bot caught, or required fields missing — pretend success, do nothing harmful.
+  if (honeypot) return res.redirect('/?sent=1#contact');
+  if (!name || !message || (!phone && !email)) {
+    return res.redirect('/?err=1#contact');
+  }
+
+  const entry = { name, phone, email, message, date: new Date().toISOString() };
+  try {
+    saveEnquiry(entry); // always keep a copy
+  } catch (e) {
+    console.error('Could not save enquiry:', e.message);
+  }
+  try {
+    await emailEnquiry(entry);
+  } catch (e) {
+    console.error('Could not email enquiry (saved to data/enquiries.json):', e.message);
+  }
+  res.redirect('/?sent=1#contact');
 });
 
 // ---- SEO: robots.txt & sitemap.xml -----------------------------------------
@@ -152,6 +249,16 @@ app.get('/admin', requireAuth, (req, res) => {
     c: loadContent(),
     saved: req.query.saved === '1',
     message: req.query.message || null,
+    enquiryCount: loadEnquiries().length,
+  });
+});
+
+// ---- View enquiries received through the contact form ----------------------
+app.get('/admin/enquiries', requireAuth, (req, res) => {
+  res.render('admin-enquiries', {
+    enquiries: loadEnquiries(),
+    mailEnabled: MAIL_ENABLED,
+    contactTo: CONTACT_TO,
   });
 });
 
@@ -335,5 +442,12 @@ app.listen(PORT, () => {
   console.log(`  ──────────────────────────────────────`);
   console.log(`  Public site:  http://localhost:${PORT}`);
   console.log(`  Admin panel:  http://localhost:${PORT}/admin`);
-  console.log(`  Admin password: ${ADMIN_PASSWORD === 'admin123' ? 'admin123  (CHANGE THIS! see README)' : '(set via ADMIN_PASSWORD)'}\n`);
+  console.log(`  Admin password: ${ADMIN_PASSWORD === 'admin123' ? 'admin123  (CHANGE THIS! see README)' : '(set via ADMIN_PASSWORD)'}`);
+  console.log(
+    `  Contact email:  ${
+      MAIL_ENABLED
+        ? `enabled — enquiries go to ${CONTACT_TO}`
+        : `NOT sending yet — set SMTP_USER/SMTP_PASS (see README). Enquiries still saved to data/enquiries.json`
+    }\n`
+  );
 });

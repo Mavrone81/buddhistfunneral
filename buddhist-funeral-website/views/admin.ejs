@@ -61,6 +61,7 @@ input[type=file]{font-size:.85rem}
 <div class="topbar">
   <span class="title">✦ Edit Your Website</span>
   <div class="actions">
+    <a class="btn btn-ghost btn-sm" href="/admin/enquiries">Enquiries<% if (typeof enquiryCount !== 'undefined' && enquiryCount) { %> (<%= enquiryCount %>)<% } %></a>
     <a class="btn btn-ghost btn-sm" href="/" target="_blank">View Site ↗</a>
     <a class="btn btn-ghost btn-sm" href="/admin/logout">Log Out</a>
     <button class="btn btn-gold" type="submit" form="contentForm">Save All Changes</button>
@@ -336,6 +337,11 @@ input[type=file]{font-size:.85rem}
     <div class="field"><label>Note title</label><input form="contentForm" type="text" name="contact[noteTitle]" value="<%= c.contact.noteTitle %>"></div>
     <div class="field"><label>Note text</label><textarea form="contentForm" name="contact[noteText]"><%= c.contact.noteText %></textarea></div>
     <div class="field"><label>Note button text</label><input form="contentForm" type="text" name="contact[noteButton]" value="<%= c.contact.noteButton %>"></div>
+    <hr style="border:none;border-top:1px solid #e5dcca;margin:8px 0 20px">
+    <p class="hint">Contact form (visitors fill this in; submissions are emailed to you and listed under “Enquiries”).</p>
+    <div class="field"><label>Form heading</label><input form="contentForm" type="text" name="contact[formTitle]" value="<%= c.contact.formTitle %>"></div>
+    <div class="field"><label>Form note / instructions</label><textarea form="contentForm" name="contact[formNote]"><%= c.contact.formNote %></textarea></div>
+    <div class="field"><label>Form button text</label><input form="contentForm" type="text" name="contact[formButton]" value="<%= c.contact.formButton %>"></div>
   </div>
 
   <div style="text-align:center"><button class="btn btn-gold" type="submit" form="contentForm" style="padding:14px 40px">Save All Changes</button></div>

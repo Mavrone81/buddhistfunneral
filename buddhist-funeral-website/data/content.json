@@ -304,6 +304,12 @@
     "noteText": "Our advisors respond at any hour, every day. Let us shoulder the arrangements while you stay close to your family.",
     "noteTextZh": "我们的顾问全天候、每日为您解答。让我们承担各项安排，您只需安心陪伴家人。",
     "noteButton": "Call Now",
-    "noteButtonZh": "立即致电"
+    "noteButtonZh": "立即致电",
+    "formTitle": "Send us a message",
+    "formTitleZh": "给我们留言",
+    "formNote": "Leave your details and we will respond as soon as possible. For urgent matters, please call our 24-hour hotline.",
+    "formNoteZh": "请留下您的联系方式，我们将尽快回复。如有紧急事宜，请拨打我们的 24 小时热线。",
+    "formButton": "Send Message",
+    "formButtonZh": "发送信息"
   }
 }
