@@ -68,6 +68,22 @@
       { "title": "Present at Every Step", "titleZh": "全程陪伴", "text": "A dedicated funeral director stays with your family throughout and is reachable day or night — help is only ever a phone call away.", "textZh": "专属的殡葬顾问将全程陪伴您的家庭，昼夜皆可联系——只需一通电话，我们便在您身边。" }
     ]
   },
+  "etiquette": {
+    "eyebrow": "Attending The Wake",
+    "eyebrowZh": "出席灵堂",
+    "title": "Etiquette &",
+    "titleZh": "礼节与",
+    "titleEm": "gentle guidance",
+    "titleEmZh": "温柔的指引",
+    "lead": "If you are visiting to pay your respects, a few simple customs are good to know — though our staff are always on hand to guide you.",
+    "leadZh": "若您前来吊唁，了解几项简单的礼俗会有所帮助——而我们的工作人员也随时在旁为您引导。",
+    "items": [
+      { "title": "What to Wear", "titleZh": "穿着", "text": "Dress modestly in muted tones such as white, black, blue or grey. It is customary to avoid bright colours and especially red, which signifies celebration.", "textZh": "请以素雅的色调端庄着装，如白、黑、蓝或灰色。习俗上应避免鲜艳的颜色，尤其是象征喜庆的红色。" },
+      { "title": "Offering Respects", "titleZh": "上香致意", "text": "Approach the altar, offer a joss stick or a quiet bow, and observe a moment of silence. If you are unsure of the customs, simply follow the family's lead or ask our staff.", "textZh": "请走近灵桌，上一炷香或轻轻鞠躬，并默哀片刻。若不熟悉礼俗，只需跟随家属的引导，或向我们的工作人员询问。" },
+      { "title": "A Quiet Presence", "titleZh": "静默的陪伴", "text": "There is no need for elaborate words — your presence alone brings comfort. You are welcome to sit with the family, share a memory, or simply be near.", "textZh": "无需多言——您的到来本身便是慰藉。欢迎您陪坐在家属身旁、分享一段回忆，或只是静静相伴。" },
+      { "title": "What the Family Provides", "titleZh": "家属需备", "text": "A recent photograph for the memorial portrait, a set of the departed's clothing, and their identity documents are all that is needed — we take care of everything else.", "textZh": "只需准备一张近照作为遗照、一套逝者的衣物，以及其身份证件——其余一切皆由我们处理。" }
+    ]
+  },
   "steps": {
     "eyebrow": "Guidance In Difficult Moments",
     "eyebrowZh": "艰难时刻的指引",
