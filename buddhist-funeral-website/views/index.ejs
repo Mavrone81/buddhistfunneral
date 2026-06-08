@@ -18,14 +18,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ivory:#f7f1e6;
-  --ivory-deep:#efe6d4;
-  --brown:#3b2f24;
-  --brown-soft:#5c4c3c;
-  --gold:#b08d4a;
-  --gold-light:#d6b878;
-  --maroon:#7a3b2e;
-  --white:#fffdf8;
+  /* Enshrine navy & gold theme */
+  --ivory:#0b1a5e;       /* page background (navy) */
+  --ivory-deep:#081244;  /* deeper navy */
+  --brown:#0a1652;       /* dark section background (navy) */
+  --brown-soft:#d2d8ee;  /* body text (light) */
+  --gold:#d7b35a;
+  --gold-light:#f0d896;
+  --maroon:#13235f;      /* accent band (navy) */
+  --white:#ffffff;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -255,6 +256,39 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 @media(max-width:380px){
   .lang-toggle button{padding:6px 10px;font-size:.72rem}
 }
+
+/* ===== ENSHRINE NAVY & GOLD THEME ===== */
+h1,h2,h3,h4{color:#fff}
+.section-title em,.hero h1 em{color:var(--gold-light)}
+.rites .section-title,.contact .section-title{color:#fff}
+.hero .zh-line{color:var(--gold-light)}
+.lead{color:#c3cbe6}
+/* hero background -> navy with a soft gold glow */
+.hero{background:radial-gradient(ellipse at 75% 20%,rgba(215,179,90,.20),transparent 55%),linear-gradient(170deg,#0d1d6b 0%,#0b1a5e 52%,#081244 100%)}
+/* nav */
+nav{background:rgba(7,15,58,.96);border-bottom:1px solid rgba(215,179,90,.35)}
+.brand-logo{height:48px;max-width:240px}
+.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0b1a5e;font-weight:600}
+.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#0b1a5e}
+/* hotline strip -> gold accent band */
+.strip{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
+.strip p{color:#0b1a5e}
+.strip b{color:#071142}
+.strip .btn{background:#0b1a5e;color:#fff}
+.strip .btn:hover{background:#13235f}
+/* light sections -> navy */
+.steps,.packages,.gallery{background:var(--ivory)}
+/* cards -> deep navy panels with gold edges */
+.step,.pkg,.faq details{background:#101e5c;border:1px solid rgba(215,179,90,.20)}
+.svc{background:#101e5c;border:1px solid rgba(215,179,90,.20);border-top:3px solid var(--gold)}
+.pkg.featured{background:#15246b;border:1px solid var(--gold)}
+.pkg li{border-bottom:1px dashed rgba(215,179,90,.20)}
+.faq summary{color:var(--gold-light)}
+.faq summary::after{color:var(--gold)}
+/* footer */
+footer{background:#070f38}
+/* keep the floating Call button red for contrast on navy */
+.float-contact .fc-call{background:linear-gradient(135deg,#a23b2e,#c0492f)}
 </style>
 </head>
 <body>
@@ -275,12 +309,7 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 <nav>
   <div class="nav-inner">
     <a href="#top" class="brand">
-      <% if (c.site.logo) { %>
-      <img class="brand-logo" src="<%= c.site.logo %>" alt="<%= c.site.brandTop %> <%= c.site.brandBottom %>">
-      <% } else { %>
-      <svg viewBox="0 0 64 64" fill="none"><path d="M32 14c4 7 5 13 0 20-5-7-4-13 0-20Z" fill="#d6b878"/><path d="M20 22c7 2 11 6 12 14-8-1-12-6-12-14Z" fill="#b08d4a"/><path d="M44 22c-7 2-11 6-12 14 8-1 12-6 12-14Z" fill="#b08d4a"/><path d="M12 34c7-1 13 1 18 7-7 3-14 0-18-7Z" fill="#d6b878"/><path d="M52 34c-7-1-13 1-18 7 7 3 14 0 18-7Z" fill="#d6b878"/><path d="M18 46c9-4 19-4 28 0-9 5-19 5-28 0Z" fill="#b08d4a"/></svg>
-      <% } %>
-      <div><b><%- t(c.site.brandTop, c.site.brandTopZh) %></b> <span><%- t(c.site.brandBottom, c.site.brandBottomZh) %></span></div>
+      <img class="brand-logo" src="<%= c.site.logo || '/enshrine-logo.png' %>" alt="Enshrine">
     </a>
     <ul class="nav-links">
       <li><a href="#guidance"><%- t('First Steps', '初步指引') %></a></li>
