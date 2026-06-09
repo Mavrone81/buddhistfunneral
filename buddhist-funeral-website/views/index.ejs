@@ -1,11 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<% const L = (typeof lang !== 'undefined' && lang === 'zh') ? 'zh' : 'en'; const IS_ZH = L === 'zh'; %><!DOCTYPE html>
+<html lang="<%= IS_ZH ? 'zh-SG' : 'en' %>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%= c.site.metaTitle %></title>
-<meta name="description" content="<%= c.site.metaDescription %>">
-<link rel="canonical" href="https://singaporebuddhistfuneral.com.sg/">
+<title><%= IS_ZH ? (c.site.metaTitleZh || c.site.metaTitle) : c.site.metaTitle %></title>
+<meta name="description" content="<%= IS_ZH ? (c.site.metaDescriptionZh || c.site.metaDescription) : c.site.metaDescription %>">
+<link rel="canonical" href="https://singaporebuddhistfuneral.com.sg<%= IS_ZH ? '/zh' : '/' %>">
+<link rel="alternate" hreflang="en" href="https://singaporebuddhistfuneral.com.sg/">
+<link rel="alternate" hreflang="zh-SG" href="https://singaporebuddhistfuneral.com.sg/zh">
+<link rel="alternate" hreflang="x-default" href="https://singaporebuddhistfuneral.com.sg/">
 <%
   // ---- SEO: JSON-LD structured data (built from site content) ----
   var seoUrl = 'https://singaporebuddhistfuneral.com.sg';
@@ -116,9 +119,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(59,47,36,.95
 .nav-hotline:hover{background:#8f4536}
 /* LANGUAGE TOGGLE */
 .lang-toggle{display:inline-flex;align-items:center;border:1px solid rgba(214,184,120,.55);border-radius:30px;overflow:hidden}
-.lang-toggle button{background:transparent;color:#e9ddc6;border:none;padding:7px 13px;cursor:pointer;font-family:'Noto Sans',sans-serif;font-size:.78rem;letter-spacing:.1em;line-height:1;transition:background .25s,color .25s}
-.lang-toggle button.zh-label{font-family:'Noto Serif SC',serif}
-.lang-toggle button.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff}
+.lang-toggle a{display:inline-block;background:transparent;color:#e9ddc6;border:none;padding:7px 13px;cursor:pointer;font-family:'Noto Sans',sans-serif;font-size:.78rem;letter-spacing:.1em;line-height:1;transition:background .25s,color .25s}
+.lang-toggle a.zh-label{font-family:'Noto Serif SC',serif}
+.lang-toggle a.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff}
 .nav-toggle{display:none;background:transparent;border:none;color:#e9ddc6;cursor:pointer;padding:6px;line-height:0}
 .nav-toggle svg{width:26px;height:26px}
 @media(max-width:900px){
@@ -301,7 +304,7 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
   .values .v{font-size:.88rem}
 }
 @media(max-width:380px){
-  .lang-toggle button{padding:6px 10px;font-size:.72rem}
+  .lang-toggle a{padding:6px 10px;font-size:.72rem}
 }
 
 /* ===== ENSHRINE NAVY & GOLD THEME ===== */
@@ -363,10 +366,11 @@ footer{background:#1d3c80}
 @media(max-width:560px){.etq-grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body>
+<body class="<%= IS_ZH ? 'lang-zh' : '' %>">
 <%
-  // Bilingual helper: renders a text node carrying both languages.
-  // The toggle swaps textContent between data-en / data-zh at runtime.
+  // Bilingual helper: renders each page in ONE language server-side (crawlable),
+  // chosen by the URL (/ = en, /zh = zh). Language is switched by navigating
+  // between the two URLs (see the .lang-toggle links), not a JS text swap.
   function esc(s){
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -374,7 +378,7 @@ footer{background:#1d3c80}
   function t(en, zh){
     en = en == null ? '' : String(en);
     zh = (zh == null || zh === '') ? en : String(zh);
-    return '<span class="i18n" data-en="' + esc(en) + '" data-zh="' + esc(zh) + '">' + esc(en) + '</span>';
+    return esc(L === 'zh' ? zh : en);
   }
 %>
 
@@ -395,8 +399,8 @@ footer{background:#1d3c80}
     </ul>
     <div class="nav-right">
       <div class="lang-toggle" role="group" aria-label="Language">
-        <button type="button" data-lang="en" class="active">EN</button>
-        <button type="button" data-lang="zh" class="zh-label">中文</button>
+        <a href="/" class="<%= IS_ZH ? '' : 'active' %>" hreflang="en">EN</a>
+        <a href="/zh" class="zh-label <%= IS_ZH ? 'active' : '' %>" hreflang="zh-SG">中文</a>
       </div>
       <a class="nav-hotline" href="tel:<%= c.site.hotlineTel %>"><%- t('24-Hr Hotline', '24小时热线') %> · <%= c.site.hotline %></a>
       <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
@@ -638,6 +642,7 @@ footer{background:#1d3c80}
       <% } %>
 
       <form method="post" action="/contact">
+        <input type="hidden" name="lang" value="<%= L %>">
         <div class="cf-row">
           <div class="cf-field">
             <label for="cf-name"><%- t('Your name *', '您的姓名 *') %></label>
@@ -671,31 +676,8 @@ footer{background:#1d3c80}
 
 <script>
 (function(){
-  var KEY = 'sbf_lang';
-  function setLang(lang){
-    lang = (lang === 'zh') ? 'zh' : 'en';
-    document.body.classList.toggle('lang-zh', lang === 'zh');
-    document.documentElement.lang = (lang === 'zh') ? 'zh-Hans' : 'en';
-    var nodes = document.querySelectorAll('.i18n');
-    for (var i = 0; i < nodes.length; i++){
-      var v = nodes[i].getAttribute(lang === 'zh' ? 'data-zh' : 'data-en');
-      if (v !== null) nodes[i].textContent = v;
-    }
-    var btns = document.querySelectorAll('.lang-toggle button');
-    for (var j = 0; j < btns.length; j++){
-      btns[j].classList.toggle('active', btns[j].getAttribute('data-lang') === lang);
-    }
-    try { localStorage.setItem(KEY, lang); } catch(e){}
-  }
-  var saved = 'en';
-  try { saved = localStorage.getItem(KEY) || 'en'; } catch(e){}
+  // Language is set by the URL (/ = English, /zh = Chinese), rendered server-side.
   document.addEventListener('DOMContentLoaded', function(){
-    var btns = document.querySelectorAll('.lang-toggle button');
-    for (var i = 0; i < btns.length; i++){
-      (function(b){ b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); }); })(btns[i]);
-    }
-    if (saved === 'zh') setLang('zh');
-
     // Mobile menu
     var nav = document.querySelector('nav');
     var toggle = document.querySelector('.nav-toggle');

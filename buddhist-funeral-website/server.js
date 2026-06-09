@@ -182,12 +182,16 @@ function requireAuth(req, res, next) {
 // ============================================================================
 // PUBLIC SITE
 // ============================================================================
-app.get('/', (req, res) => {
+function renderHome(req, res, lang) {
   res.render('index', {
     c: loadContent(),
+    lang: lang,
     formStatus: req.query.sent === '1' ? 'ok' : req.query.err === '1' ? 'err' : null,
   });
-});
+}
+// English at /, Chinese at /zh — each a separate crawlable, indexable URL (hreflang in <head>).
+app.get('/', (req, res) => renderHome(req, res, 'en'));
+app.get('/zh', (req, res) => renderHome(req, res, 'zh'));
 
 // ---- Contact form submission -----------------------------------------------
 app.post('/contact', async (req, res) => {
@@ -196,11 +200,12 @@ app.post('/contact', async (req, res) => {
   const email = (req.body.email || '').trim();
   const message = (req.body.message || '').trim();
   const honeypot = (req.body.website || '').trim(); // bots fill hidden fields
+  const base = req.body.lang === 'zh' ? '/zh' : '/'; // return to the same language page
 
   // Spam bot caught, or required fields missing — pretend success, do nothing harmful.
-  if (honeypot) return res.redirect('/?sent=1#contact');
+  if (honeypot) return res.redirect(base + '?sent=1#contact');
   if (!name || !message || (!phone && !email)) {
-    return res.redirect('/?err=1#contact');
+    return res.redirect(base + '?err=1#contact');
   }
 
   const entry = { name, phone, email, message, date: new Date().toISOString() };
@@ -214,7 +219,7 @@ app.post('/contact', async (req, res) => {
   } catch (e) {
     console.error('Could not email enquiry (saved to data/enquiries.json):', e.message);
   }
-  res.redirect('/?sent=1#contact');
+  res.redirect(base + '?sent=1#contact');
 });
 
 // ---- SEO: robots.txt & sitemap.xml -----------------------------------------
@@ -252,14 +257,26 @@ app.get('/sitemap.xml', (req, res) => {
   } catch (e) {
     lastmod = new Date().toISOString().slice(0, 10);
   }
+  const alt =
+    '    <xhtml:link rel="alternate" hreflang="en" href="' + origin + '/"/>\n' +
+    '    <xhtml:link rel="alternate" hreflang="zh-SG" href="' + origin + '/zh"/>\n' +
+    '    <xhtml:link rel="alternate" hreflang="x-default" href="' + origin + '/"/>\n';
   const xml =
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' +
     '  <url>\n' +
     '    <loc>' + origin + '/</loc>\n' +
+    alt +
     '    <lastmod>' + lastmod + '</lastmod>\n' +
     '    <changefreq>weekly</changefreq>\n' +
     '    <priority>1.0</priority>\n' +
+    '  </url>\n' +
+    '  <url>\n' +
+    '    <loc>' + origin + '/zh</loc>\n' +
+    alt +
+    '    <lastmod>' + lastmod + '</lastmod>\n' +
+    '    <changefreq>weekly</changefreq>\n' +
+    '    <priority>0.9</priority>\n' +
     '  </url>\n' +
     '</urlset>\n';
   res.type('application/xml').send(xml);
