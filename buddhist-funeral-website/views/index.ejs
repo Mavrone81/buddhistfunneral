@@ -6,6 +6,49 @@
 <title><%= c.site.metaTitle %></title>
 <meta name="description" content="<%= c.site.metaDescription %>">
 <link rel="canonical" href="https://singaporebuddhistfuneral.com.sg/">
+<%
+  // ---- SEO: JSON-LD structured data (built from site content) ----
+  var seoUrl = 'https://singaporebuddhistfuneral.com.sg';
+  var seoName = ((c.site.brandTop || '') + ' ' + (c.site.brandBottom || '')).trim() || 'Singapore Buddhist Funeral Services';
+  var seoImg = seoUrl + (c.site.logo || '/enshrine-logo.png');
+  var bizLd = {
+    "@context": "https://schema.org",
+    "@type": "FuneralHome",
+    "name": seoName,
+    "url": seoUrl + "/",
+    "image": seoImg,
+    "logo": seoImg,
+    "telephone": c.site.hotlineTel || "",
+    "email": c.site.email || "",
+    "description": c.site.metaDescription || "",
+    "address": { "@type": "PostalAddress", "streetAddress": c.site.address || "Singapore", "addressLocality": "Singapore", "addressCountry": "SG" },
+    "areaServed": { "@type": "Country", "name": "Singapore" },
+    "availableLanguage": ["en", "zh"],
+    "openingHoursSpecification": [{ "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "opens": "00:00", "closes": "23:59" }]
+  };
+  if (c.services && c.services.items && c.services.items.length) {
+    bizLd.hasOfferCatalog = {
+      "@type": "OfferCatalog",
+      "name": "Buddhist Funeral Services",
+      "itemListElement": c.services.items.map(function (s) {
+        return { "@type": "Offer", "itemOffered": { "@type": "Service", "name": s.title, "description": s.text } };
+      })
+    };
+  }
+  var faqLd = null;
+  if (c.faq && c.faq.items && c.faq.items.length) {
+    faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": c.faq.items.map(function (f) {
+        return { "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } };
+      })
+    };
+  }
+  function ldSafe(o) { return JSON.stringify(o).replace(/</g, '\\u003c'); }
+%>
+<script type="application/ld+json"><%- ldSafe(bizLd) %></script>
+<% if (faqLd) { %><script type="application/ld+json"><%- ldSafe(faqLd) %></script><% } %>
 <% if (c.site.favicon) { %>
 <link rel="icon" href="<%= c.site.favicon %>">
 <link rel="apple-touch-icon" href="<%= c.site.favicon %>">
