@@ -14,6 +14,35 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 
 const app = express();
+app.disable('x-powered-by');
+app.set('trust proxy', 1); // behind Nginx — enables req.secure and real req.ip from X-Forwarded-*
+
+// ---- Security headers (every response) -------------------------------------
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; base-uri 'self'; frame-ancestors 'self'; " +
+      "img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+      "font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; " +
+      "connect-src 'self'; form-action 'self'"
+  );
+  if (req.secure) res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  next();
+});
+
+// CSRF defense for state-changing POSTs: the request's Origin/Referer must be this site.
+function sameOriginPost(req, res, next) {
+  const host = req.headers.host;
+  const src = req.headers.origin || req.headers.referer;
+  if (src) {
+    try { if (new URL(src).host === host) return next(); } catch (e) { /* malformed */ }
+    return res.status(403).send('Request blocked (cross-origin).');
+  }
+  return next(); // no Origin/Referer (rare); SameSite=lax cookie still applies
+}
 
 // ---- Config ----------------------------------------------------------------
 // App runs on a port in the 20201–20300 range. Override with the PORT env var (any value in that range).
@@ -38,6 +67,8 @@ const MAIL_ENABLED = Boolean(SMTP_USER && SMTP_PASS);
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b'; // 'qwen2.5:1.5b' is faster
 const CHAT_ENABLED = process.env.CHAT_ENABLED !== '0';
+const CHAT_MAX_CONCURRENT = Number(process.env.CHAT_MAX_CONCURRENT || 2); // cap CPU-heavy inference
+let chatInFlight = 0;
 
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
 // Seed/template content shipped in the repo. The live, admin-edited content lives
@@ -158,7 +189,7 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 8 }, // 8 hours
+    cookie: { httpOnly: true, sameSite: 'lax', secure: 'auto', maxAge: 1000 * 60 * 60 * 8 }, // 8 hours; secure when HTTPS
   })
 );
 
@@ -170,12 +201,17 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + safe);
   },
 });
+// Whitelist raster image types only. SVG is excluded on purpose — it can carry
+// embedded scripts and would be served same-origin (stored-XSS risk).
+const ALLOWED_IMG_EXT = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
+const ALLOWED_IMG_MIME = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
 const upload = multer({
   storage,
   limits: { fileSize: 8 * 1024 * 1024 }, // 8 MB
   fileFilter: (req, file, cb) => {
-    if (/^image\//.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Only image files are allowed.'));
+    const ext = path.extname(file.originalname || '').toLowerCase();
+    if (ALLOWED_IMG_EXT.includes(ext) && ALLOWED_IMG_MIME.includes(file.mimetype)) cb(null, true);
+    else cb(new Error('Only PNG, JPG, WEBP or GIF images are allowed.'));
   },
 });
 
@@ -184,6 +220,20 @@ function requireAuth(req, res, next) {
   if (req.session && req.session.loggedIn) return next();
   return res.redirect('/admin/login');
 }
+
+// ---- Admin login brute-force throttling (per IP) ---------------------------
+const loginFails = new Map(); // ip -> { count, until }
+function loginLocked(ip) {
+  const rec = loginFails.get(ip);
+  return rec && rec.until && Date.now() < rec.until;
+}
+function noteLoginFail(ip) {
+  const rec = loginFails.get(ip) || { count: 0, until: 0 };
+  rec.count += 1;
+  if (rec.count >= 5) rec.until = Date.now() + 15 * 60 * 1000; // lock 15 min after 5 fails
+  loginFails.set(ip, rec);
+}
+function clearLoginFails(ip) { loginFails.delete(ip); }
 
 // ============================================================================
 // PUBLIC SITE
@@ -323,10 +373,12 @@ app.post('/api/chat', async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('X-Accel-Buffering', 'no'); // disable nginx buffering so tokens stream
 
-  const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
+  const ip = req.ip || 'unknown'; // real client IP (trust proxy is set)
+  const busyMsg = lang === 'zh' ? `信息太多了。请直接拨打 ${c.site.hotline}。` : `That's a lot of messages — please call us directly at ${c.site.hotline}.`;
   if (!CHAT_ENABLED) return res.end(fallback);
-  if (chatRateLimited(ip)) {
-    return res.end(lang === 'zh' ? `信息太多了。请直接拨打 ${c.site.hotline}。` : `That's a lot of messages — please call us directly at ${c.site.hotline}.`);
+  if (chatRateLimited(ip)) return res.end(busyMsg);
+  if (chatInFlight >= CHAT_MAX_CONCURRENT) {
+    return res.end(lang === 'zh' ? `我们正在为其他访客服务，请稍后再试，或拨打 ${c.site.hotline}。` : `We're helping other visitors right now — please try again shortly, or call ${c.site.hotline}.`);
   }
 
   const userMsg = String((req.body && req.body.message) || '').slice(0, 1000).trim();
@@ -338,6 +390,7 @@ app.post('/api/chat', async (req, res) => {
     { role: 'user', content: userMsg },
   ];
 
+  chatInFlight++;
   try {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 90000);
@@ -374,6 +427,8 @@ app.post('/api/chat', async (req, res) => {
     console.error('chat error:', e.message);
     try { res.write(fallback); } catch (_) {}
     res.end();
+  } finally {
+    chatInFlight--;
   }
 });
 
@@ -453,12 +508,18 @@ app.get('/admin/login', (req, res) => {
   res.render('admin-login', { error: null });
 });
 
-app.post('/admin/login', (req, res) => {
+app.post('/admin/login', sameOriginPost, (req, res) => {
+  const ip = req.ip || 'unknown';
+  if (loginLocked(ip)) {
+    return res.status(429).render('admin-login', { error: 'Too many attempts. Please wait 15 minutes and try again.' });
+  }
   if (req.body.password === ADMIN_PASSWORD) {
+    clearLoginFails(ip);
     req.session.loggedIn = true;
     return res.redirect('/admin');
   }
-  res.render('admin-login', { error: 'Incorrect password. Please try again.' });
+  noteLoginFail(ip);
+  res.status(401).render('admin-login', { error: 'Incorrect password. Please try again.' });
 });
 
 app.get('/admin/logout', (req, res) => {
@@ -487,7 +548,7 @@ app.get('/admin/enquiries', requireAuth, (req, res) => {
 // The admin form posts nested fields (e.g. hero[title], steps[items][0][title]),
 // which express's extended urlencoded parser turns into a nested object.
 // We merge it over the existing content so image paths etc. are preserved.
-app.post('/admin/save', requireAuth, (req, res) => {
+app.post('/admin/save', requireAuth, sameOriginPost, (req, res) => {
   const current = loadContent();
   const incoming = req.body;
 
@@ -566,7 +627,7 @@ function mergePackages(target, incoming) {
 }
 
 // ---- Hero background image -------------------------------------------------
-app.post('/admin/hero-image', requireAuth, upload.single('image'), (req, res) => {
+app.post('/admin/hero-image', requireAuth, sameOriginPost, upload.single('image'), (req, res) => {
   const content = loadContent();
   if (req.file) {
     deleteUpload(content.hero.backgroundImage);
@@ -576,7 +637,7 @@ app.post('/admin/hero-image', requireAuth, upload.single('image'), (req, res) =>
   res.redirect('/admin?saved=1#hero');
 });
 
-app.post('/admin/hero-image/remove', requireAuth, (req, res) => {
+app.post('/admin/hero-image/remove', requireAuth, sameOriginPost, (req, res) => {
   const content = loadContent();
   deleteUpload(content.hero.backgroundImage);
   content.hero.backgroundImage = '';
@@ -585,7 +646,7 @@ app.post('/admin/hero-image/remove', requireAuth, (req, res) => {
 });
 
 // ---- Header logo -----------------------------------------------------------
-app.post('/admin/logo', requireAuth, upload.single('image'), (req, res) => {
+app.post('/admin/logo', requireAuth, sameOriginPost, upload.single('image'), (req, res) => {
   const content = loadContent();
   if (req.file) {
     deleteUpload(content.site.logo);
@@ -595,7 +656,7 @@ app.post('/admin/logo', requireAuth, upload.single('image'), (req, res) => {
   res.redirect('/admin?saved=1#sec-logo');
 });
 
-app.post('/admin/logo/remove', requireAuth, (req, res) => {
+app.post('/admin/logo/remove', requireAuth, sameOriginPost, (req, res) => {
   const content = loadContent();
   deleteUpload(content.site.logo);
   content.site.logo = '';
@@ -604,7 +665,7 @@ app.post('/admin/logo/remove', requireAuth, (req, res) => {
 });
 
 // ---- Favicon ---------------------------------------------------------------
-app.post('/admin/favicon', requireAuth, upload.single('image'), (req, res) => {
+app.post('/admin/favicon', requireAuth, sameOriginPost, upload.single('image'), (req, res) => {
   const content = loadContent();
   if (req.file) {
     deleteUpload(content.site.favicon);
@@ -614,7 +675,7 @@ app.post('/admin/favicon', requireAuth, upload.single('image'), (req, res) => {
   res.redirect('/admin?saved=1#sec-logo');
 });
 
-app.post('/admin/favicon/remove', requireAuth, (req, res) => {
+app.post('/admin/favicon/remove', requireAuth, sameOriginPost, (req, res) => {
   const content = loadContent();
   deleteUpload(content.site.favicon);
   content.site.favicon = '';
@@ -623,7 +684,7 @@ app.post('/admin/favicon/remove', requireAuth, (req, res) => {
 });
 
 // ---- Gallery images --------------------------------------------------------
-app.post('/admin/gallery/add', requireAuth, upload.single('image'), (req, res) => {
+app.post('/admin/gallery/add', requireAuth, sameOriginPost, upload.single('image'), (req, res) => {
   const content = loadContent();
   if (req.file) {
     content.gallery.items.push({
@@ -635,7 +696,7 @@ app.post('/admin/gallery/add', requireAuth, upload.single('image'), (req, res) =
   res.redirect('/admin?saved=1#gallery');
 });
 
-app.post('/admin/gallery/delete', requireAuth, (req, res) => {
+app.post('/admin/gallery/delete', requireAuth, sameOriginPost, (req, res) => {
   const content = loadContent();
   const idx = Number(req.body.index);
   if (content.gallery.items[idx]) {
