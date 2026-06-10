@@ -1,7 +1,12 @@
 <nav>
   <div class="nav-inner">
     <a href="<%= homeHref %>" class="brand">
-      <img class="brand-logo" src="<%= c.site.logo || '/enshrine-logo.png' %>" alt="Enshrine">
+      <% if (c.site.logo) { %>
+      <img class="brand-logo" src="<%= c.site.logo %>" alt="<%= c.site.brandTop %> <%= c.site.brandBottom %>">
+      <% } else { %>
+      <svg viewBox="0 0 64 64" fill="none"><path d="M32 14c4 7 5 13 0 20-5-7-4-13 0-20Z" fill="#d6b878"/><path d="M20 22c7 2 11 6 12 14-8-1-12-6-12-14Z" fill="#b08d4a"/><path d="M44 22c-7 2-11 6-12 14 8-1 12-6 12-14Z" fill="#b08d4a"/><path d="M12 34c7-1 13 1 18 7-7 3-14 0-18-7Z" fill="#d6b878"/><path d="M52 34c-7-1-13 1-18 7 7 3 14 0 18-7Z" fill="#d6b878"/><path d="M18 46c9-4 19-4 28 0-9 5-19 5-28 0Z" fill="#b08d4a"/></svg>
+      <div><b><%- t(c.site.brandTop, c.site.brandTopZh) %></b> <span><%- t(c.site.brandBottom, c.site.brandBottomZh) %></span></div>
+      <% } %>
     </a>
     <ul class="nav-links">
       <li><a href="<%= homeHref %>#about"><%- t('About', '关于') %></a></li>

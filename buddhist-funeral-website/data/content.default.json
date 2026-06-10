@@ -13,13 +13,15 @@
     "whatsapp": "6590099234",
     "whatsappMsg": "Hi, I'd like to enquire about your Buddhist funeral services.",
     "whatsappMsgZh": "您好，我想咨询贵公司的佛教殡葬服务。",
-    "email": "enquiries@enshrinepet.com.sg",
+    "email": "enquiries@singaporebuddhistfuneral.com.sg",
     "address": "Singapore",
     "addressZh": "新加坡",
     "companyName": "Singapore Bereavement Group Pte Ltd",
     "footerZh": "慈悲 · 庄严 · 安详",
     "logo": "",
-    "favicon": ""
+    "favicon": "",
+    "groupNote": "An Enshrine Group company",
+    "groupNoteZh": "欣奉集团旗下公司"
   },
   "hero": {
     "title": "Farewell with Grace,",

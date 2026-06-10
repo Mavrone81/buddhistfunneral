@@ -2,4 +2,5 @@
   <p class="zh"><%= c.site.footerZh %></p>
   <p>© <%= c.site.companyName %> · <%- t(c.site.brandTop, c.site.brandTopZh) %> <%- t(c.site.brandBottom, c.site.brandBottomZh) %> · <%- t('Available 24 Hours', '24小时为您服务') %></p>
   <p style="margin-top:8px"><%= c.site.hotline %> · <%= c.site.email %> · <%- t(c.site.address, c.site.addressZh) %></p>
+  <% if (c.site.groupNote) { %><p style="margin-top:6px"><%- t(c.site.groupNote, c.site.groupNoteZh) %></p><% } %>
 </footer>

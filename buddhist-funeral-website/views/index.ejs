@@ -13,7 +13,7 @@
   // ---- SEO: JSON-LD structured data (built from site content) ----
   var seoUrl = 'https://singaporebuddhistfuneral.com.sg';
   var seoName = ((c.site.brandTop || '') + ' ' + (c.site.brandBottom || '')).trim() || 'Singapore Buddhist Funeral Services';
-  var seoImg = seoUrl + (c.site.logo || '/enshrine-logo.png');
+  var seoImg = seoUrl + (c.site.logo || '/favicon.svg');
   var bizLd = {
     "@context": "https://schema.org",
     "@type": "FuneralHome",
@@ -64,15 +64,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,500&family=Noto+Sans:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Enshrine navy & gold theme */
-  --ivory:#2a4c9c;       /* page background (lighter royal navy) */
-  --ivory-deep:#21407f;  /* deeper navy */
-  --brown:#264893;       /* dark section background (navy) */
-  --brown-soft:#e7ebf6;  /* body text (light) */
-  --gold:#d7b35a;
-  --gold-light:#f0d896;
-  --maroon:#2e519e;      /* accent band (navy) */
-  --white:#ffffff;
+  /* Warm Buddhist palette (ivory / brown / gold) */
+  --ivory:#f7f1e6;
+  --ivory-deep:#efe6d4;
+  --brown:#3b2f24;
+  --brown-soft:#5c4c3c;
+  --gold:#b08d4a;
+  --gold-light:#d6b878;
+  --maroon:#7a3b2e;
+  --white:#fffdf8;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -307,61 +307,33 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
   .lang-toggle a{padding:6px 10px;font-size:.72rem}
 }
 
-/* ===== ENSHRINE NAVY & GOLD THEME ===== */
-h1,h2,h3,h4{color:#fff}
-.section-title em,.hero h1 em{color:var(--gold-light)}
-.rites .section-title,.contact .section-title{color:#fff}
-.hero .zh-line{color:var(--gold-light)}
-.lead{color:#c3cbe6}
-/* hero background -> navy with a soft gold glow */
-.hero{background:radial-gradient(ellipse at 75% 20%,rgba(215,179,90,.20),transparent 55%),linear-gradient(170deg,#34579f 0%,#2a4c9c 52%,#21407f 100%)}
-/* nav */
-nav{background:rgba(28,50,128,.96);border-bottom:1px solid rgba(215,179,90,.35)}
-.brand-logo{height:48px;max-width:240px}
-.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0b1a5e;font-weight:600}
-.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#0b1a5e}
-/* hotline strip -> gold accent band */
-.strip{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
-.strip p{color:#0b1a5e}
-.strip b{color:#071142}
-.strip .btn{background:#0b1a5e;color:#fff}
-.strip .btn:hover{background:#13235f}
-/* light sections -> navy */
-.steps,.packages,.gallery{background:var(--ivory)}
-/* cards -> deep navy panels with gold edges */
-.step,.pkg,.faq details{background:#32569e;border:1px solid rgba(215,179,90,.20)}
-.svc{background:#32569e;border:1px solid rgba(215,179,90,.20);border-top:3px solid var(--gold)}
-.pkg.featured{background:#3d63b0;border:1px solid var(--gold)}
-.pkg li{border-bottom:1px dashed rgba(215,179,90,.20)}
-.faq summary{color:var(--gold-light)}
-.faq summary::after{color:var(--gold)}
-/* footer */
-footer{background:#1d3c80}
-/* keep the floating Call button red for contrast on navy */
-.float-contact .fc-call{background:linear-gradient(135deg,#a23b2e,#c0492f)}
+/* ===== Warm Buddhist theme — styling for the added sections =====
+   (base rules above already use the warm palette via :root; the new
+   sections below — values strip, about, etiquette — are styled here.) */
+.brand-logo{height:46px;width:auto;max-width:220px;object-fit:contain}
 
 /* values strip */
-.values{background:var(--ivory-deep);padding:26px 0;border-top:1px solid rgba(215,179,90,.18);border-bottom:1px solid rgba(215,179,90,.18)}
+.values{background:var(--ivory-deep);padding:26px 0;border-top:1px solid rgba(176,141,74,.2);border-bottom:1px solid rgba(176,141,74,.2)}
 .values .container{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:16px 42px}
-.values .v{display:flex;align-items:center;gap:10px;color:#e7ecf8;font-size:.95rem;letter-spacing:.05em}
+.values .v{display:flex;align-items:center;gap:10px;color:var(--brown-soft);font-size:.95rem;letter-spacing:.05em}
 .values .v::before{content:'';width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));flex:none}
 /* about */
 .about{background:var(--ivory)}
 .about-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:46px}
-.about-cols h3{color:var(--gold-light);font-size:1.45rem;margin-bottom:12px}
-.about-cols p{color:#c3cbe6;font-size:1rem}
+.about-cols h3{color:var(--brown);font-size:1.45rem;margin-bottom:12px}
+.about-cols p{color:var(--brown-soft);font-size:1rem}
 .about-commit{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
-.commit{background:#32569e;border:1px solid rgba(215,179,90,.2);border-radius:16px;padding:28px 26px}
-.commit h4{color:#fff;font-size:1.2rem;font-family:'Noto Serif',serif;font-weight:600;margin-bottom:10px}
+.commit{background:var(--white);border:1px solid var(--ivory-deep);border-radius:16px;padding:28px 26px;box-shadow:0 8px 26px rgba(59,47,36,.06)}
+.commit h4{color:var(--brown);font-size:1.2rem;font-family:'Noto Serif',serif;font-weight:600;margin-bottom:10px}
 .commit h4::before{content:'';display:block;width:34px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin-bottom:14px}
-.commit p{color:#c3cbe6;font-size:.93rem}
+.commit p{color:var(--brown-soft);font-size:.93rem}
 @media(max-width:860px){.about-cols{grid-template-columns:1fr;gap:26px}.about-commit{grid-template-columns:1fr}}
 /* etiquette */
 .etiquette{background:var(--ivory-deep)}
 .etq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px}
-.etq{background:#32569e;border:1px solid rgba(215,179,90,.2);border-radius:16px;padding:26px 24px}
-.etq h4{color:var(--gold-light);font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:600;margin-bottom:10px}
-.etq p{color:#c3cbe6;font-size:.92rem}
+.etq{background:var(--white);border:1px solid var(--ivory-deep);border-radius:16px;padding:26px 24px;box-shadow:0 8px 26px rgba(59,47,36,.06)}
+.etq h4{color:var(--brown);font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:600;margin-bottom:10px}
+.etq p{color:var(--brown-soft);font-size:.92rem}
 @media(max-width:900px){.etq-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.etq-grid{grid-template-columns:1fr}}
 </style>
@@ -385,7 +357,12 @@ footer{background:#1d3c80}
 <nav>
   <div class="nav-inner">
     <a href="#top" class="brand">
-      <img class="brand-logo" src="<%= c.site.logo || '/enshrine-logo.png' %>" alt="Enshrine">
+      <% if (c.site.logo) { %>
+      <img class="brand-logo" src="<%= c.site.logo %>" alt="<%= c.site.brandTop %> <%= c.site.brandBottom %>">
+      <% } else { %>
+      <svg viewBox="0 0 64 64" fill="none"><path d="M32 14c4 7 5 13 0 20-5-7-4-13 0-20Z" fill="#d6b878"/><path d="M20 22c7 2 11 6 12 14-8-1-12-6-12-14Z" fill="#b08d4a"/><path d="M44 22c-7 2-11 6-12 14 8-1 12-6 12-14Z" fill="#b08d4a"/><path d="M12 34c7-1 13 1 18 7-7 3-14 0-18-7Z" fill="#d6b878"/><path d="M52 34c-7-1-13 1-18 7 7 3 14 0 18-7Z" fill="#d6b878"/><path d="M18 46c9-4 19-4 28 0-9 5-19 5-28 0Z" fill="#b08d4a"/></svg>
+      <div><b><%- t(c.site.brandTop, c.site.brandTopZh) %></b> <span><%- t(c.site.brandBottom, c.site.brandBottomZh) %></span></div>
+      <% } %>
     </a>
     <ul class="nav-links">
       <li><a href="#about"><%- t('About', '关于') %></a></li>
@@ -672,6 +649,7 @@ footer{background:#1d3c80}
 <footer>
   <p class="zh"><%= c.site.footerZh %></p>
   <p>© <%= c.site.companyName %> · <%- t(c.site.brandTop, c.site.brandTopZh) %> <%- t(c.site.brandBottom, c.site.brandBottomZh) %> · <%- t('Available 24 Hours', '24小时为您服务') %></p>
+  <% if (c.site.groupNote) { %><p style="margin-top:6px"><%- t(c.site.groupNote, c.site.groupNoteZh) %></p><% } %>
 </footer>
 
 <script>
