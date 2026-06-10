@@ -12,6 +12,7 @@ const express = require('express');
 const session = require('express-session');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const app = express();
 app.disable('x-powered-by');
