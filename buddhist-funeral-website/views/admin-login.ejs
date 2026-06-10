@@ -36,8 +36,10 @@ a.back:hover{color:#d6b878}
     <h1>Admin Panel</h1>
     <p class="sub">Singapore Buddhist Funeral Services</p>
     <% if (error) { %><div class="err"><%= error %></div><% } %>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" autofocus required>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" autocomplete="username" autocapitalize="off" autofocus required>
+    <label for="password" style="margin-top:16px">Password</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required>
     <button type="submit">Sign In</button>
     <a class="back" href="/">← Back to website</a>
   </form>

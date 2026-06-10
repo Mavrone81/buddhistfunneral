@@ -84,6 +84,7 @@ input[type=file]{font-size:.85rem}
     <a href="#sec-packages">Packages</a>
     <a href="#sec-faq">FAQ</a>
     <a href="#sec-contact">Contact Section</a>
+    <a href="#account">Account &amp; Admins</a>
   </div>
 
   <!-- This empty form collects every text field on the page via the form="contentForm" attribute. -->
@@ -347,6 +348,50 @@ input[type=file]{font-size:.85rem}
   </div>
 
   <div style="text-align:center"><button class="btn btn-gold" type="submit" form="contentForm" style="padding:14px 40px">Save All Changes</button></div>
+
+  <!-- ============ ACCOUNT & ADMINS ============ -->
+  <div class="card" id="account" style="margin-top:30px">
+    <h2>Account &amp; Admins</h2>
+    <p class="hint">Signed in as <strong><%= currentUser %></strong>. These changes save immediately (separate from “Save All Changes”).</p>
+
+    <h3 style="font-family:'Noto Serif',serif;color:var(--brown);font-size:1.15rem;margin:8px 0 14px">Change my password</h3>
+    <form method="post" action="/admin/account/password" autocomplete="off">
+      <div class="grid2">
+        <div class="field"><label>Current password</label><input type="password" name="current" autocomplete="current-password" required></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>New password (min 8 chars)</label><input type="password" name="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="field"><label>Confirm new password</label><input type="password" name="confirm" autocomplete="new-password" minlength="8" required></div>
+      </div>
+      <button class="btn btn-gold btn-sm" type="submit">Update password</button>
+    </form>
+
+    <hr style="border:none;border-top:1px solid #e5dcca;margin:24px 0 20px">
+
+    <h3 style="font-family:'Noto Serif',serif;color:var(--brown);font-size:1.15rem;margin:8px 0 14px">Admin users</h3>
+    <div class="gal-grid" style="grid-template-columns:1fr;gap:10px;margin-bottom:20px">
+      <% admins.forEach(function(u){ %>
+      <div class="subcard" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0">
+        <span><strong><%= u %></strong><% if (u === currentUser) { %> <span class="hint" style="margin:0">(you)</span><% } %></span>
+        <% if (u !== currentUser) { %>
+        <form method="post" action="/admin/admins/delete" onsubmit="return confirm('Remove admin &quot;<%= u %>&quot;?')" style="margin:0">
+          <input type="hidden" name="username" value="<%= u %>">
+          <button class="btn btn-danger btn-sm" type="submit">Remove</button>
+        </form>
+        <% } %>
+      </div>
+      <% }); %>
+    </div>
+
+    <h3 style="font-family:'Noto Serif',serif;color:var(--brown);font-size:1.15rem;margin:8px 0 14px">Add a new admin</h3>
+    <form method="post" action="/admin/admins" autocomplete="off">
+      <div class="grid2">
+        <div class="field"><label>Username (3–32: letters, numbers, . _ -)</label><input type="text" name="username" autocapitalize="off" required></div>
+        <div class="field"><label>Password (min 8 chars)</label><input type="password" name="password" autocomplete="new-password" minlength="8" required></div>
+      </div>
+      <button class="btn btn-gold btn-sm" type="submit">Create admin</button>
+    </form>
+  </div>
 
 </div>
 </body>

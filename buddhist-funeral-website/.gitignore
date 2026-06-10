@@ -3,5 +3,6 @@ public/uploads/*
 !public/uploads/.gitkeep
 data/enquiries.json
 data/content.json
+data/admins.json
 .DS_Store
 ecosystem.config.js

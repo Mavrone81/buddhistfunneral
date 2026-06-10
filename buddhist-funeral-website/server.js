@@ -76,6 +76,7 @@ const DATA_FILE = path.join(__dirname, 'data', 'content.json');
 // in content.json, which is NOT tracked by git so deploys never overwrite it.
 const DATA_DEFAULT_FILE = path.join(__dirname, 'data', 'content.default.json');
 const ENQUIRIES_FILE = path.join(__dirname, 'data', 'enquiries.json');
+const ADMINS_FILE = path.join(__dirname, 'data', 'admins.json'); // [{username, hash}]
 const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads');
 
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -115,6 +116,41 @@ if (fs.existsSync(DATA_FILE) && fs.existsSync(DATA_DEFAULT_FILE)) {
     }
   } catch (e) {
     console.error('Could not merge defaults into content.json:', e.message);
+  }
+}
+
+// ---- Admin accounts (username + scrypt-hashed password) --------------------
+function loadAdmins() {
+  try { return JSON.parse(fs.readFileSync(ADMINS_FILE, 'utf8')); } catch { return []; }
+}
+function saveAdmins(list) {
+  fs.writeFileSync(ADMINS_FILE, JSON.stringify(list, null, 2));
+}
+function hashPassword(pw) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(String(pw), salt, 64).toString('hex');
+  return 'scrypt:' + salt + ':' + hash;
+}
+function verifyPassword(pw, stored) {
+  try {
+    const [scheme, salt, hash] = String(stored).split(':');
+    if (scheme !== 'scrypt' || !salt || !hash) return false;
+    const calc = crypto.scryptSync(String(pw), salt, 64);
+    const expected = Buffer.from(hash, 'hex');
+    return expected.length === calc.length && crypto.timingSafeEqual(expected, calc);
+  } catch (e) { return false; }
+}
+function findAdmin(username) {
+  const u = String(username || '').trim().toLowerCase();
+  return loadAdmins().find((a) => a.username.toLowerCase() === u);
+}
+// Seed the first admin from ADMIN_PASSWORD on first run (username: "admin").
+if (loadAdmins().length === 0) {
+  try {
+    saveAdmins([{ username: 'admin', hash: hashPassword(ADMIN_PASSWORD) }]);
+    console.log('Seeded initial admin account "admin" from ADMIN_PASSWORD');
+  } catch (e) {
+    console.error('Could not seed admin account:', e.message);
   }
 }
 
@@ -514,13 +550,15 @@ app.post('/admin/login', sameOriginPost, (req, res) => {
   if (loginLocked(ip)) {
     return res.status(429).render('admin-login', { error: 'Too many attempts. Please wait 15 minutes and try again.' });
   }
-  if (req.body.password === ADMIN_PASSWORD) {
+  const admin = findAdmin(req.body.username);
+  if (admin && verifyPassword(req.body.password, admin.hash)) {
     clearLoginFails(ip);
     req.session.loggedIn = true;
+    req.session.user = admin.username;
     return res.redirect('/admin');
   }
   noteLoginFail(ip);
-  res.status(401).render('admin-login', { error: 'Incorrect password. Please try again.' });
+  res.status(401).render('admin-login', { error: 'Incorrect username or password.' });
 });
 
 app.get('/admin/logout', (req, res) => {
@@ -533,7 +571,50 @@ app.get('/admin', requireAuth, (req, res) => {
     saved: req.query.saved === '1',
     message: req.query.message || null,
     enquiryCount: loadEnquiries().length,
+    admins: loadAdmins().map((a) => a.username),
+    currentUser: req.session.user || '',
   });
+});
+
+// ---- Account & admin-user management ---------------------------------------
+// Change the logged-in admin's own password.
+app.post('/admin/account/password', requireAuth, sameOriginPost, (req, res) => {
+  const admins = loadAdmins();
+  const me = admins.find((a) => a.username === req.session.user);
+  if (!me) return res.redirect('/admin/logout');
+  const cur = String(req.body.current || '');
+  const nw = String(req.body.password || '');
+  const cf = String(req.body.confirm || '');
+  if (!verifyPassword(cur, me.hash)) return res.redirect('/admin?message=' + encodeURIComponent('Current password is incorrect.') + '#account');
+  if (nw.length < 8) return res.redirect('/admin?message=' + encodeURIComponent('New password must be at least 8 characters.') + '#account');
+  if (nw !== cf) return res.redirect('/admin?message=' + encodeURIComponent('New passwords do not match.') + '#account');
+  me.hash = hashPassword(nw);
+  saveAdmins(admins);
+  res.redirect('/admin?saved=1#account');
+});
+
+// Create a new admin user.
+app.post('/admin/admins', requireAuth, sameOriginPost, (req, res) => {
+  const username = String(req.body.username || '').trim();
+  const password = String(req.body.password || '');
+  if (!/^[A-Za-z0-9_.-]{3,32}$/.test(username)) return res.redirect('/admin?message=' + encodeURIComponent('Username must be 3-32 characters (letters, numbers, . _ -).') + '#account');
+  if (password.length < 8) return res.redirect('/admin?message=' + encodeURIComponent('Password must be at least 8 characters.') + '#account');
+  const admins = loadAdmins();
+  if (admins.some((a) => a.username.toLowerCase() === username.toLowerCase())) return res.redirect('/admin?message=' + encodeURIComponent('That username already exists.') + '#account');
+  admins.push({ username, hash: hashPassword(password) });
+  saveAdmins(admins);
+  res.redirect('/admin?saved=1#account');
+});
+
+// Delete an admin user (cannot delete yourself or the last remaining admin).
+app.post('/admin/admins/delete', requireAuth, sameOriginPost, (req, res) => {
+  const username = String(req.body.username || '');
+  if (username === req.session.user) return res.redirect('/admin?message=' + encodeURIComponent('You cannot delete your own account.') + '#account');
+  let admins = loadAdmins();
+  if (admins.length <= 1) return res.redirect('/admin?message=' + encodeURIComponent('Cannot delete the last admin.') + '#account');
+  admins = admins.filter((a) => a.username !== username);
+  saveAdmins(admins);
+  res.redirect('/admin?saved=1#account');
 });
 
 // ---- View enquiries received through the contact form ----------------------
