@@ -34,6 +34,11 @@ const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
 const MAIL_ENABLED = Boolean(SMTP_USER && SMTP_PASS);
 
+// ---- Chatbot (local Ollama) config -----------------------------------------
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b'; // 'qwen2.5:1.5b' is faster
+const CHAT_ENABLED = process.env.CHAT_ENABLED !== '0';
+
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
 // Seed/template content shipped in the repo. The live, admin-edited content lives
 // in content.json, which is NOT tracked by git so deploys never overwrite it.
@@ -146,6 +151,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true, limit: '2mb' })); // extended -> nested form fields
+app.use(express.json({ limit: '64kb' })); // for the chatbot API
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
@@ -274,6 +280,101 @@ app.post('/contact', async (req, res) => {
     console.error('Could not email enquiry (saved to data/enquiries.json):', e.message);
   }
   res.redirect(base + '?sent=1#contact');
+});
+
+// ---- Chatbot: grounded answers via local Ollama (streamed) -----------------
+// Builds a compact knowledge base from the site content so the bot only answers
+// from real information and defers anything uncertain to the 24-hour hotline.
+function chatSystemPrompt(c, lang) {
+  const s = c.site || {};
+  const name = ((s.brandTop || '') + ' ' + (s.brandBottom || '')).trim() || 'Singapore Buddhist Funeral Services';
+  const list = (arr, fn) => (Array.isArray(arr) ? arr.map(fn).join('\n') : '');
+  const p = [];
+  p.push(`You are a warm, compassionate virtual assistant for ${name}, a Buddhist funeral service in Singapore.`);
+  p.push('Rules: Answer ONLY using the INFORMATION below. Do not invent prices, facts, dates or promises. If you are unsure, or the person asks for exact pricing/availability, or the matter is urgent, gently ask them to call the 24-hour hotline or WhatsApp. Be brief, kind and clear (2-4 sentences).');
+  p.push(lang === 'zh' ? 'Always reply in Simplified Chinese (中文).' : 'Always reply in English.');
+  p.push(`CONTACT — 24-hour hotline: ${s.hotline}; WhatsApp: ${s.whatsapp}; Email: ${s.email}.`);
+  if (c.services && c.services.items) p.push('SERVICES:\n' + list(c.services.items, (i) => `- ${i.title}: ${i.text}`));
+  if (c.packages && c.packages.items) p.push('PACKAGES:\n' + list(c.packages.items, (pk) => `- ${pk.name} (${pk.days}): ${(pk.features || []).join('; ')}`));
+  if (c.rites && c.rites.items) p.push('BUDDHIST RITES:\n' + list(c.rites.items, (i) => `- ${i.title}: ${i.text}`));
+  if (c.steps && c.steps.items) p.push('WHAT TO DO FIRST:\n' + list(c.steps.items, (i) => `- ${i.title}: ${i.text}`));
+  if (c.etiquette && c.etiquette.items) p.push('WAKE ETIQUETTE:\n' + list(c.etiquette.items, (i) => `- ${i.title}: ${i.text}`));
+  if (c.faq && c.faq.items) p.push('FAQ:\n' + list(c.faq.items, (i) => `Q: ${i.q}\nA: ${i.a}`));
+  return p.join('\n\n');
+}
+
+// Simple in-memory per-IP rate limit (public, cost-free, but protects the box).
+const chatHits = new Map();
+function chatRateLimited(ip) {
+  const now = Date.now();
+  const arr = (chatHits.get(ip) || []).filter((t) => now - t < 5 * 60 * 1000);
+  arr.push(now);
+  chatHits.set(ip, arr);
+  return arr.length > 25; // 25 messages / 5 min / IP
+}
+
+app.post('/api/chat', async (req, res) => {
+  const c = loadContent();
+  const lang = req.body && req.body.lang === 'zh' ? 'zh' : 'en';
+  const fallback = lang === 'zh'
+    ? `抱歉，目前无法回应。请拨打我们的24小时热线 ${c.site.hotline}。`
+    : `Sorry, I can't respond right now. Please call our 24-hour hotline ${c.site.hotline}.`;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('X-Accel-Buffering', 'no'); // disable nginx buffering so tokens stream
+
+  const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
+  if (!CHAT_ENABLED) return res.end(fallback);
+  if (chatRateLimited(ip)) {
+    return res.end(lang === 'zh' ? `信息太多了。请直接拨打 ${c.site.hotline}。` : `That's a lot of messages — please call us directly at ${c.site.hotline}.`);
+  }
+
+  const userMsg = String((req.body && req.body.message) || '').slice(0, 1000).trim();
+  if (!userMsg) return res.end('');
+  const history = Array.isArray(req.body.history) ? req.body.history.slice(-6) : [];
+  const messages = [
+    { role: 'system', content: chatSystemPrompt(c, lang) },
+    ...history.map((h) => ({ role: h.role === 'assistant' ? 'assistant' : 'user', content: String(h.content || '').slice(0, 2000) })),
+    { role: 'user', content: userMsg },
+  ];
+
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 90000);
+    const r = await fetch(OLLAMA_URL + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: OLLAMA_MODEL, stream: true, options: { temperature: 0.3, num_predict: 320, num_ctx: 4096 }, messages }),
+      signal: ctrl.signal,
+    });
+    if (!r.ok || !r.body) throw new Error('ollama http ' + r.status);
+    const reader = r.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    let wrote = false;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let nl;
+      while ((nl = buf.indexOf('\n')) >= 0) {
+        const line = buf.slice(0, nl).trim();
+        buf = buf.slice(nl + 1);
+        if (!line) continue;
+        try {
+          const j = JSON.parse(line);
+          if (j.message && j.message.content) { res.write(j.message.content); wrote = true; }
+        } catch (e) { /* ignore partial line */ }
+      }
+    }
+    clearTimeout(timer);
+    if (!wrote) res.write(fallback);
+    res.end();
+  } catch (e) {
+    console.error('chat error:', e.message);
+    try { res.write(fallback); } catch (_) {}
+    res.end();
+  }
 });
 
 // ---- SEO: robots.txt & sitemap.xml -----------------------------------------
