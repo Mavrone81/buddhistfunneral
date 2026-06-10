@@ -440,7 +440,7 @@ footer{background:#1d3c80}
 <div class="strip">
   <div class="container">
     <p><%- t(c.strip.text, c.strip.textZh) %><br><b><%= c.site.hotline %></b></p>
-    <a class="btn" href="https://wa.me/<%= c.site.whatsapp %>"><%- t(c.strip.button, c.strip.buttonZh) %></a>
+    <a class="btn" href="https://wa.me/<%= c.site.whatsapp %>?text=<%= encodeURIComponent((IS_ZH ? (c.site.whatsappMsgZh || c.site.whatsappMsg) : c.site.whatsappMsg) || '') %>"><%- t(c.strip.button, c.strip.buttonZh) %></a>
   </div>
 </div>
 
@@ -708,7 +708,7 @@ footer{background:#1d3c80}
     <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 3h2.7l1.4 4.6-1.9 1.4a12 12 0 0 0 4.8 4.8l1.4-1.9 4.6 1.4v2.7a2 2 0 0 1-2.1 2A16.8 16.8 0 0 1 4.6 5.1 2 2 0 0 1 6.6 3Z" fill="#fff"/></svg>
     <span><%- t('Call 24h', '24小时热线') %></span>
   </a>
-  <a class="fc-wa" href="https://wa.me/<%= c.site.whatsapp %>" target="_blank" rel="noopener" aria-label="WhatsApp us">
+  <a class="fc-wa" href="https://wa.me/<%= c.site.whatsapp %>?text=<%= encodeURIComponent((IS_ZH ? (c.site.whatsappMsgZh || c.site.whatsappMsg) : c.site.whatsappMsg) || '') %>" target="_blank" rel="noopener" aria-label="WhatsApp us">
     <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.3.1.6-.1 1.3Z"/></svg>
     <span><%- t('WhatsApp', 'WhatsApp') %></span>
   </a>
