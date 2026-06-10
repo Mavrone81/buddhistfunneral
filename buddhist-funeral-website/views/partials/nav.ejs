@@ -1,0 +1,25 @@
+<nav>
+  <div class="nav-inner">
+    <a href="<%= homeHref %>" class="brand">
+      <img class="brand-logo" src="<%= c.site.logo || '/enshrine-logo.png' %>" alt="Enshrine">
+    </a>
+    <ul class="nav-links">
+      <li><a href="<%= homeHref %>#about"><%- t('About', '关于') %></a></li>
+      <li><a href="<%= homeHref %>#guidance"><%- t('First Steps', '初步指引') %></a></li>
+      <li><a href="<%= homeHref %>#services"><%- t('Services', '服务') %></a></li>
+      <li><a href="<%= homeHref %>#rites"><%- t('Buddhist Rites', '佛教仪轨') %></a></li>
+      <li><a href="<%= IS_ZH ? '/zh/buddhist-funeral-packages' : '/buddhist-funeral-packages' %>"><%- t('Packages', '配套') %></a></li>
+      <li><a href="<%= homeHref %>#contact"><%- t('Contact', '联系') %></a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <a href="<%= enPath %>" class="<%= IS_ZH ? '' : 'active' %>" hreflang="en">EN</a>
+        <a href="<%= zhPath %>" class="zh-label <%= IS_ZH ? 'active' : '' %>" hreflang="zh-SG">中文</a>
+      </div>
+      <a class="nav-hotline" href="tel:<%= c.site.hotlineTel %>"><%- t('24-Hr Hotline', '24小时热线') %> · <%= c.site.hotline %></a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>

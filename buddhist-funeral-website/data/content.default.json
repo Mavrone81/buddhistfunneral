@@ -360,5 +360,35 @@
     "formNoteZh": "请留下您的联系方式，我们将尽快回复。如有紧急事宜，请拨打我们的 24 小时热线。",
     "formButton": "Send Message",
     "formButtonZh": "发送信息"
+  },
+  "pages": {
+    "packages": {
+      "metaTitle": "Buddhist Funeral Packages Singapore (3/5/7-Day) | Pricing",
+      "metaTitleZh": "新加坡佛教殡葬配套（3、5、7天）| 透明价格",
+      "metaDescription": "Complete 3, 5 & 7-day Buddhist funeral packages in Singapore — casket, embalming, wake setup, monk chanting and cremation. Transparent, no hidden costs.",
+      "metaDescriptionZh": "新加坡完整的3天、5天与7天佛教殡葬配套——涵盖棺木、防腐、灵堂布置、僧人诵经与火化。价格透明，绝无隐藏费用。",
+      "eyebrow": "Transparent & Complete",
+      "eyebrowZh": "透明 · 圆满",
+      "h1": "Buddhist Funeral Packages in Singapore",
+      "h1Zh": "新加坡佛教殡葬配套",
+      "lead": "Complete 3, 5 and 7-day Buddhist funeral packages, arranged end to end — with clear, all-inclusive pricing and no hidden costs.",
+      "leadZh": "完整的3天、5天与7天佛教殡葬配套，由始至终悉心安排——价格清晰、全包到底，绝无隐藏费用。",
+      "intro": "Losing someone you love is overwhelming, and the last thing a grieving family should have to face is piecing a funeral together alone. Our Buddhist funeral packages bring every element of a dignified farewell under one arrangement — from the casket and encoffinment to the monk chanting rites, the nightly prayers and the cremation. Each package is complete and prepared according to Mahayana or Theravada tradition, so your family can be fully present with one another while we quietly take care of everything else.",
+      "introZh": "痛失至亲令人难以承受，而悲伤中的家属最不该独自张罗整场丧礼。我们的佛教殡葬配套将庄严告别的每一个环节都纳入同一安排——从棺木、入殓，到僧人诵经、每晚祈福与火化。每个配套皆完整齐备，并依大乘或南传传统办理，让您的家人能安心彼此相伴，其余一切交由我们悉心打理。",
+      "includedTitle": "What every package includes",
+      "includedTitleZh": "每个配套包含的内容",
+      "included": "Every Buddhist funeral package covers the essentials of a proper wake and send-off: a quality casket suited to Buddhist customs, professional embalming, dressing and encoffinment, and a full wake setup with a Buddhist altar, Buddha image, floral arrangements and an enlarged memorial portrait. Venerable monks conduct the encoffinment rite and the funeral-day chanting, transferring merit to the departed. We book the cremation slot at Mandai, arrange the hearse and family transport, and accompany you for the respectful collection of ashes the following day. Longer packages add nightly chanting sessions, daily refreshed altar offerings and a dedicated funeral director present throughout.",
+      "includedZh": "每个佛教殡葬配套都涵盖如法治丧与送别的基本所需：契合佛教礼俗的优质棺木、专业防腐、净身更衣与入殓，以及完整的灵堂布置，包括佛坛、佛像、花艺与放大的遗照。法师主持入殓仪式与出殡日诵经，为亡者回向功德。我们预订万礼火化场时段、安排灵车与家属接送，并于翌日陪同您恭敬捡灰。较长的配套另加每晚诵经、每日更新的供品，以及全程在场的专属殡葬顾问。",
+      "durationTitle": "Choosing 3, 5 or 7 days",
+      "durationTitleZh": "选择三天、五天或七天",
+      "duration": "Buddhist wakes in Singapore are most commonly held over three, five or seven days, and families often choose an odd number of days in keeping with custom. A three-day wake suits an intimate farewell among close family; a five-day wake — the most frequently chosen — gives relatives and friends from near and far the time to pay their respects; and a seven-day wake allows for a fuller traditional observance with additional prayer sessions. There is no single right answer — the right length is the one that lets your family grieve, gather and say goodbye without feeling rushed. Our advisors will help you weigh the options calmly.",
+      "durationZh": "在新加坡，佛教守灵通常为三天、五天或七天，家属往往依习俗选择单数天数。三天守灵适合至亲之间的私密告别；五天守灵——最常被选择——让远近的亲友都有时间前来吊唁；七天守灵则可进行更完整的传统仪式，并增加诵经场次。并没有唯一正确的答案——最合适的天数，是能让您的家人从容地哀悼、团聚与道别的那一个。我们的顾问会平和地协助您权衡选择。",
+      "costsTitle": "Clear pricing, no hidden costs",
+      "costsTitleZh": "价格透明，绝无隐藏费用",
+      "costs": "We believe a grieving family deserves complete clarity. Every package is all-inclusive and explained in full before you commit, so there are no surprise charges during an already difficult time. Pricing depends on the wake venue, the chosen duration and any personal touches your family would like to add. Because circumstances and budgets differ, we share current pricing and prepare a tailored quotation when you speak with us.",
+      "costsZh": "我们相信，悲伤中的家属理应得到完全的清晰透明。每个配套皆全包在内，并在您决定之前详细说明，让您在艰难时刻不必担心意外收费。价格取决于灵堂场地、所选天数，以及您的家人希望加入的任何个人化安排。由于每个家庭的情况与预算不同，当您与我们联系时，我们会提供当前价格并备妥量身定制的报价。",
+      "closing": "To discuss packages, pricing or a custom arrangement, call our 24-hour hotline or send an enquiry — an advisor will respond at any hour, every day, and guide you gently through what comes next.",
+      "closingZh": "如需洽谈配套、价格或定制安排，请拨打我们的24小时热线或发送咨询——顾问全天候、每日为您解答，并温柔地引导您完成接下来的每一步。"
+    }
   }
 }

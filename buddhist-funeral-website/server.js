@@ -193,6 +193,60 @@ function renderHome(req, res, lang) {
 app.get('/', (req, res) => renderHome(req, res, 'en'));
 app.get('/zh', (req, res) => renderHome(req, res, 'zh'));
 
+// ---- Inner SEO content pages (bilingual: /slug = en, /zh/slug = zh) ----------
+const SITE_URL = 'https://singaporebuddhistfuneral.com.sg';
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function makeT(lang) {
+  return (en, zh) => escHtml(lang === 'zh' ? (zh == null || zh === '' ? en : zh) : (en == null ? '' : en));
+}
+function renderContentPage(res, view, lang, enPath, zhPath, pageTitle, pageDesc, jsonLd, extra) {
+  const IS_ZH = lang === 'zh';
+  res.render(view, Object.assign({
+    c: loadContent(),
+    lang, L: lang, IS_ZH,
+    t: makeT(lang),
+    homeHref: IS_ZH ? '/zh' : '/',
+    enPath, zhPath,
+    canonicalPath: IS_ZH ? zhPath : enPath,
+    pageTitle, pageDesc,
+    jsonLd: jsonLd || [],
+  }, extra || {}));
+}
+
+function packagesPage(lang) {
+  return (req, res) => {
+    const c = loadContent();
+    const p = (c.pages && c.pages.packages) || {};
+    const IS_ZH = lang === 'zh';
+    const enPath = '/buddhist-funeral-packages';
+    const zhPath = '/zh/buddhist-funeral-packages';
+    const title = IS_ZH ? (p.metaTitleZh || p.metaTitle) : p.metaTitle;
+    const desc = IS_ZH ? (p.metaDescriptionZh || p.metaDescription) : p.metaDescription;
+    const name = IS_ZH ? (p.h1Zh || p.h1) : p.h1;
+    const jsonLd = [
+      {
+        '@context': 'https://schema.org', '@type': 'Service',
+        serviceType: 'Buddhist funeral package', name: name, description: desc,
+        provider: { '@type': 'FuneralHome', name: ((c.site.brandTop || '') + ' ' + (c.site.brandBottom || '')).trim(), telephone: c.site.hotlineTel, url: SITE_URL + '/' },
+        areaServed: { '@type': 'Country', name: 'Singapore' },
+        url: SITE_URL + (IS_ZH ? zhPath : enPath),
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: IS_ZH ? '首页' : 'Home', item: SITE_URL + (IS_ZH ? '/zh' : '/') },
+          { '@type': 'ListItem', position: 2, name: name, item: SITE_URL + (IS_ZH ? zhPath : enPath) },
+        ],
+      },
+    ];
+    renderContentPage(res, 'page-packages', lang, enPath, zhPath, title, desc, jsonLd, { p });
+  };
+}
+app.get('/buddhist-funeral-packages', packagesPage('en'));
+app.get('/zh/buddhist-funeral-packages', packagesPage('zh'));
+
 // ---- Contact form submission -----------------------------------------------
 app.post('/contact', async (req, res) => {
   const name = (req.body.name || '').trim();
@@ -257,27 +311,35 @@ app.get('/sitemap.xml', (req, res) => {
   } catch (e) {
     lastmod = new Date().toISOString().slice(0, 10);
   }
-  const alt =
-    '    <xhtml:link rel="alternate" hreflang="en" href="' + origin + '/"/>\n' +
-    '    <xhtml:link rel="alternate" hreflang="zh-SG" href="' + origin + '/zh"/>\n' +
-    '    <xhtml:link rel="alternate" hreflang="x-default" href="' + origin + '/"/>\n';
+  // Each entry has an English and a Chinese URL; both get reciprocal hreflang alternates.
+  const PAGES = [
+    { en: '/', zh: '/zh', priority: '1.0' },
+    { en: '/buddhist-funeral-packages', zh: '/zh/buddhist-funeral-packages', priority: '0.9' },
+  ];
+  function altLinks(pg) {
+    return (
+      '    <xhtml:link rel="alternate" hreflang="en" href="' + origin + pg.en + '"/>\n' +
+      '    <xhtml:link rel="alternate" hreflang="zh-SG" href="' + origin + pg.zh + '"/>\n' +
+      '    <xhtml:link rel="alternate" hreflang="x-default" href="' + origin + pg.en + '"/>\n'
+    );
+  }
+  function urlEntry(loc, pg) {
+    return (
+      '  <url>\n' +
+      '    <loc>' + origin + loc + '</loc>\n' +
+      altLinks(pg) +
+      '    <lastmod>' + lastmod + '</lastmod>\n' +
+      '    <changefreq>weekly</changefreq>\n' +
+      '    <priority>' + pg.priority + '</priority>\n' +
+      '  </url>\n'
+    );
+  }
+  let body = '';
+  PAGES.forEach((pg) => { body += urlEntry(pg.en, pg) + urlEntry(pg.zh, pg); });
   const xml =
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' +
-    '  <url>\n' +
-    '    <loc>' + origin + '/</loc>\n' +
-    alt +
-    '    <lastmod>' + lastmod + '</lastmod>\n' +
-    '    <changefreq>weekly</changefreq>\n' +
-    '    <priority>1.0</priority>\n' +
-    '  </url>\n' +
-    '  <url>\n' +
-    '    <loc>' + origin + '/zh</loc>\n' +
-    alt +
-    '    <lastmod>' + lastmod + '</lastmod>\n' +
-    '    <changefreq>weekly</changefreq>\n' +
-    '    <priority>0.9</priority>\n' +
-    '  </url>\n' +
+    body +
     '</urlset>\n';
   res.type('application/xml').send(xml);
 });

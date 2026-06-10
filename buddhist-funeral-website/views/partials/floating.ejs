@@ -1,0 +1,15 @@
+<!-- Floating quick-contact buttons (24-hour) -->
+<div class="float-contact">
+  <a class="fc-enquire" href="<%= homeHref %>#contact" aria-label="Send an enquiry">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v11A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-11Z" stroke="#fff" stroke-width="1.6"/><path d="m4 7 8 6 8-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span><%- t('Enquire', '咨询') %></span>
+  </a>
+  <a class="fc-call" href="tel:<%= c.site.hotlineTel %>" aria-label="Call our 24-hour hotline">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 3h2.7l1.4 4.6-1.9 1.4a12 12 0 0 0 4.8 4.8l1.4-1.9 4.6 1.4v2.7a2 2 0 0 1-2.1 2A16.8 16.8 0 0 1 4.6 5.1 2 2 0 0 1 6.6 3Z" fill="#fff"/></svg>
+    <span><%- t('Call 24h', '24小时热线') %></span>
+  </a>
+  <a class="fc-wa" href="https://wa.me/<%= c.site.whatsapp %>" target="_blank" rel="noopener" aria-label="WhatsApp us">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.3.1.6-.1 1.3Z"/></svg>
+    <span><%- t('WhatsApp', 'WhatsApp') %></span>
+  </a>
+</div>

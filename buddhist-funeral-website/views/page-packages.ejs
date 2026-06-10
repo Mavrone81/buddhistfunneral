@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="<%= IS_ZH ? 'zh-SG' : 'en' %>">
+<%- include('partials/head') %>
+<body class="<%= IS_ZH ? 'lang-zh' : '' %>">
+<%- include('partials/nav') %>
+
+<header class="page-head packages">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="<%= homeHref %>"><%- t('Home', '首页') %></a><span>/</span><%- t('Funeral Packages', '殡葬配套') %>
+    </nav>
+    <span class="eyebrow"><%- t(p.eyebrow, p.eyebrowZh) %></span>
+    <h1 class="section-title"><%- t(p.h1, p.h1Zh) %></h1>
+    <div class="rule"></div>
+    <p class="lead"><%- t(p.lead, p.leadZh) %></p>
+  </div>
+</header>
+
+<section class="packages page-body">
+  <div class="container">
+    <div class="prose">
+      <p><%- t(p.intro, p.introZh) %></p>
+      <h2><%- t(p.includedTitle, p.includedTitleZh) %></h2>
+      <p><%- t(p.included, p.includedZh) %></p>
+    </div>
+
+    <div class="pkg-grid" style="margin-top:40px">
+      <% c.packages.items.forEach(function(pkg){ %>
+      <div class="pkg <%= pkg.featured ? 'featured' : '' %>">
+        <% if (pkg.featured && pkg.tag) { %><span class="tag"><%- t(pkg.tag, pkg.tagZh) %></span><% } %>
+        <h3><%- t(pkg.name, pkg.nameZh) %></h3>
+        <div class="days"><%- t(pkg.days, pkg.daysZh) %></div>
+        <ul>
+          <% (pkg.features || []).forEach(function(f, i){ %><li><%- t(f, (pkg.featuresZh && pkg.featuresZh[i]) || f) %></li><% }); %>
+        </ul>
+        <a href="<%= homeHref %>#contact" class="btn <%= pkg.featured ? 'btn-gold' : 'btn-outline' %>"><%- t('Enquire', '咨询') %></a>
+      </div>
+      <% }); %>
+    </div>
+
+    <div class="prose" style="margin-top:46px">
+      <h2><%- t(p.durationTitle, p.durationTitleZh) %></h2>
+      <p><%- t(p.duration, p.durationZh) %></p>
+      <h2><%- t(p.costsTitle, p.costsTitleZh) %></h2>
+      <p><%- t(p.costs, p.costsZh) %></p>
+      <p><%- t(p.closing, p.closingZh) %></p>
+    </div>
+
+    <div class="page-cta">
+      <a class="btn btn-gold" href="tel:<%= c.site.hotlineTel %>"><%- t('Call our 24-hour hotline', '拨打24小时热线') %></a>
+      <a class="btn btn-outline" href="<%= homeHref %>#contact"><%- t('Send an enquiry', '发送咨询') %></a>
+    </div>
+
+    <div class="related">
+      <%- t('Related pages:', '相关页面：') %>
+      <a href="<%= homeHref %>#rites"><%- t('Funeral Rites & Traditions', '殡葬仪轨与传统') %></a>
+      <a href="<%= homeHref %>#guidance"><%- t('What To Do First', '初步指引') %></a>
+      <a href="<%= homeHref %>#contact"><%- t('Contact Us', '联系我们') %></a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<%- include('partials/scripts') %>
+<%- include('partials/floating') %>
+</body>
+</html>

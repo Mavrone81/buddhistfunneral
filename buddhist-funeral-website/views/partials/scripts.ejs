@@ -1,0 +1,22 @@
+<script>
+(function(){
+  // Language is set by the URL (/ = English, /zh = Chinese), rendered server-side.
+  document.addEventListener('DOMContentLoaded', function(){
+    var nav = document.querySelector('nav');
+    var toggle = document.querySelector('.nav-toggle');
+    if (toggle && nav){
+      toggle.addEventListener('click', function(){
+        var open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      var links = nav.querySelectorAll('.nav-links a');
+      for (var k = 0; k < links.length; k++){
+        links[k].addEventListener('click', function(){
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      }
+    }
+  });
+})();
+</script>
