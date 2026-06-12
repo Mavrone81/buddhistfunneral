@@ -1,31 +1,31 @@
 <!-- AI chat assistant (local Ollama) -->
 <style>
-.cbot-launch{position:fixed;left:18px;bottom:18px;z-index:300;display:flex;align-items:center;gap:9px;padding:12px 18px;border-radius:40px;border:none;cursor:pointer;color:#0b1a5e;font-family:'Noto Sans',sans-serif;font-weight:600;font-size:.85rem;background:linear-gradient(135deg,#d7b35a,#f0d896);box-shadow:0 8px 24px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s}
+.cbot-launch{position:fixed;left:18px;bottom:18px;z-index:300;display:flex;align-items:center;gap:9px;padding:12px 18px;border-radius:40px;border:none;cursor:pointer;color:#16294d;font-family:'Noto Sans',sans-serif;font-weight:600;font-size:.85rem;background:linear-gradient(135deg,#c6a553,#ddc78a);box-shadow:0 8px 24px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s}
 .cbot-launch:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.38)}
 .cbot-launch svg{width:20px;height:20px;flex:none}
-.cbot-panel{position:fixed;left:18px;bottom:18px;z-index:301;width:360px;max-width:calc(100vw - 36px);height:520px;max-height:calc(100vh - 36px);background:#0e1f54;border:1px solid rgba(215,179,90,.4);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden;font-family:'Noto Sans',sans-serif}
+.cbot-panel{position:fixed;left:18px;bottom:18px;z-index:301;width:360px;max-width:calc(100vw - 36px);height:520px;max-height:calc(100vh - 36px);background:#16305f;border:1px solid rgba(198,165,83,.4);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden;font-family:'Noto Sans',sans-serif}
 .cbot-panel.open{display:flex}
-.cbot-head{background:linear-gradient(135deg,#16317c,#0b1a5e);padding:15px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(215,179,90,.3)}
-.cbot-head h4{margin:0;color:#f0d896;font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:600}
-.cbot-head p{margin:2px 0 0;color:#aeb9dd;font-size:.72rem}
+.cbot-head{background:linear-gradient(135deg,#16305f,#16294d);padding:15px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(198,165,83,.3)}
+.cbot-head h4{margin:0;color:#ddc78a;font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:600}
+.cbot-head p{margin:2px 0 0;color:#9fb0d8;font-size:.72rem}
 .cbot-close{background:none;border:none;color:#cdbfa8;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 4px}
 .cbot-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
 .cbot-b{max-width:84%;padding:10px 13px;border-radius:14px;font-size:.92rem;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
-.cbot-b.bot{background:rgba(255,255,255,.07);color:#e7ecf8;align-self:flex-start;border-bottom-left-radius:4px}
-.cbot-b.user{background:linear-gradient(135deg,#d7b35a,#f0d896);color:#0b1a5e;align-self:flex-end;border-bottom-right-radius:4px}
-.cbot-typing{align-self:flex-start;color:#aeb9dd;font-size:.85rem;font-style:italic}
-.cbot-foot{border-top:1px solid rgba(215,179,90,.25);padding:10px}
+.cbot-b.bot{background:rgba(255,255,255,.07);color:#e7ebf6;align-self:flex-start;border-bottom-left-radius:4px}
+.cbot-b.user{background:linear-gradient(135deg,#c6a553,#ddc78a);color:#16294d;align-self:flex-end;border-bottom-right-radius:4px}
+.cbot-typing{align-self:flex-start;color:#9fb0d8;font-size:.85rem;font-style:italic}
+.cbot-foot{border-top:1px solid rgba(198,165,83,.25);padding:10px}
 .cbot-row{display:flex;gap:8px}
-.cbot-row input{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(215,179,90,.35);border-radius:10px;padding:11px 13px;color:#fff;font-family:inherit;font-size:.92rem}
-.cbot-row input:focus{outline:none;border-color:#f0d896}
-.cbot-row button{background:linear-gradient(135deg,#d7b35a,#f0d896);color:#0b1a5e;border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}
+.cbot-row input{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(198,165,83,.35);border-radius:10px;padding:11px 13px;color:#fff;font-family:inherit;font-size:.92rem}
+.cbot-row input:focus{outline:none;border-color:#ddc78a}
+.cbot-row button{background:linear-gradient(135deg,#c6a553,#ddc78a);color:#16294d;border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}
 .cbot-row button:disabled{opacity:.5;cursor:default}
 .cbot-note{color:#8e9ac4;font-size:.68rem;margin:8px 2px 0;text-align:center}
 @media(max-width:560px){.cbot-launch{left:14px;bottom:14px}.cbot-launch span{display:none}.cbot-launch{padding:14px;border-radius:50%}.cbot-panel{left:0;bottom:0;width:100vw;max-width:100vw;height:80vh;border-radius:18px 18px 0 0}}
 </style>
 
 <button type="button" class="cbot-launch" id="cbotLaunch" aria-label="<%= t('Chat with us', '在线咨询') %>">
-  <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z" stroke="#0b1a5e" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10h8M8 13h5" stroke="#0b1a5e" stroke-width="1.8" stroke-linecap="round"/></svg>
+  <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z" stroke="#16294d" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10h8M8 13h5" stroke="#16294d" stroke-width="1.8" stroke-linecap="round"/></svg>
   <span><%= t('Chat with us', '在线咨询') %></span>
 </button>
 
