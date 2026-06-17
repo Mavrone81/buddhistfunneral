@@ -64,11 +64,14 @@ const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER;
 const MAIL_ENABLED = Boolean(SMTP_USER && SMTP_PASS);
 
-// ---- Chatbot (local Ollama) config -----------------------------------------
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b'; // 'qwen2.5:1.5b' is faster
-const CHAT_ENABLED = process.env.CHAT_ENABLED !== '0';
-const CHAT_MAX_CONCURRENT = Number(process.env.CHAT_MAX_CONCURRENT || 2); // cap CPU-heavy inference
+// ---- Chatbot (Anthropic Claude) config -------------------------------------
+// API key lives only in the server-managed ecosystem.config.js (git-ignored).
+const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001';
+// Chat is on only when not explicitly disabled AND a key is configured.
+const CHAT_ENABLED = process.env.CHAT_ENABLED !== '0' && !!ANTHROPIC_API_KEY;
+const CHAT_MAX_CONCURRENT = Number(process.env.CHAT_MAX_CONCURRENT || 4); // API-bound, not CPU
 let chatInFlight = 0;
 
 const DATA_FILE = path.join(__dirname, 'data', 'content.json');
@@ -421,8 +424,9 @@ app.post('/api/chat', async (req, res) => {
   const userMsg = String((req.body && req.body.message) || '').slice(0, 1000).trim();
   if (!userMsg) return res.end('');
   const history = Array.isArray(req.body.history) ? req.body.history.slice(-6) : [];
+  // Anthropic: system prompt is a top-level param; messages are user/assistant only.
+  const systemPrompt = chatSystemPrompt(c, lang);
   const messages = [
-    { role: 'system', content: chatSystemPrompt(c, lang) },
     ...history.map((h) => ({ role: h.role === 'assistant' ? 'assistant' : 'user', content: String(h.content || '').slice(0, 2000) })),
     { role: 'user', content: userMsg },
   ];
@@ -431,13 +435,17 @@ app.post('/api/chat', async (req, res) => {
   try {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 90000);
-    const r = await fetch(OLLAMA_URL + '/api/chat', {
+    const r = await fetch(ANTHROPIC_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: OLLAMA_MODEL, stream: true, options: { temperature: 0.3, num_predict: 320, num_ctx: 4096 }, messages }),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({ model: ANTHROPIC_MODEL, max_tokens: 400, temperature: 0.3, system: systemPrompt, stream: true, messages }),
       signal: ctrl.signal,
     });
-    if (!r.ok || !r.body) throw new Error('ollama http ' + r.status);
+    if (!r.ok || !r.body) throw new Error('anthropic http ' + r.status);
     const reader = r.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
@@ -450,10 +458,12 @@ app.post('/api/chat', async (req, res) => {
       while ((nl = buf.indexOf('\n')) >= 0) {
         const line = buf.slice(0, nl).trim();
         buf = buf.slice(nl + 1);
-        if (!line) continue;
+        if (!line.startsWith('data:')) continue; // SSE: only data lines carry deltas
+        const payload = line.slice(5).trim();
+        if (!payload || payload === '[DONE]') continue;
         try {
-          const j = JSON.parse(line);
-          if (j.message && j.message.content) { res.write(j.message.content); wrote = true; }
+          const j = JSON.parse(payload);
+          if (j.type === 'content_block_delta' && j.delta && typeof j.delta.text === 'string') { res.write(j.delta.text); wrote = true; }
         } catch (e) { /* ignore partial line */ }
       }
     }
