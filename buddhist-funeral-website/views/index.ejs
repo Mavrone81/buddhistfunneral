@@ -1,6 +1,7 @@
 <% const L = (typeof lang !== 'undefined' && lang === 'zh') ? 'zh' : 'en'; const IS_ZH = L === 'zh'; %><!DOCTYPE html>
 <html lang="<%= IS_ZH ? 'zh-SG' : 'en' %>">
 <head>
+<!-- deploy-check: ci/cd verified on 165 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= IS_ZH ? (c.site.metaTitleZh || c.site.metaTitle) : c.site.metaTitle %></title>
