@@ -222,7 +222,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true, limit: '2mb' })); // extended -> nested form fields
-app.use(express.json({ limit: '64kb' })); // for the chatbot API
+app.use(express.json({ limit: '8mb' })); // chatbot API (incl. base64 image attachments)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
@@ -422,13 +422,23 @@ app.post('/api/chat', async (req, res) => {
   }
 
   const userMsg = String((req.body && req.body.message) || '').slice(0, 1000).trim();
-  if (!userMsg) return res.end('');
+  // Optional attached images (base64, no data: prefix) for Claude vision.
+  const images = Array.isArray(req.body && req.body.images)
+    ? req.body.images
+        .filter((im) => im && typeof im.data === 'string' && /^image\/(jpeg|png|gif|webp)$/.test(im.media_type || ''))
+        .slice(0, 4)
+        .map((im) => ({ media_type: im.media_type, data: String(im.data).slice(0, 7000000) }))
+    : [];
+  if (!userMsg && images.length === 0) return res.end('');
   const history = Array.isArray(req.body.history) ? req.body.history.slice(-6) : [];
   // Anthropic: system prompt is a top-level param; messages are user/assistant only.
   const systemPrompt = chatSystemPrompt(c, lang);
+  const userContent = [];
+  for (const im of images) userContent.push({ type: 'image', source: { type: 'base64', media_type: im.media_type, data: im.data } });
+  userContent.push({ type: 'text', text: userMsg || (lang === 'zh' ? '请看这张图片，并提供协助。' : 'Please look at this image and help.') });
   const messages = [
     ...history.map((h) => ({ role: h.role === 'assistant' ? 'assistant' : 'user', content: String(h.content || '').slice(0, 2000) })),
-    { role: 'user', content: userMsg },
+    { role: 'user', content: userContent },
   ];
 
   chatInFlight++;

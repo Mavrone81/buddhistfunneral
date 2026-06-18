@@ -1,4 +1,4 @@
-<!-- AI chat assistant (local Ollama) -->
+<!-- AI chat assistant (Anthropic Claude; supports image attachments) -->
 <style>
 .cbot-launch{position:fixed;left:18px;bottom:18px;z-index:300;display:flex;align-items:center;gap:9px;padding:12px 18px;border-radius:40px;border:none;cursor:pointer;color:#16294d;font-family:'Noto Sans',sans-serif;font-weight:600;font-size:.85rem;background:linear-gradient(135deg,#c6a553,#ddc78a);box-shadow:0 8px 24px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s}
 .cbot-launch:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.38)}
@@ -15,12 +15,20 @@
 .cbot-b.user{background:linear-gradient(135deg,#c6a553,#ddc78a);color:#16294d;align-self:flex-end;border-bottom-right-radius:4px}
 .cbot-typing{align-self:flex-start;color:#9fb0d8;font-size:.85rem;font-style:italic}
 .cbot-foot{border-top:1px solid rgba(198,165,83,.25);padding:10px}
-.cbot-row{display:flex;gap:8px}
-.cbot-row input{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(198,165,83,.35);border-radius:10px;padding:11px 13px;color:#fff;font-family:inherit;font-size:.92rem}
-.cbot-row input:focus{outline:none;border-color:#ddc78a}
-.cbot-row button{background:linear-gradient(135deg,#c6a553,#ddc78a);color:#16294d;border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}
+.cbot-row{display:flex;gap:8px;align-items:center}
+.cbot-row input[type=text]{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(198,165,83,.35);border-radius:10px;padding:11px 13px;color:#fff;font-family:inherit;font-size:.92rem}
+.cbot-row input[type=text]:focus{outline:none;border-color:#ddc78a}
+.cbot-row button#cbotSend{background:linear-gradient(135deg,#c6a553,#ddc78a);color:#16294d;border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}
 .cbot-row button:disabled{opacity:.5;cursor:default}
 .cbot-note{color:#8e9ac4;font-size:.68rem;margin:8px 2px 0;text-align:center}
+.cbot-thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.cbot-thumb{position:relative}
+.cbot-thumb img{width:46px;height:46px;object-fit:cover;border-radius:6px;border:1px solid rgba(198,165,83,.4)}
+.cbot-thumb button{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;border:none;background:#16294d;color:#fff;font-size:12px;line-height:18px;cursor:pointer;padding:0}
+.cbot-attach{background:none;border:none;color:#ddc78a;font-size:1.15rem;cursor:pointer;padding:0 2px;flex:none}
+.cbot-attach:disabled{opacity:.5;cursor:default}
+.cbot-b img.cbot-bimg{width:120px;max-width:100%;border-radius:8px;margin-bottom:6px;display:block}
+.cbot-panel.dragover{outline:2px dashed #ddc78a;outline-offset:-6px}
 @media(max-width:560px){.cbot-launch{left:14px;bottom:14px}.cbot-launch span{display:none}.cbot-launch{padding:14px;border-radius:50%}.cbot-panel{left:0;bottom:0;width:100vw;max-width:100vw;height:80vh;border-radius:18px 18px 0 0}}
 </style>
 
@@ -41,7 +49,10 @@
     <div class="cbot-b bot"><%= t('Hello. How may we help you today? For urgent matters, please call our 24-hour hotline.', '您好，请问今天有什么可以帮您？如有紧急事宜，请拨打我们的24小时热线。') %></div>
   </div>
   <div class="cbot-foot">
+    <div class="cbot-thumbs" id="cbotThumbs"></div>
     <div class="cbot-row">
+      <input type="file" id="cbotFile" accept="image/*" multiple style="display:none">
+      <button type="button" class="cbot-attach" id="cbotAttach" title="<%= t('Attach image', '添加图片') %>" aria-label="<%= t('Attach image', '添加图片') %>">📎</button>
       <input type="text" id="cbotInput" autocomplete="off" placeholder="<%= t('Type your question…', '输入您的问题…') %>">
       <button type="button" id="cbotSend"><%= t('Send', '发送') %></button>
     </div>
@@ -62,7 +73,11 @@
   var msgs = document.getElementById('cbotMsgs');
   var input = document.getElementById('cbotInput');
   var sendBtn = document.getElementById('cbotSend');
+  var attachBtn = document.getElementById('cbotAttach');
+  var fileInput = document.getElementById('cbotFile');
+  var thumbs = document.getElementById('cbotThumbs');
   var history = [];
+  var attachments = []; // { media_type, data, preview }
   var busy = false;
 
   function openPanel(){ panel.classList.add('open'); launch.style.display='none'; setTimeout(function(){ input.focus(); }, 50); }
@@ -70,10 +85,68 @@
   launch.addEventListener('click', openPanel);
   closeBtn.addEventListener('click', closePanel);
 
-  function addBubble(role, text){
+  // Downscale an image file to <=1280px JPEG so uploads stay small.
+  function fileToAttachment(file){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onerror = function(){ reject(new Error('read')); };
+      reader.onload = function(){
+        var img = new Image();
+        img.onerror = function(){ reject(new Error('decode')); };
+        img.onload = function(){
+          var max = 1280, scale = Math.min(1, max / Math.max(img.width, img.height));
+          var w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+          var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+          var ctx = cv.getContext('2d'); if (!ctx) return reject(new Error('canvas'));
+          ctx.drawImage(img, 0, 0, w, h);
+          var url = cv.toDataURL('image/jpeg', 0.82);
+          resolve({ media_type:'image/jpeg', data: url.split(',')[1], preview: url });
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderThumbs(){
+    thumbs.innerHTML = '';
+    attachments.forEach(function(a, i){
+      var wrap = document.createElement('div'); wrap.className = 'cbot-thumb';
+      var im = document.createElement('img'); im.src = a.preview; im.alt = '';
+      var x = document.createElement('button'); x.type='button'; x.textContent='×'; x.setAttribute('aria-label','Remove');
+      x.addEventListener('click', function(){ attachments.splice(i,1); renderThumbs(); });
+      wrap.appendChild(im); wrap.appendChild(x); thumbs.appendChild(wrap);
+    });
+  }
+
+  function addFiles(list){
+    var arr = Array.prototype.slice.call(list).filter(function(f){ return f && f.type && f.type.indexOf('image/') === 0; });
+    var room = 4 - attachments.length;
+    var picked = arr.slice(0, Math.max(0, room));
+    picked.reduce(function(p, f){
+      return p.then(function(){ return fileToAttachment(f).then(function(a){ attachments.push(a); }).catch(function(){}); });
+    }, Promise.resolve()).then(renderThumbs);
+  }
+
+  attachBtn.addEventListener('click', function(){ fileInput.click(); });
+  fileInput.addEventListener('change', function(){ if (fileInput.files) addFiles(fileInput.files); fileInput.value=''; });
+  input.addEventListener('paste', function(e){
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    var files = [];
+    for (var i=0;i<items.length;i++){ if (items[i].type && items[i].type.indexOf('image/')===0){ var f=items[i].getAsFile(); if(f) files.push(f); } }
+    if (files.length){ e.preventDefault(); addFiles(files); }
+  });
+  panel.addEventListener('dragover', function(e){ e.preventDefault(); panel.classList.add('dragover'); });
+  panel.addEventListener('dragleave', function(e){ e.preventDefault(); panel.classList.remove('dragover'); });
+  panel.addEventListener('drop', function(e){ e.preventDefault(); panel.classList.remove('dragover'); if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files); });
+
+  function addBubble(role, text, previews){
     var d = document.createElement('div');
     d.className = 'cbot-b ' + (role === 'user' ? 'user' : 'bot');
-    d.textContent = text;
+    if (previews && previews.length){
+      previews.forEach(function(src){ var im = document.createElement('img'); im.className='cbot-bimg'; im.src=src; im.alt=''; d.appendChild(im); });
+    }
+    if (text){ var span = document.createElement('span'); span.textContent = text; d.appendChild(span); }
     msgs.appendChild(d);
     msgs.scrollTop = msgs.scrollHeight;
     return d;
@@ -82,18 +155,22 @@
   async function send(){
     if (busy) return;
     var text = input.value.trim();
-    if (!text) return;
+    if (!text && attachments.length === 0) return;
+    var imgs = attachments.slice();
     busy = true; sendBtn.disabled = true;
-    addBubble('user', text);
-    history.push({ role: 'user', content: text });
-    input.value = '';
+    addBubble('user', text, imgs.map(function(a){ return a.preview; }));
+    if (text) history.push({ role: 'user', content: text });
+    input.value = ''; attachments = []; renderThumbs();
     var typing = addBubble('bot', LANG === 'zh' ? '正在输入…' : 'Typing…');
     typing.classList.add('cbot-typing');
     try {
       var resp = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, lang: LANG, history: history.slice(-6) })
+        body: JSON.stringify({
+          message: text, lang: LANG, history: history.slice(-6),
+          images: imgs.map(function(a){ return { media_type: a.media_type, data: a.data }; })
+        })
       });
       typing.remove();
       var bubble = addBubble('bot', '');
