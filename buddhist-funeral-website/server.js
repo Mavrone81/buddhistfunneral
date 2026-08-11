@@ -261,19 +261,49 @@ function requireAuth(req, res, next) {
   return res.redirect('/admin/login');
 }
 
-// ---- Admin login brute-force throttling (per IP) ---------------------------
-const loginFails = new Map(); // ip -> { count, until }
-function loginLocked(ip) {
-  const rec = loginFails.get(ip);
-  return rec && rec.until && Date.now() < rec.until;
+// ---- Admin login brute-force throttling (per username + IP) ----------------
+//
+// 5 failed attempts per (username, IP) per 15 minutes.
+//
+// Keyed on the pair, deliberately. Per-IP alone -- what this was -- misses
+// credential stuffing that rotates addresses while walking a list of accounts,
+// and this site has multiple admin users (see loadAdmins), so a per-IP lock
+// also takes out every other admin sharing an office connection. Per-username
+// alone would hand anyone a denial-of-service against a known account. The pair
+// confines a lockout to the attacker's own address and their chosen username.
+//
+// The counter previously never reset: once `count` reached 5 it stayed there, so
+// after the 15-minute lock expired the very next failure re-locked immediately,
+// forever. That made a temporary lock effectively permanent. The window now
+// expires as a unit -- a lapsed entry starts again at one.
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const LOGIN_MAX_FAILS = 5;
+const loginFails = new Map(); // "username|ip" -> { count, resetAt }
+
+// req.ip, not the first X-Forwarded-For entry. Nginx builds that header with
+// $proxy_add_x_forwarded_for, which APPENDS the real peer to whatever the
+// client already sent, so the first entry is attacker-supplied. `trust proxy`
+// is set above, so req.ip is the address nginx actually saw.
+function loginKey(req, username) {
+  return String(username || '').trim().toLowerCase().slice(0, 128) + '|' + (req.ip || 'unknown');
 }
-function noteLoginFail(ip) {
-  const rec = loginFails.get(ip) || { count: 0, until: 0 };
-  rec.count += 1;
-  if (rec.count >= 5) rec.until = Date.now() + 15 * 60 * 1000; // lock 15 min after 5 fails
-  loginFails.set(ip, rec);
+function loginLocked(key) {
+  const rec = loginFails.get(key);
+  return !!rec && Date.now() <= rec.resetAt && rec.count >= LOGIN_MAX_FAILS;
 }
-function clearLoginFails(ip) { loginFails.delete(ip); }
+function noteLoginFail(key) {
+  const now = Date.now();
+  const rec = loginFails.get(key);
+  if (!rec || now > rec.resetAt) loginFails.set(key, { count: 1, resetAt: now + LOGIN_WINDOW_MS });
+  else rec.count += 1;
+}
+function clearLoginFails(key) { loginFails.delete(key); }
+
+// Drop expired entries so the map cannot grow without bound.
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, rec] of loginFails) if (now > rec.resetAt) loginFails.delete(k);
+}, LOGIN_WINDOW_MS).unref();
 
 // ============================================================================
 // PUBLIC SITE
@@ -566,18 +596,18 @@ app.get('/admin/login', (req, res) => {
 });
 
 app.post('/admin/login', sameOriginPost, (req, res) => {
-  const ip = req.ip || 'unknown';
-  if (loginLocked(ip)) {
+  const key = loginKey(req, req.body.username);
+  if (loginLocked(key)) {
     return res.status(429).render('admin-login', { error: 'Too many attempts. Please wait 15 minutes and try again.' });
   }
   const admin = findAdmin(req.body.username);
   if (admin && verifyPassword(req.body.password, admin.hash)) {
-    clearLoginFails(ip);
+    clearLoginFails(key);
     req.session.loggedIn = true;
     req.session.user = admin.username;
     return res.redirect('/admin');
   }
-  noteLoginFail(ip);
+  noteLoginFail(key);
   res.status(401).render('admin-login', { error: 'Incorrect username or password.' });
 });
 
