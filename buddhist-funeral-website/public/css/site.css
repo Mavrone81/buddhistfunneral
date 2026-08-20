@@ -8,6 +8,13 @@
   --gold-light:#ddc78a;
   --maroon:#2a4c8e;      /* royal-blue accent */
   --white:#ffffff;
+  /* Light movements. --paper is derived from the pale blue already used for
+     body text (#e7ebf6), so the light half reads as the same system as the
+     navy rather than a second theme. Cool, deliberately not cream. */
+  --paper:#f7f9fc;       /* light section background */
+  --ink:#16294d;         /* text + headings on paper (= the darkest navy) */
+  --ink-soft:#48597c;    /* secondary text on paper */
+  --seam:rgba(198,165,83,.38);  /* gold hairline where light meets dark */
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -261,15 +268,45 @@ nav{background:rgba(20,40,84,.92);border-bottom:1px solid rgba(198,165,83,.35)}
 .strip b{color:#0c1f42}
 .strip .btn{background:#16294d;color:#fff}
 .strip .btn:hover{background:#1f3d7a}
-/* light sections -> navy */
-.steps,.packages,.gallery{background:var(--ivory)}
-/* cards -> deep navy panels with gold edges */
-.step,.pkg,.faq details{background:#27508f;border:1px solid rgba(198,165,83,.20)}
-.svc{background:#27508f;border:1px solid rgba(198,165,83,.20);border-top:3px solid var(--gold)}
-.pkg.featured{background:#2f5aa0;border:1px solid var(--gold)}
-.pkg li{border-bottom:1px dashed rgba(198,165,83,.20)}
-.faq summary{color:var(--gold-light)}
+/* ═══ SECTION RHYTHM — three movements ════════════════════════════════
+   The page alternates light and dark rather than running navy throughout:
+     welcome & understand (light) → the rites (dark) →
+     choose & ask (light)         → reach us (dark)
+   White is the mourning colour and the daytime register of receiving
+   guests; navy is the vigil. The split carries the same meaning the
+   content does, so which sections are light is not arbitrary.
+   A gold hairline marks every seam — the one flourish. */
+
+/* ── DARK: gallery keeps navy so the photographs carry ── */
+.gallery{background:var(--ivory)}
+.gallery .section-title{color:var(--white)}   /* was dark-on-navy: unreadable */
+
+/* ── LIGHT movement 1: welcome, process, services ── */
+.about,.steps,.services{background:var(--paper);color:var(--ink)}
+/* ── LIGHT movement 2: packages and FAQ, where clarity matters most ── */
+.packages,.faq{background:var(--paper);color:var(--ink)}
+
+/* type on paper */
+.about .section-title,.steps .section-title,.services .section-title,
+.packages .section-title,.faq .section-title{color:var(--ink)}
+.about .lead,.steps .lead,.services .lead,.packages .lead,.faq .lead{color:var(--ink-soft)}
+.step p,.svc p,.pkg li,.faq details p{color:var(--ink-soft)}
+.step h3,.svc h3,.pkg h3{color:var(--ink)}
+
+/* cards on paper: white, lifted by shadow rather than outlined in gold */
+.step,.pkg,.svc,.faq details{
+  background:var(--white);
+  border:1px solid rgba(22,41,77,.10);
+  box-shadow:0 10px 30px rgba(22,41,77,.06)
+}
+.svc{border-top:3px solid var(--gold)}
+.pkg.featured{background:var(--white);border:1px solid var(--gold);box-shadow:0 14px 40px rgba(198,165,83,.20)}
+.pkg li{border-bottom:1px dashed rgba(22,41,77,.12)}
+.faq summary{color:var(--ink)}
 .faq summary::after{color:var(--gold)}
+
+/* ── the seam: a gold hairline wherever a movement changes ── */
+.about,.gallery,.packages,.contact{border-top:1px solid var(--seam)}
 /* footer */
 footer{background:linear-gradient(180deg,#16305f,#0c1f42)}
 /* keep the floating Call button red for contrast on navy */
@@ -280,16 +317,16 @@ footer{background:linear-gradient(180deg,#16305f,#0c1f42)}
 .values .container{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:16px 42px}
 .values .v{display:flex;align-items:center;gap:10px;color:#e7ebf6;font-size:.95rem;letter-spacing:.05em}
 .values .v::before{content:'';width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));flex:none}
-/* about */
-.about{background:var(--ivory)}
+/* about — a LIGHT movement (see SECTION RHYTHM above) */
+.about{background:var(--paper)}
 .about-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:46px}
-.about-cols h3{color:var(--gold-light);font-size:1.45rem;margin-bottom:12px}
-.about-cols p{color:#cdd7ee;font-size:1rem}
+.about-cols h3{color:var(--ink);font-size:1.45rem;margin-bottom:12px}
+.about-cols p{color:var(--ink-soft);font-size:1rem}
 .about-commit{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
-.commit{background:#27508f;border:1px solid rgba(198,165,83,.2);border-radius:16px;padding:28px 26px}
-.commit h4{color:#fff;font-size:1.2rem;font-family:'Noto Serif',serif;font-weight:600;margin-bottom:10px}
+.commit{background:var(--white);border:1px solid rgba(22,41,77,.10);border-radius:16px;padding:28px 26px;box-shadow:0 10px 30px rgba(22,41,77,.06)}
+.commit h4{color:var(--ink);font-size:1.2rem;font-family:'Noto Serif',serif;font-weight:600;margin-bottom:10px}
 .commit h4::before{content:'';display:block;width:34px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin-bottom:14px}
-.commit p{color:#cdd7ee;font-size:.93rem}
+.commit p{color:var(--ink-soft);font-size:.93rem}
 @media(max-width:860px){.about-cols{grid-template-columns:1fr;gap:26px}.about-commit{grid-template-columns:1fr}}
 /* etiquette */
 .etiquette{background:var(--ivory-deep)}
