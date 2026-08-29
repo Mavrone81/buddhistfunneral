@@ -310,6 +310,7 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
 
 
 
+
 /* ===== FULL WHITE THEME (funeral) =====
    Warm milky cream/beige background — soft, traditional, subdued for a funeral
    service. Warm charcoal text, muted warm gold as the one accent. Self-contained
@@ -430,6 +431,31 @@ footer .zh{color:var(--gold-ink)}
 .prose h2{color:var(--ink)}
 .prose h3{color:var(--gold-ink)}
 .prose p,.prose li{color:var(--ink)}
+
+
+/* ── Commitments ("What sets us apart") — refined medallion cards ── */
+.about-commit{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:50px}
+.commit{position:relative;text-align:center;padding:42px 28px 34px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+  transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.commit::after{content:'';position:absolute;left:0;right:0;top:0;height:3px;border-radius:18px 18px 0 0;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
+.commit:hover{transform:translateY(-5px);box-shadow:0 20px 46px rgba(95,80,45,.16);border-color:var(--gold-light)}
+.commit .emblem,.commit h4::before{}
+.commit h4{font-family:'Noto Serif',serif;font-size:1.22rem;font-weight:600;color:var(--ink);
+  margin:0 0 14px;padding-bottom:14px;position:relative}
+.commit h4::before{content:'';display:block;width:66px;height:66px;margin:0 auto 22px;border-radius:50%;
+  border:1px solid var(--gold);background-color:#fbf7ec;
+  background-repeat:no-repeat;background-position:center;background-size:30px 30px;
+  box-shadow:0 4px 14px rgba(138,111,43,.14), inset 0 0 0 4px rgba(202,178,122,.16)}
+.commit h4::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:30px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.commit p{color:var(--ink-soft);font-size:.95rem;line-height:1.72;margin:0}
+.commit:nth-child(1) h4::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%238a6f2b%27%20stroke-width%3D%271.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205c1.6%202.4%201.6%205%200%207-1.6-2-1.6-4.6%200-7Z%27%2F%3E%3Cpath%20d%3D%27M12%2012c-1.6-1.8-4.4-2.2-6.5-1%20.8%202.6%203.4%203.6%206.5%201Z%27%2F%3E%3Cpath%20d%3D%27M12%2012c1.6-1.8%204.4-2.2%206.5-1-.8%202.6-3.4%203.6-6.5%201Z%27%2F%3E%3Cpath%20d%3D%27M5%2012.6c-.6%203%202.8%205.4%207%205.4s7.6-2.4%207-5.4%27%2F%3E%3C%2Fsvg%3E")}
+.commit:nth-child(2) h4::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%238a6f2b%27%20stroke-width%3D%271.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203l7%203v5c0%204-3%207-7%209-4-2-7-5-7-9V6l7-3Z%27%2F%3E%3Cpath%20d%3D%27M9%2012l2%202%204-4%27%2F%3E%3C%2Fsvg%3E")}
+.commit:nth-child(3) h4::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%238a6f2b%27%20stroke-width%3D%271.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%278%27%2F%3E%3Cpath%20d%3D%27M12%208v4l3%202%27%2F%3E%3C%2Fsvg%3E")}
+body.lang-zh .commit h4{font-family:'Noto Serif SC',serif}
+@media(max-width:860px){.about-commit{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto}}
 
 </style>
 </head>
