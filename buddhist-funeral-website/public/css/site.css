@@ -361,22 +361,22 @@ footer{background:linear-gradient(180deg,#16305f,#0c1f42)}
 .related a{color:var(--gold-light);margin:0 10px;white-space:nowrap}
 
 /* ===== FULL WHITE THEME (funeral) =====
-   Milky, dull off-white background — subdued and somber for a funeral service,
-   not clinical bright white. Warm charcoal text, muted antique gold as the one
-   accent. Self-contained (own vars, and dulls the base --gold) so the same block
-   drops into the homepage inline styles too. No white text ever on white. */
+   Warm milky cream/beige background — soft, traditional, subdued for a funeral
+   service. Warm charcoal text, muted warm gold as the one accent. Self-contained
+   (own vars, dulls the base --gold) so the same block drops into the homepage
+   inline styles too. No white text ever lands on a light background. */
 :root{
-  --pg:#f2f0ea;          /* milky dull white — MAIN background */
-  --band:#ece8df;        /* milky band */
-  --band-2:#e5e0d5;      /* deeper milky band */
-  --card:#f8f6f0;        /* milky card, just above the page */
-  --ink:#3a372f;         /* warm charcoal (dull), not black */
-  --ink-soft:#6d675b;    /* muted warm grey */
-  --gold:#a8935a;        /* dulled antique gold (redefines the base gold) */
-  --gold-light:#c3af7c;  /* dulled light gold */
-  --gold-ink:#87702f;    /* deep dull gold for text on milky */
-  --line:#dcd6c7;        /* warm hairline */
-  --shadow:0 10px 30px rgba(90,78,50,.08);
+  --pg:#f2ecdf;          /* warm milky cream — MAIN background */
+  --band:#ece2ce;        /* warm beige band */
+  --band-2:#e5d9c1;      /* deeper warm beige band */
+  --card:#f8f3e8;        /* warm cream card, just above the page */
+  --ink:#3b3529;         /* warm charcoal (dull), not black */
+  --ink-soft:#6e6550;    /* warm taupe-grey */
+  --gold:#ad9351;        /* warm muted gold (redefines the base gold) */
+  --gold-light:#cab27a;  /* warm light gold */
+  --gold-ink:#8a6f2b;    /* deep warm gold for text on cream */
+  --line:#ddd2ba;        /* warm beige hairline */
+  --shadow:0 10px 30px rgba(95,80,45,.09);
 }
 body{background:var(--pg);color:var(--ink-soft)}
 h1,h2,h3,h4{color:var(--ink)}
@@ -384,92 +384,92 @@ h1,h2,h3,h4{color:var(--ink)}
 .eyebrow{color:var(--gold-ink)}
 .lead{color:var(--ink-soft)}
 
-/* NAV — milky, dull, dark text */
-nav{background:rgba(242,240,234,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+/* NAV — warm cream, dark text */
+nav{background:rgba(242,236,223,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
 .brand{color:var(--ink)}
 .brand span{color:var(--ink-soft);opacity:1}
-.nav-links a{color:#514c42}
+.nav-links a{color:#544c3c}
 .nav-links a:hover{color:var(--gold-ink)}
 .nav-toggle{color:var(--ink)}
 @media(max-width:900px){
-  .nav-links{background:rgba(242,240,234,.98);border-top:1px solid var(--line)}
+  .nav-links{background:rgba(242,236,223,.98);border-top:1px solid var(--line)}
   .nav-links a{border-top:1px solid var(--line)}
   nav.open .nav-links{border-bottom:1px solid var(--line)}
 }
-.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#38300f;font-weight:600}
-.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#38300f}
+.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#372e0d;font-weight:600}
+.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#372e0d}
 
-/* HERO — soft milky wash with a faint dull-gold glow, dark text */
+/* HERO — warm cream wash with a faint gold glow, dark text */
 .hero{background:
-  radial-gradient(ellipse at 75% 18%,rgba(168,147,90,.12),transparent 55%),
-  linear-gradient(165deg,#efebe2 0%,#f2f0ea 58%,#e9e4d9 100%)}
+  radial-gradient(ellipse at 75% 18%,rgba(173,147,81,.13),transparent 55%),
+  linear-gradient(165deg,#efe7d6 0%,#f2ecdf 58%,#e8ddc8 100%)}
 .hero .zh-line{color:var(--gold-ink)}
 .hero p{color:var(--ink-soft)}
 .hero.has-bg h1,.hero.has-bg p{color:#fff}
 .hero.has-bg h1 em,.hero.has-bg .zh-line{color:var(--gold-light)}
-.ensoCircle{border-color:rgba(150,130,80,.16)}
+.ensoCircle{border-color:rgba(160,135,80,.16)}
 
-/* HOTLINE STRIP — muted gold band, dark text */
+/* HOTLINE STRIP — warm gold band, dark text */
 .strip{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
-.strip p{color:#38300f}
-.strip b{color:#2b2509}
-.strip .btn{background:#2b2509;color:#f2f0ea}
-.strip .btn:hover{background:#463c14}
+.strip p{color:#372e0d}
+.strip b{color:#2a2308}
+.strip .btn{background:#2a2308;color:#f2ecdf}
+.strip .btn:hover{background:#453a13}
 
-/* SECTION BACKGROUNDS — milky throughout, gentle alternation */
+/* SECTION BACKGROUNDS — warm cream throughout, gentle alternation */
 .steps,.gallery,.faq,.etiquette,.services,.about{background:var(--pg)}
 .packages,.rites{background:var(--band)}
 .values,.contact{background:var(--band-2)}
 .gallery .section-title{color:var(--ink)}
 
-/* CARDS — milky panels, hairline border, soft shadow, dark text */
+/* CARDS — warm cream panels, hairline border, soft shadow, dark text */
 .step,.svc,.pkg,.faq details,.commit,.etq,.rite,.contact-card{
   background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
 .svc{border-top:3px solid var(--gold)}
 .pkg{background:var(--card);border:1px solid var(--line)}
-.pkg.featured{background:linear-gradient(170deg,#f4efe3,var(--card));border:1px solid var(--gold-light);box-shadow:0 16px 40px rgba(135,112,47,.14)}
+.pkg.featured{background:linear-gradient(170deg,#f5edda,var(--card));border:1px solid var(--gold-light);box-shadow:0 16px 40px rgba(138,111,43,.15)}
 .pkg li{border-bottom:1px dashed var(--line);color:var(--ink-soft)}
 .step p,.svc p,.about-cols p,.commit p,.etq p{color:var(--ink-soft)}
 .step h3,.svc h3,.commit h4{color:var(--ink)}
 .about-cols h3,.etq h4{color:var(--gold-ink)}
-.values .v{color:#514c42}
+.values .v{color:#544c3c}
 
 /* FAQ */
 .faq summary{color:var(--ink)}
 .faq summary::after{color:var(--gold-ink)}
 .faq details p{color:var(--ink-soft)}
 
-/* RITES — flipped to milky light */
+/* RITES — warm light */
 .rites .section-title{color:var(--ink)}
 .rites .eyebrow{color:var(--gold-ink)}
 .rites .lead{color:var(--ink-soft)}
-.rites::before{border-color:rgba(135,112,47,.14)}
+.rites::before{border-color:rgba(138,111,43,.14)}
 .rite h3{color:var(--gold-ink)}
 .rite p{color:var(--ink-soft)}
 
-/* CONTACT — flipped to milky light */
+/* CONTACT — warm light */
 .contact .section-title{color:var(--ink)}
 .contact .eyebrow{color:var(--gold-ink)}
 .contact-card{color:var(--ink-soft)}
 .contact-card h3{color:var(--ink)}
 .cl b{color:var(--gold-ink)}
-.contact-note{background:#efe9dd;border:1px solid var(--line);color:var(--ink-soft)}
+.contact-note{background:#eee2cd;border:1px solid var(--line);color:var(--ink-soft)}
 .contact-note h3{color:var(--ink)}
 .contact-form{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
 .contact-form h3{color:var(--ink)}
 .contact-form .cf-note{color:var(--ink-soft)}
 .cf-field label{color:var(--gold-ink)}
-.cf-field input,.cf-field textarea{background:#fcfbf7;border:1px solid #cfc8b6;color:var(--ink)}
-.cf-field input:focus,.cf-field textarea:focus{border-color:var(--gold);background:#fff}
-.cf-alert.ok{background:#e9efe0;border:1px solid #cdddb7;color:#42632c}
-.cf-alert.err{background:#f2e6df;border:1px solid #ddc4b6;color:#96442f}
+.cf-field input,.cf-field textarea{background:#fdfbf4;border:1px solid #d4cbb2;color:var(--ink)}
+.cf-field input:focus,.cf-field textarea:focus{border-color:var(--gold);background:#fffdf6}
+.cf-alert.ok{background:#ecefdd;border:1px solid #d1ddb4;color:#456029}
+.cf-alert.err{background:#f3e6dc;border:1px solid #ddc3b2;color:#95432d}
 
-/* FOOTER — milky, muted */
+/* FOOTER — warm cream, muted */
 footer{background:var(--band-2)}
-footer p{color:#847d6f}
+footer p{color:#857b64}
 footer .zh{color:var(--gold-ink)}
 
-/* FLOATING CONTACT — keep a (slightly muted) red call button for contrast */
+/* FLOATING CONTACT — muted red call button for contrast */
 .float-contact .fc-call{background:linear-gradient(135deg,#9a4033,#b1503b)}
 
 /* INNER CONTENT PAGES */
