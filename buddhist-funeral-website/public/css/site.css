@@ -359,3 +359,123 @@ footer{background:linear-gradient(180deg,#16305f,#0c1f42)}
 .page-cta{text-align:center;margin:44px 0 8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .related{max-width:780px;margin:46px auto 0;border-top:1px solid rgba(198,165,83,.2);padding-top:26px;text-align:center;color:#9fb0d8;font-size:.95rem}
 .related a{color:var(--gold-light);margin:0 10px;white-space:nowrap}
+
+/* ===== FULL WHITE THEME (funeral) =====
+   Extends the light movements to the whole page: white / cool near-white
+   throughout, dark ink text, gold kept as the one accent. Self-contained
+   (own vars) so the same block drops into the homepage inline styles too.
+   Every previously light-on-navy surface is flipped so no white text ever
+   lands on a white background. */
+:root{
+  --pg:#ffffff;          /* page white */
+  --band:#f7f9fc;        /* cool near-white band (matches --paper) */
+  --band-2:#eef2f8;      /* slightly deeper cool band */
+  --ink:#16294d;         /* headings / strong text */
+  --ink-soft:#48597c;    /* body / secondary text */
+  --gold-ink:#9c7c2e;    /* gold darkened for legibility on white */
+  --line:#e4e8f0;        /* cool hairline border */
+  --shadow:0 10px 30px rgba(22,41,77,.07);
+}
+body{background:var(--pg);color:var(--ink-soft)}
+h1,h2,h3,h4{color:var(--ink)}
+.section-title em,.hero h1 em{color:var(--gold-ink)}
+.eyebrow{color:var(--gold-ink)}
+.lead{color:var(--ink-soft)}
+
+/* NAV — translucent white, dark text */
+nav{background:rgba(255,255,255,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.brand{color:var(--ink)}
+.brand span{color:var(--ink-soft);opacity:1}
+.nav-links a{color:#3f4a63}
+.nav-links a:hover{color:var(--gold-ink)}
+.nav-toggle{color:var(--ink)}
+@media(max-width:900px){
+  .nav-links{background:rgba(255,255,255,.98);border-top:1px solid var(--line)}
+  .nav-links a{border-top:1px solid var(--line)}
+  nav.open .nav-links{border-bottom:1px solid var(--line)}
+}
+.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#3a2e0d;font-weight:600}
+.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2e0d}
+
+/* HERO — soft cool-white with a faint gold glow, dark text */
+.hero{background:
+  radial-gradient(ellipse at 75% 18%,rgba(198,165,83,.14),transparent 55%),
+  linear-gradient(165deg,#f4f7fc 0%,#ffffff 58%,#eef2f8 100%)}
+.hero .zh-line{color:var(--gold-ink)}
+.hero p{color:var(--ink-soft)}
+/* photo hero keeps its dark overlay + light text */
+.hero.has-bg h1,.hero.has-bg p{color:#fff}
+.hero.has-bg h1 em,.hero.has-bg .zh-line{color:var(--gold-light)}
+.ensoCircle{border-color:rgba(176,141,74,.18)}
+
+/* HOTLINE STRIP — warm gold accent band, dark text */
+.strip{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
+.strip p{color:#3a2e0d}
+.strip b{color:#2c230a}
+.strip .btn{background:#2c230a;color:#fff}
+.strip .btn:hover{background:#4a3a12}
+
+/* SECTION BACKGROUNDS — all light (white / cool near-white) */
+.steps,.gallery,.faq,.etiquette,.services,.about{background:var(--pg)}
+.packages,.rites{background:var(--band)}
+.values,.contact{background:var(--band-2)}
+.gallery .section-title{color:var(--ink)}
+
+/* CARDS — white panels, hairline border, soft shadow, dark text */
+.step,.svc,.pkg,.faq details,.commit,.etq,.rite,.contact-card{
+  background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+.svc{border-top:3px solid var(--gold)}
+.pkg{background:#fff;border:1px solid var(--line)}
+.pkg.featured{background:linear-gradient(170deg,#fbfcff,#ffffff);border:1px solid var(--gold-light);box-shadow:0 16px 40px rgba(156,124,46,.16)}
+.pkg li{border-bottom:1px dashed var(--line);color:var(--ink-soft)}
+.step p,.svc p,.about-cols p,.commit p,.etq p{color:var(--ink-soft)}
+.step h3,.svc h3,.commit h4{color:var(--ink)}
+.about-cols h3,.etq h4{color:var(--gold-ink)}
+.values .v{color:#3f4a63}
+
+/* FAQ */
+.faq summary{color:var(--ink)}
+.faq summary::after{color:var(--gold-ink)}
+.faq details p{color:var(--ink-soft)}
+
+/* RITES — flipped from navy to light */
+.rites .section-title{color:var(--ink)}
+.rites .eyebrow{color:var(--gold-ink)}
+.rites .lead{color:var(--ink-soft)}
+.rites::before{border-color:rgba(156,124,46,.16)}
+.rite h3{color:var(--gold-ink)}
+.rite p{color:var(--ink-soft)}
+
+/* CONTACT — flipped from navy to light */
+.contact .section-title{color:var(--ink)}
+.contact .eyebrow{color:var(--gold-ink)}
+.contact-card{color:var(--ink-soft)}
+.contact-card h3{color:var(--ink)}
+.cl b{color:var(--gold-ink)}
+.contact-note{background:#f3f6fb;border:1px solid var(--line);color:var(--ink-soft)}
+.contact-note h3{color:var(--ink)}
+.contact-form{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+.contact-form h3{color:var(--ink)}
+.contact-form .cf-note{color:var(--ink-soft)}
+.cf-field label{color:var(--gold-ink)}
+.cf-field input,.cf-field textarea{background:#fff;border:1px solid #cdd6e6;color:var(--ink)}
+.cf-field input:focus,.cf-field textarea:focus{border-color:var(--gold);background:#fdfdff}
+.cf-alert.ok{background:#eef5e8;border:1px solid #cfe3bd;color:#3f6b2c}
+.cf-alert.err{background:#f8ece7;border:1px solid #e6c9bd;color:#a24a34}
+
+/* FOOTER — light */
+footer{background:var(--band-2)}
+footer p{color:#7a8393}
+footer .zh{color:var(--gold-ink)}
+
+/* FLOATING CONTACT — keep red call button for contrast on white */
+.float-contact .fc-call{background:linear-gradient(135deg,#a23b2e,#c0492f)}
+
+/* INNER CONTENT PAGES */
+.breadcrumb{color:var(--ink-soft)}
+.breadcrumb a{color:var(--gold-ink)}
+.related{border-top:1px solid var(--line);color:var(--ink-soft)}
+.related a{color:var(--gold-ink)}
+.prose h2{color:var(--ink)}
+.prose h3{color:var(--gold-ink)}
+.prose p,.prose li{color:var(--ink)}

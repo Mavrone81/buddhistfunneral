@@ -307,63 +307,127 @@ footer .zh{color:var(--gold);font-size:1rem;margin-bottom:6px;letter-spacing:.4e
   .lang-toggle a{padding:6px 10px;font-size:.72rem}
 }
 
-/* ===== NAVY & GOLD THEME ===== */
-h1,h2,h3,h4{color:#fff}
-.section-title em,.hero h1 em{color:var(--gold-light)}
-.rites .section-title,.contact .section-title{color:#fff}
-.hero .zh-line{color:var(--gold-light)}
-.lead{color:#cdd7ee}
-/* hero background -> navy with a soft gold glow */
-.hero{background:radial-gradient(ellipse at 75% 20%,rgba(198,165,83,.22),transparent 55%),linear-gradient(160deg,#16305f 0%,#1f3d7a 60%,#27508f 100%)}
-/* nav */
-nav{background:rgba(20,40,84,.92);border-bottom:1px solid rgba(198,165,83,.35)}
-.brand-logo{height:48px;max-width:240px}
-.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#16294d;font-weight:600}
-.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#16294d}
-/* hotline strip -> gold accent band */
+
+/* ===== FULL WHITE THEME (funeral) =====
+   Extends the light movements to the whole page: white / cool near-white
+   throughout, dark ink text, gold kept as the one accent. Self-contained
+   (own vars) so the same block drops into the homepage inline styles too.
+   Every previously light-on-navy surface is flipped so no white text ever
+   lands on a white background. */
+:root{
+  --pg:#ffffff;          /* page white */
+  --band:#f7f9fc;        /* cool near-white band (matches --paper) */
+  --band-2:#eef2f8;      /* slightly deeper cool band */
+  --ink:#16294d;         /* headings / strong text */
+  --ink-soft:#48597c;    /* body / secondary text */
+  --gold-ink:#9c7c2e;    /* gold darkened for legibility on white */
+  --line:#e4e8f0;        /* cool hairline border */
+  --shadow:0 10px 30px rgba(22,41,77,.07);
+}
+body{background:var(--pg);color:var(--ink-soft)}
+h1,h2,h3,h4{color:var(--ink)}
+.section-title em,.hero h1 em{color:var(--gold-ink)}
+.eyebrow{color:var(--gold-ink)}
+.lead{color:var(--ink-soft)}
+
+/* NAV — translucent white, dark text */
+nav{background:rgba(255,255,255,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.brand{color:var(--ink)}
+.brand span{color:var(--ink-soft);opacity:1}
+.nav-links a{color:#3f4a63}
+.nav-links a:hover{color:var(--gold-ink)}
+.nav-toggle{color:var(--ink)}
+@media(max-width:900px){
+  .nav-links{background:rgba(255,255,255,.98);border-top:1px solid var(--line)}
+  .nav-links a{border-top:1px solid var(--line)}
+  nav.open .nav-links{border-bottom:1px solid var(--line)}
+}
+.nav-hotline{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#3a2e0d;font-weight:600}
+.nav-hotline:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2e0d}
+
+/* HERO — soft cool-white with a faint gold glow, dark text */
+.hero{background:
+  radial-gradient(ellipse at 75% 18%,rgba(198,165,83,.14),transparent 55%),
+  linear-gradient(165deg,#f4f7fc 0%,#ffffff 58%,#eef2f8 100%)}
+.hero .zh-line{color:var(--gold-ink)}
+.hero p{color:var(--ink-soft)}
+/* photo hero keeps its dark overlay + light text */
+.hero.has-bg h1,.hero.has-bg p{color:#fff}
+.hero.has-bg h1 em,.hero.has-bg .zh-line{color:var(--gold-light)}
+.ensoCircle{border-color:rgba(176,141,74,.18)}
+
+/* HOTLINE STRIP — warm gold accent band, dark text */
 .strip{background:linear-gradient(135deg,var(--gold),var(--gold-light))}
-.strip p{color:#16294d}
-.strip b{color:#0c1f42}
-.strip .btn{background:#16294d;color:#fff}
-.strip .btn:hover{background:#1f3d7a}
-/* light sections -> navy */
-.steps,.packages,.gallery{background:var(--ivory)}
-/* cards -> deep navy panels with gold edges */
-.step,.pkg,.faq details{background:#27508f;border:1px solid rgba(198,165,83,.20)}
-.svc{background:#27508f;border:1px solid rgba(198,165,83,.20);border-top:3px solid var(--gold)}
-.pkg.featured{background:#2f5aa0;border:1px solid var(--gold)}
-.pkg li{border-bottom:1px dashed rgba(198,165,83,.20)}
-.faq summary{color:var(--gold-light)}
-.faq summary::after{color:var(--gold)}
-/* footer */
-footer{background:linear-gradient(180deg,#16305f,#0c1f42)}
-/* keep the floating Call button red for contrast on navy */
+.strip p{color:#3a2e0d}
+.strip b{color:#2c230a}
+.strip .btn{background:#2c230a;color:#fff}
+.strip .btn:hover{background:#4a3a12}
+
+/* SECTION BACKGROUNDS — all light (white / cool near-white) */
+.steps,.gallery,.faq,.etiquette,.services,.about{background:var(--pg)}
+.packages,.rites{background:var(--band)}
+.values,.contact{background:var(--band-2)}
+.gallery .section-title{color:var(--ink)}
+
+/* CARDS — white panels, hairline border, soft shadow, dark text */
+.step,.svc,.pkg,.faq details,.commit,.etq,.rite,.contact-card{
+  background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+.svc{border-top:3px solid var(--gold)}
+.pkg{background:#fff;border:1px solid var(--line)}
+.pkg.featured{background:linear-gradient(170deg,#fbfcff,#ffffff);border:1px solid var(--gold-light);box-shadow:0 16px 40px rgba(156,124,46,.16)}
+.pkg li{border-bottom:1px dashed var(--line);color:var(--ink-soft)}
+.step p,.svc p,.about-cols p,.commit p,.etq p{color:var(--ink-soft)}
+.step h3,.svc h3,.commit h4{color:var(--ink)}
+.about-cols h3,.etq h4{color:var(--gold-ink)}
+.values .v{color:#3f4a63}
+
+/* FAQ */
+.faq summary{color:var(--ink)}
+.faq summary::after{color:var(--gold-ink)}
+.faq details p{color:var(--ink-soft)}
+
+/* RITES — flipped from navy to light */
+.rites .section-title{color:var(--ink)}
+.rites .eyebrow{color:var(--gold-ink)}
+.rites .lead{color:var(--ink-soft)}
+.rites::before{border-color:rgba(156,124,46,.16)}
+.rite h3{color:var(--gold-ink)}
+.rite p{color:var(--ink-soft)}
+
+/* CONTACT — flipped from navy to light */
+.contact .section-title{color:var(--ink)}
+.contact .eyebrow{color:var(--gold-ink)}
+.contact-card{color:var(--ink-soft)}
+.contact-card h3{color:var(--ink)}
+.cl b{color:var(--gold-ink)}
+.contact-note{background:#f3f6fb;border:1px solid var(--line);color:var(--ink-soft)}
+.contact-note h3{color:var(--ink)}
+.contact-form{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+.contact-form h3{color:var(--ink)}
+.contact-form .cf-note{color:var(--ink-soft)}
+.cf-field label{color:var(--gold-ink)}
+.cf-field input,.cf-field textarea{background:#fff;border:1px solid #cdd6e6;color:var(--ink)}
+.cf-field input:focus,.cf-field textarea:focus{border-color:var(--gold);background:#fdfdff}
+.cf-alert.ok{background:#eef5e8;border:1px solid #cfe3bd;color:#3f6b2c}
+.cf-alert.err{background:#f8ece7;border:1px solid #e6c9bd;color:#a24a34}
+
+/* FOOTER — light */
+footer{background:var(--band-2)}
+footer p{color:#7a8393}
+footer .zh{color:var(--gold-ink)}
+
+/* FLOATING CONTACT — keep red call button for contrast on white */
 .float-contact .fc-call{background:linear-gradient(135deg,#a23b2e,#c0492f)}
 
-/* values strip */
-.values{background:var(--ivory-deep);padding:26px 0;border-top:1px solid rgba(198,165,83,.18);border-bottom:1px solid rgba(198,165,83,.18)}
-.values .container{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:16px 42px}
-.values .v{display:flex;align-items:center;gap:10px;color:#e7ebf6;font-size:.95rem;letter-spacing:.05em}
-.values .v::before{content:'';width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));flex:none}
-/* about */
-.about{background:var(--ivory)}
-.about-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:46px}
-.about-cols h3{color:var(--gold-light);font-size:1.45rem;margin-bottom:12px}
-.about-cols p{color:#cdd7ee;font-size:1rem}
-.about-commit{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
-.commit{background:#27508f;border:1px solid rgba(198,165,83,.2);border-radius:16px;padding:28px 26px}
-.commit h4{color:#fff;font-size:1.2rem;font-family:'Noto Serif',serif;font-weight:600;margin-bottom:10px}
-.commit h4::before{content:'';display:block;width:34px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin-bottom:14px}
-.commit p{color:#cdd7ee;font-size:.93rem}
-@media(max-width:860px){.about-cols{grid-template-columns:1fr;gap:26px}.about-commit{grid-template-columns:1fr}}
-/* etiquette */
-.etiquette{background:var(--ivory-deep)}
-.etq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px}
-.etq{background:#27508f;border:1px solid rgba(198,165,83,.2);border-radius:16px;padding:26px 24px}
-.etq h4{color:var(--gold-light);font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:600;margin-bottom:10px}
-.etq p{color:#cdd7ee;font-size:.92rem}
-@media(max-width:900px){.etq-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.etq-grid{grid-template-columns:1fr}}
+/* INNER CONTENT PAGES */
+.breadcrumb{color:var(--ink-soft)}
+.breadcrumb a{color:var(--gold-ink)}
+.related{border-top:1px solid var(--line);color:var(--ink-soft)}
+.related a{color:var(--gold-ink)}
+.prose h2{color:var(--ink)}
+.prose h3{color:var(--gold-ink)}
+.prose p,.prose li{color:var(--ink)}
+
 </style>
 </head>
 <body class="<%= IS_ZH ? 'lang-zh' : '' %>">
@@ -422,16 +486,6 @@ footer{background:linear-gradient(180deg,#16305f,#0c1f42)}
     <span class="ensoCircle e1"></span><span class="ensoCircle e2"></span>
   <% } %>
   <div class="container">
-    <% if (!c.hero.backgroundImage) { %>
-    <svg class="hero-lotus" viewBox="0 0 120 90" fill="none">
-      <path d="M60 8c8 13 10 25 0 38-10-13-8-25 0-38Z" fill="#d6b878"/>
-      <path d="M36 20c13 4 21 12 23 27-15-2-22-12-23-27Z" fill="#b08d4a"/>
-      <path d="M84 20c-13 4-21 12-23 27 15-2 22-12 23-27Z" fill="#b08d4a"/>
-      <path d="M18 42c13-2 25 2 34 13-13 6-26 1-34-13Z" fill="#d6b878"/>
-      <path d="M102 42c-13-2-25 2-34 13 13 6 26 1 34-13Z" fill="#d6b878"/>
-      <path d="M30 64c18-8 42-8 60 0-18 10-42 10-60 0Z" fill="#b08d4a"/>
-    </svg>
-    <% } %>
     <h1><%- t(c.hero.title, c.hero.titleZh) %> <em><%- t(c.hero.titleEm, c.hero.titleEmZh) %></em></h1>
     <div class="zh-line"><%= c.hero.zhLine %></div>
     <p><%- t(c.hero.paragraph, c.hero.paragraphZh) %></p>
