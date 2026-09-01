@@ -9,6 +9,18 @@
 <link rel="alternate" hreflang="en" href="https://singaporebuddhistfuneral.com.sg/">
 <link rel="alternate" hreflang="zh-SG" href="https://singaporebuddhistfuneral.com.sg/zh">
 <link rel="alternate" hreflang="x-default" href="https://singaporebuddhistfuneral.com.sg/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Singapore Buddhist Funeral Services">
+<meta property="og:title" content="<%= IS_ZH ? (c.site.metaTitleZh || c.site.metaTitle) : c.site.metaTitle %>">
+<meta property="og:description" content="<%= IS_ZH ? (c.site.metaDescriptionZh || c.site.metaDescription) : c.site.metaDescription %>">
+<meta property="og:url" content="https://singaporebuddhistfuneral.com.sg<%= IS_ZH ? '/zh' : '/' %>">
+<meta property="og:image" content="https://singaporebuddhistfuneral.com.sg/enshrine-logo.png">
+<meta property="og:locale" content="<%= IS_ZH ? 'zh_SG' : 'en_SG' %>">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= IS_ZH ? (c.site.metaTitleZh || c.site.metaTitle) : c.site.metaTitle %>">
+<meta name="twitter:description" content="<%= IS_ZH ? (c.site.metaDescriptionZh || c.site.metaDescription) : c.site.metaDescription %>">
+<meta name="twitter:image" content="https://singaporebuddhistfuneral.com.sg/enshrine-logo.png">
 <%
   // ---- SEO: JSON-LD structured data (built from site content) ----
   var seoUrl = 'https://singaporebuddhistfuneral.com.sg';
